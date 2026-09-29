@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #06090f;
+    color: #cbd5e1;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: #06090f; }
+  ::-webkit-scrollbar-thumb { background: #172236; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #0064b4; }
+
+  * { box-sizing: border-box; }
+}
+
+@layer utilities {
+  /* ── Static spiral / arc SVG background ── */
+  .spiral-bg {
+    position: relative;
+  }
+  .spiral-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900' viewBox='0 0 900 900'%3E%3Cg fill='none' stroke='%230072ce' stroke-width='0.9' opacity='0.15'%3E%3Ccircle cx='450' cy='450' r='80'/%3E%3Ccircle cx='450' cy='450' r='150'/%3E%3Ccircle cx='450' cy='450' r='230'/%3E%3Ccircle cx='450' cy='450' r='320'/%3E%3Ccircle cx='450' cy='450' r='420'/%3E%3Ccircle cx='450' cy='450' r='530'/%3E%3Ccircle cx='450' cy='450' r='650'/%3E%3Cline x1='450' y1='0' x2='450' y2='900' stroke-width='0.6'/%3E%3Cline x1='0' y1='450' x2='900' y2='450' stroke-width='0.6'/%3E%3Cline x1='0' y1='0' x2='900' y2='900' stroke-width='0.5'/%3E%3Cline x1='900' y1='0' x2='0' y2='900' stroke-width='0.5'/%3E%3Cellipse cx='450' cy='450' rx='300' ry='150' stroke-width='0.7'/%3E%3Cellipse cx='450' cy='450' rx='150' ry='300' stroke-width='0.7'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: 720px 720px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Bank-style panel / card ── */
+  .bank-card {
+    background: rgba(10, 22, 40, 0.55);
+    border: 1px solid rgba(0, 100, 180, 0.14);
+    border-radius: 2px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .bank-card:hover {
+    background: rgba(10, 22, 40, 0.8);
+    border-color: rgba(0, 100, 180, 0.4);
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #38a5ff;
+  }
+
+  /* ── Monospace stat value ── */
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+  }
+
+  .animate-fade {
+    /* Instant rendering */
+  }
+}
