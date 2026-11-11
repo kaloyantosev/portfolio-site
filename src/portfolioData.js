@@ -1,3 +1,4 @@
+import drcPine from "./indicators/dynamic-regression-channels.pine?raw";
 // =========================================================================
 // PORTFOLIO CONTENT CONFIGURATION
 // =========================================================================
@@ -246,26 +247,24 @@ export const customModels = [
 
 export const customIndicators = [
   {
-    id: "indicator-1",
-    name: "Sample Custom Indicator Name",
-    subtitle: "Technical, order flow, or macroeconomic oscillator",
-    category: "Order Flow / Momentum / Volatility",
-    timeframes: ["Intraday", "Daily", "Weekly"],
-    assetSuitability: "Equities, Futures, FX",
+    id: "dynamic-regression-channels",
+    name: "Dynamic Regression Channels Pro",
+    subtitle: "Multi-horizon log-regression channels with confluence zones for mathematical bounce levels",
+    category: "Trend / Mean Reversion",
+    timeframes: ["Daily"],
+    assetSuitability: "NVDA · Equities",
     // TradingView chart on the detail page. intervals: "1","5","15","30","60","240","D","W","M"
     // (first one opens by default; more than one shows timeframe buttons).
     // studies: TradingView built-in study ids, e.g. "STD;RSI", "STD;MACD".
-    chart: { symbol: "AMEX:SPY", intervals: ["D"], studies: [] },
-    description: "Detailed description of the indicator logic, what market inefficiencies it captures, and how to interpret its readings.",
-    formula: "Mathematical formula for the indicator calculation",
+    chart: { symbol: "NASDAQ:NVDA", intervals: ["D"], studies: [] },
+    description: "Fits four least-squares regression channels (12, 60, 210 and 315 bars) to log price, so each channel follows a constant-percentage trend rather than a straight dollar line. Band width is two standard deviations of the residuals around the fit, which measures true scatter instead of the trend itself. R² grades how well each trend holds, and where bands from different channels cluster within 0.6 × ATR the indicator draws a confluence zone: the price levels where several independent horizons agree.",
+    formula: "ln P(t) = a + b·t  (OLS over N bars)   ·   Band = a + b·t ± k·σᵣ,  σᵣ = √(Σ residual² / (N − 2))   ·   R² = trend quality   ·   Zone = bands within 0.6 × ATR(14)",
     signals: [
-      { signal: "Bullish Signal", condition: "Condition trigger description", action: "Recommended action or interpretation" },
-      { signal: "Bearish Signal", condition: "Condition trigger description", action: "Recommended action or interpretation" }
+      { signal: "Confluence support", condition: "Two or more channel bands cluster within 0.6 × ATR below price", action: "Highest-probability bounce area; wait for a reaction candle inside the zone" },
+      { signal: "Mean reversion", condition: "Price tags the lower band of a channel with R² ≥ 0.6", action: "Target that channel's midline" },
+      { signal: "Trend break", condition: "Daily close below the Core (315) lower band", action: "Bounce thesis invalid; the level turns into resistance" }
     ],
-    codeSnippet: `// Insert your code snippet (Python, Pine Script, C++, etc.) here
-def calculate_indicator(data):
-    # Your calculation logic
-    return result`
+    codeSnippet: drcPine
   }
 ];
 

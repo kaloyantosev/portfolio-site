@@ -1,0 +1,203 @@
+// This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Kaloyan26
+
+//@version=5
+indicator("Dynamic Regression Channels Pro", shorttitle="DRC Pro", overlay=true, max_bars_back=500,
+     max_lines_count=50, max_labels_count=50, max_boxes_count=20, max_polylines_count=60)
+
+// ─── INPUTS ───────────────────────────────────────────────────────────────
+G1 = "Channels (lookback in bars)"
+len1 = input.int(12,  "Scalp", minval=5, maxval=490, inline="c1", group=G1)
+col1 = input.color(#7D8CA3, "",  inline="c1", group=G1)
+len2 = input.int(60,  "Swing", minval=5, maxval=490, inline="c2", group=G1)
+col2 = input.color(#C9A96E, "",  inline="c2", group=G1)
+len3 = input.int(210, "Trend", minval=5, maxval=490, inline="c3", group=G1)
+col3 = input.color(#4C8DD9, "",  inline="c3", group=G1)
+len4 = input.int(315, "Core",  minval=5, maxval=490, inline="c4", group=G1)
+col4 = input.color(#E8E6E1, "",  inline="c4", group=G1)
+
+G2 = "Math"
+mult   = input.float(2.0, "Band width (σ of residuals)", minval=0.25, step=0.25, group=G2)
+useLog = input.bool(true, "Fit on log price (exponential trend)", group=G2,
+     tooltip="Growth stocks compound. A straight line in log price is a constant % trend, so long channels stop drifting away from price.")
+proj   = input.int(15, "Projection (bars ahead)", minval=0, maxval=100, group=G2)
+
+G3 = "Confluence"
+tolAtr  = input.float(0.6, "Cluster tolerance (× ATR 14)", minval=0.1, step=0.1, group=G3,
+     tooltip="Band levels from different channels closer than this are merged into one zone.")
+minHits = input.int(2, "Levels needed for a zone", minval=2, maxval=8, group=G3)
+
+G4 = "Display"
+showMid   = input.bool(true, "Midlines (mean-reversion targets)", group=G4)
+showLbl   = input.bool(true, "Channel labels", group=G4)
+showTable = input.bool(true, "Levels table", group=G4)
+
+// ─── MATH ─────────────────────────────────────────────────────────────────
+src = useLog ? math.log(close) : close
+atr = ta.atr(14)
+
+toPrice(v) =>
+    useLog ? math.exp(v) : v
+
+// Ordinary least squares over the last n bars, x = bars ago (0 = current bar).
+// Returns [fitted value now, slope per bar-ago, σ of residuals, R²].
+// σ of residuals measures scatter around the trend line; plain stdev(close)
+// also counts the trend itself and makes bands too wide in strong trends.
+fit(n) =>
+    float sx  = 0.0
+    float sy  = 0.0
+    float sxx = 0.0
+    float sxy = 0.0
+    float syy = 0.0
+    for i = 0 to n - 1
+        y = src[i]
+        sx  += i
+        sy  += y
+        sxx += i * i
+        sxy += i * y
+        syy += y * y
+    den = n * sxx - sx * sx
+    b = (n * sxy - sx * sy) / den
+    a = (sy - b * sx) / n
+    float ss = 0.0
+    for i = 0 to n - 1
+        r = src[i] - (a + b * i)
+        ss += r * r
+    sigma = math.sqrt(ss / math.max(n - 2, 1))
+    vy = n * syy - sy * sy
+    r2 = vy > 0 ? math.pow(n * sxy - sx * sy, 2) / (den * vy) : 0.0
+    [a, b, sigma, r2]
+
+// ─── DRAWING ──────────────────────────────────────────────────────────────
+// Drawings are rebuilt on the last bar. Deleting the previous set first stops
+// copies piling up on every realtime tick.
+var array<polyline> polys = array.new<polyline>()
+var array<label>    lbls  = array.new<label>()
+var array<box>      zones = array.new<box>()
+var table tbl = table.new(position.top_right, 5, 5, bgcolor=color.new(#0B0F17, 5),
+     frame_color=color.new(#FFFFFF, 85), frame_width=1, border_color=color.new(#FFFFFF, 92), border_width=1)
+
+clearAll() =>
+    for p in polys
+        polyline.delete(p)
+    array.clear(polys)
+    for l in lbls
+        label.delete(l)
+    array.clear(lbls)
+    for z in zones
+        box.delete(z)
+    array.clear(zones)
+
+// Points of (a + b·x + k·σ) from xFrom bars ago to xTo (negative = future).
+// Drawn as a polyline so a log-space line bends correctly on a linear chart.
+bandPath(a, b, k, sigma, xFrom, xTo) =>
+    pts = array.new<chart.point>()
+    steps = math.max(1, math.min(40, xFrom - xTo))
+    for s = 0 to steps
+        xi = int(math.round(xFrom - (xFrom - xTo) * s / float(steps)))
+        array.push(pts, chart.point.from_index(bar_index - xi, toPrice(a + b * xi + k * sigma)))
+    pts
+
+// Draws one channel; returns [upper, mid, lower] at the current bar, R² and slope.
+drawChannel(n, col, name) =>
+    float up  = na
+    float mid = na
+    float lo  = na
+    float r2v = na
+    float slope = na
+    if bar_index + 1 >= n
+        [a, b, sigma, r2] = fit(n)
+        // Weak trend fit (low R²) = fainter lines: its levels deserve less trust.
+        c = color.new(col, int(math.max(0, math.min(60, 65 - 60 * r2))))
+        array.push(polys, polyline.new(bandPath(a, b,  mult, sigma, n - 1, 0), line_color=c, line_width=1))
+        array.push(polys, polyline.new(bandPath(a, b, -mult, sigma, n - 1, 0), line_color=c, line_width=1))
+        if proj > 0
+            array.push(polys, polyline.new(bandPath(a, b,  mult, sigma, 0, -proj), line_color=c, line_style=line.style_dashed, line_width=1))
+            array.push(polys, polyline.new(bandPath(a, b, -mult, sigma, 0, -proj), line_color=c, line_style=line.style_dashed, line_width=1))
+        if showMid
+            array.push(polys, polyline.new(bandPath(a, b, 0, sigma, n - 1, -proj), line_color=color.new(col, 75), line_style=line.style_dotted, line_width=1))
+        if showLbl
+            array.push(lbls, label.new(bar_index + proj, toPrice(a - b * proj), name + " " + str.tostring(n),
+                 style=label.style_label_left, color=color(na), textcolor=c, size=size.tiny))
+        up    := toPrice(a + mult * sigma)
+        mid   := toPrice(a)
+        lo    := toPrice(a - mult * sigma)
+        r2v   := r2
+        slope := b
+    [up, mid, lo, r2v, slope]
+
+// Nearest of three levels below / above the current close.
+nearestBelow(x, y, z) =>
+    float best = na
+    for v in array.from(x, y, z)
+        if not na(v) and v < close and (na(best) or v > best)
+            best := v
+    best
+
+nearestAbove(x, y, z) =>
+    float best = na
+    for v in array.from(x, y, z)
+        if not na(v) and v > close and (na(best) or v < best)
+            best := v
+    best
+
+fmtLevel(v) =>
+    pct = (v / close - 1) * 100
+    na(v) ? "—" : str.tostring(v, format.mintick) + "  " + (pct >= 0 ? "+" : "") + str.tostring(pct, "0.0") + "%"
+
+tableRow(rowIdx, name, col, u, m, l, r2, b) =>
+    txt = #D9DDE3
+    table.cell(tbl, 0, rowIdx, name, text_color=col, text_size=size.small, text_halign=text.align_left)
+    table.cell(tbl, 1, rowIdx, fmtLevel(nearestBelow(u, m, l)), text_color=txt, text_size=size.small)
+    table.cell(tbl, 2, rowIdx, fmtLevel(nearestAbove(u, m, l)), text_color=txt, text_size=size.small)
+    table.cell(tbl, 3, rowIdx, na(b) ? "—" : b < 0 ? "▲" : "▼", text_color=na(b) ? txt : b < 0 ? #2E9E6B : #C2453D, text_size=size.small)
+    table.cell(tbl, 4, rowIdx, na(r2) ? "—" : str.tostring(r2, "0.00"), text_color=na(r2) or r2 < 0.6 ? color.new(txt, 50) : txt, text_size=size.small)
+
+// ─── MAIN ─────────────────────────────────────────────────────────────────
+if barstate.islast
+    clearAll()
+    [u1, m1, l1, r1, b1] = drawChannel(len1, col1, "Scalp")
+    [u2, m2, l2, r2, b2] = drawChannel(len2, col2, "Swing")
+    [u3, m3, l3, r3, b3] = drawChannel(len3, col3, "Trend")
+    [u4, m4, l4, r4, b4] = drawChannel(len4, col4, "Core")
+
+    // Confluence: band levels from different channels that sit within
+    // tolAtr × ATR of each other form one zone. Several independent channels
+    // agreeing on a price is a stronger bounce level than any single band.
+    lv = array.new<float>()
+    for v in array.from(u1, l1, u2, l2, u3, l3, u4, l4)
+        if not na(v)
+            array.push(lv, v)
+    array.sort(lv, order.ascending)
+    tol = tolAtr * atr
+    i = 0
+    while i < array.size(lv)
+        j = i
+        while j + 1 < array.size(lv)
+            if array.get(lv, j + 1) - array.get(lv, j) <= tol
+                j += 1
+            else
+                break
+        hits = j - i + 1
+        if hits >= minHits
+            zLo = array.get(lv, i)
+            zHi = array.get(lv, j)
+            isSup = (zLo + zHi) / 2 < close
+            zc = isSup ? #2E9E6B : #C2453D
+            array.push(zones, box.new(bar_index - 8, zHi + tol * 0.25, bar_index + proj, zLo - tol * 0.25,
+                 border_color=color.new(zc, 60), bgcolor=color.new(zc, 86),
+                 text=(isSup ? "Support confluence ×" : "Resistance confluence ×") + str.tostring(hits),
+                 text_color=color.new(zc, 10), text_size=size.tiny, text_halign=text.align_right))
+        i := j + 1
+
+    if showTable
+        hdr = color.new(#FFFFFF, 45)
+        table.cell(tbl, 0, 0, "Channel",    text_color=hdr, text_size=size.small, text_halign=text.align_left)
+        table.cell(tbl, 1, 0, "Support",    text_color=hdr, text_size=size.small)
+        table.cell(tbl, 2, 0, "Resistance", text_color=hdr, text_size=size.small)
+        table.cell(tbl, 3, 0, "Trend",      text_color=hdr, text_size=size.small)
+        table.cell(tbl, 4, 0, "R²",         text_color=hdr, text_size=size.small)
+        tableRow(1, "Scalp " + str.tostring(len1), col1, u1, m1, l1, r1, b1)
+        tableRow(2, "Swing " + str.tostring(len2), col2, u2, m2, l2, r2, b2)
+        tableRow(3, "Trend " + str.tostring(len3), col3, u3, m3, l3, r3, b3)
+        tableRow(4, "Core "  + str.tostring(len4), col4, u4, m4, l4, r4, b4)
