@@ -22,7 +22,7 @@ export default function Navbar({ activeTab, navigate, onOpenContact }) {
 
   return (
     <header className="sticky top-0 z-40 bg-surface-900/85 backdrop-blur-md border-b border-white/10">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-8 flex items-center justify-between h-20">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-8 flex items-center justify-between h-20" style={{ zoom: 1.1 }}>
         <button
           onClick={() => go('overview')}
           className="font-serif text-white text-2xl tracking-wide hover:text-white/80 transition-colors"

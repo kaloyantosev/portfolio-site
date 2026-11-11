@@ -1,9 +1,5 @@
 import xauusdArticle from "./articles/xauusd-cycle-top.md?raw";
 import ttfArticle from "./articles/ttf-natural-gas.md?raw";
-import stochAtrDmiPine from "./indicators/stoch-atr-dmi.pine?raw";
-import tmeoPine from "./indicators/tmeo.pine?raw";
-import imsiPine from "./indicators/imsi.pine?raw";
-import drcPine from "./indicators/dynamic-regression-channels.pine?raw";
 // =========================================================================
 // PORTFOLIO CONTENT CONFIGURATION
 // =========================================================================
@@ -62,57 +58,10 @@ export const profileConfig = {
 
 export const investmentMemos = [
   {
-    id: "memo-1",
-    title: "Sample Investment Memo Title",
-    subtitle: "Brief one-line thesis or focus area",
-    category: "Investment Memo",
-    ticker: "TICKER",
-    assetClass: "Asset Class / Sector",
-    date: "Month Year",
-    targetPrice: "$0.00",
-    currentPrice: "$0.00",
-    recommendation: "BUY / HOLD / SELL",
-    upside: "+0.0%",
-    horizon: "12-24 Months",
-    summary: "A concise overview of the investment thesis, key drivers, and catalysts.",
-    keyPoints: [
-      "Key investment thesis pillar 1",
-      "Key investment thesis pillar 2",
-      "Key investment thesis pillar 3"
-    ],
-    fullContent: `
-### 1. Executive Summary
-Insert your detailed investment memo write-up here. You can format this with headings, bullet points, financial data, and thesis arguments.
-
-### 2. Business Overview & Moat
-Detail the company's competitive advantage, market positioning, pricing power, and barriers to entry.
-
-### 3. Financial Analysis & Valuation
-Outline your valuation methodology (e.g., DCF, multiple comparison, IRR projections).
-    `
-  }
-];
-
-export const macroAnalyses = [
-  {
-    id: "xauusd-cycle-top",
-    title: "Reading the XAUUSD Cycle Top Through Converging Regression Channels",
-    subtitle: "Three regression channels, leverage data and market psychology at gold's January 2026 peak",
-    category: "Macro Analysis",
-    assetClass: "XAUUSD · Gold",
-    date: "Jan 2026",
-    summary: "Three regression channels covering 28 years, 5 years and 1 year all reached their upper bands between $5,400 and $5,600 on the monthly gold chart. With record leverage and very one-sided sentiment on top, I read it as the end of the cycle and posted the call on Threads on January 29, 2026.",
-    images: [
-      { src: "/articles/xauusd-chart.png", caption: "Analysis published on Threads on January 29, 2026: three converging regression channels on the monthly XAUUSD chart." },
-    ],
-    docx: "/articles/xauusd-top-analysis.docx",
-    body: xauusdArticle
-  },
-  {
     id: "ttf-natural-gas",
     title: "Europe's Exposure to a Natural Gas Shock (Dutch TTF)",
     subtitle: "Geopolitical energy vulnerability and the cross-asset mispricing between gold and European gas",
-    category: "Macro Analysis",
+    category: "Investment Memo",
     assetClass: "Dutch TTF · Natural Gas",
     date: "Feb 2026",
     summary: "A U.S.-Iran escalation is above all a risk to LNG supply. Qatar ships all of its LNG through the Strait of Hormuz, Europe now depends on seaborne LNG and competes with Asia for it, and storage has to be refilled from April. I think Dutch TTF is a better hedge for this risk than gold, which already looked stretched.",
@@ -133,6 +82,23 @@ export const macroAnalyses = [
     },
     docx: "/articles/ttf-natural-gas-macro-report.docx",
     body: ttfArticle
+  }
+];
+
+export const macroAnalyses = [
+  {
+    id: "xauusd-cycle-top",
+    title: "Reading the XAUUSD Cycle Top Through Converging Regression Channels",
+    subtitle: "Three regression channels, leverage data and market psychology at gold's January 2026 peak",
+    category: "Macro Analysis",
+    assetClass: "XAUUSD · Gold",
+    date: "Jan 2026",
+    summary: "Three regression channels covering 28 years, 5 years and 1 year all reached their upper bands between $5,400 and $5,600 on the monthly gold chart. With record leverage and very one-sided sentiment on top, I read it as the end of the cycle and posted the call on Threads on January 29, 2026.",
+    images: [
+      { src: "/articles/xauusd-chart.png", caption: "Analysis published on Threads on January 29, 2026: three converging regression channels on the monthly XAUUSD chart." },
+    ],
+    docx: "/articles/xauusd-top-analysis.docx",
+    body: xauusdArticle
   }
 ];
 
@@ -257,8 +223,7 @@ export const customIndicators = [
       { signal: "Confluence support", condition: "Two or more channel bands cluster within 0.6 × ATR below price", action: "Highest-probability bounce area; wait for a reaction candle inside the zone" },
       { signal: "Mean reversion", condition: "Price tags the lower band of a channel with R² ≥ 0.6", action: "Target that channel's midline" },
       { signal: "Trend break", condition: "Daily close below the Core (315) lower band", action: "Bounce thesis invalid; the level turns into resistance" }
-    ],
-    codeSnippet: drcPine
+    ]
   },
   {
     id: "imsi",
@@ -275,8 +240,7 @@ export const customIndicators = [
       { signal: "Capitulation", condition: "Range percentile ≤ 10% and z-score ≤ −2 (red background)", action: "Statistically exhausted selling; watch for a reversal setup" },
       { signal: "Accumulation trigger", condition: "In the stress zone, price makes a 10-bar lower low while the range percentile makes a higher low (green triangle)", action: "Bullish divergence at the yearly low boundary" },
       { signal: "Extreme exhaustion", condition: "Range percentile ≤ 5% (red line)", action: "Price is pinned to the yearly low; highest stress reading" }
-    ],
-    codeSnippet: imsiPine
+    ]
   },
   {
     id: "tmeo",
@@ -295,8 +259,7 @@ export const customIndicators = [
       { signal: "Fresh downtrend", condition: "TMEO ≤ −40 and still falling (red)", action: "Efficient decline with energy behind it" },
       { signal: "Mature downtrend", condition: "TMEO ≤ −40 but rising (orange)", action: "Selling pressure is fading; watch for a base" },
       { signal: "Consolidation", condition: "TMEO between −40 and +40 (grey)", action: "No efficient trend; range conditions" }
-    ],
-    codeSnippet: tmeoPine
+    ]
   },
   {
     id: "stoch-atr-dmi",
@@ -313,8 +276,7 @@ export const customIndicators = [
       { signal: "Long signal", condition: "%K crosses above 70 with +DI > −DI, DMI spread > 7 and a bullish 20/50 EMA state", action: "Momentum breakout aligned with trend (green triangle and alert)" },
       { signal: "Short signal", condition: "%K crosses below 30 with −DI > +DI, DMI spread > 7 and a bearish 20/50 EMA state", action: "Momentum breakdown aligned with trend (red triangle and alert)" },
       { signal: "Overextended trend", condition: "ADX ≥ 40", action: "Trend is stretched; treat new signals with caution" }
-    ],
-    codeSnippet: stochAtrDmiPine
+    ]
   }
 ];
 

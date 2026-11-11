@@ -1,112 +1,65 @@
 import React from 'react';
-import { ArrowLeft, CheckCircle2, Code, Clock } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import IndicatorChart from './IndicatorChart';
+import TradeWalkthrough from './TradeWalkthrough';
 
 export default function IndicatorDetailPage({ indicator, onBack }) {
   if (!indicator) return null;
+  const meta = [indicator.assetSuitability, indicator.timeframes?.join(' · ')].filter(Boolean).join(' · ');
 
   return (
-    <div className="max-w-6xl mx-auto px-6 lg:px-8 py-12">
-      
-      {/* Back Navigation Bar */}
-      <div className="mb-8 pb-4 border-b border-citi-blue/15 flex items-center justify-between">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-sm font-mono uppercase tracking-wider text-citi-muted hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span>Back to Custom Indicators</span>
-        </button>
+    <div className="max-w-[1440px] mx-auto px-6 lg:px-8 py-16">
+      <button
+        onClick={onBack}
+        className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-citi-muted hover:text-white transition-colors group"
+      >
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+        Indicators
+      </button>
+
+      <div className="mt-10 max-w-5xl">
+        <div className="section-label mb-4">{meta}</div>
+        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-medium text-white leading-[1.05]">{indicator.name}</h1>
+        <p className="mt-4 text-lg text-citi-lightaccent">{indicator.subtitle}</p>
+        <div className="mt-6 h-px w-14 bg-gold" />
       </div>
 
-      {/* Header */}
-      <div className="space-y-2">
-        <div className="flex items-center gap-2 text-xs font-mono text-citi-muted">
-          <Clock className="w-3.5 h-3.5" />
-          <span>Timeframes: {indicator.timeframes?.join(', ')}</span>
-          <span>•</span>
-          <span className="text-citi-accent font-medium">{indicator.assetSuitability}</span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl lg:text-6xl font-serif font-medium text-white leading-[1.05]">
-          {indicator.name}
-        </h1>
-        <p className="text-citi-lightaccent text-base sm:text-lg font-medium">
-          {indicator.subtitle}
-        </p>
-      </div>
-
-      {/* Live chart */}
       {indicator.chart && (
-        <div className="mt-10">
-          <div className="section-label mb-4">Live Chart · {indicator.chart.symbol} · Daily</div>
+        <section className="mt-12">
+          <div className="section-label mb-4">Live · {indicator.chart.symbol} · Daily</div>
           <IndicatorChart symbol={indicator.chart.symbol} study={indicator.chart.study} height={620} />
-        </div>
+        </section>
       )}
 
-      {/* Overview */}
-      <p className="mt-10 max-w-4xl text-slate-300 leading-relaxed text-lg">
-        {indicator.description}
-      </p>
-
-      {/* Formula */}
-      {indicator.formula && (
-        <div className="mt-10">
-          <div className="section-label mb-3">Mathematical Calculation Formula</div>
-          <div className="bg-navy-900 border border-citi-blue/20 border-l-4 border-l-citi-lightblue p-5 font-mono text-sm text-slate-200 overflow-x-auto">
-            {indicator.formula}
-          </div>
+      <section className="mt-16 grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
+        <h2 className="font-serif text-3xl text-white">How it works</h2>
+        <div className="max-w-4xl">
+          <p className="text-lg text-slate-300 leading-relaxed">{indicator.description}</p>
+          {indicator.formula && <p className="mt-6 text-sm text-citi-muted leading-relaxed">{indicator.formula}</p>}
         </div>
-      )}
+      </section>
 
-      {/* Signal Trigger States */}
+      <section className="mt-16">
+        <h2 className="font-serif text-3xl text-white mb-8">Trading it</h2>
+        <TradeWalkthrough study={indicator.chart?.study} />
+      </section>
+
       {indicator.signals?.length > 0 && (
-        <div className="mt-10">
-          <div className="section-label mb-4">Signal States & Algorithmic Triggers</div>
-          <div className="space-y-3.5">
-            {indicator.signals.map((sig, i) => (
-              <div key={i} className="bg-navy-800 border border-white/5 p-5 space-y-2 text-sm font-mono">
-                <div className="flex items-center gap-2 text-base text-white font-bold">
-                  <CheckCircle2 className="w-5 h-5 text-citi-accent" />
-                  <span>{sig.signal}</span>
-                </div>
-                <div className="pl-7 text-slate-300">
-                  <span className="text-citi-muted uppercase text-xs">Condition: </span>
+        <section className="mt-16 grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
+          <h2 className="font-serif text-3xl text-white">Reading the signals</h2>
+          <dl className="border-t border-white/10">
+            {indicator.signals.map(sig => (
+              <div key={sig.signal} className="grid gap-2 md:grid-cols-[14rem_1fr] md:gap-8 py-6 border-b border-white/10">
+                <dt className="font-serif text-xl text-white">{sig.signal}</dt>
+                <dd className="text-slate-300 leading-relaxed">
                   {sig.condition}
-                </div>
-                <div className="pl-7 text-emerald-400">
-                  <span className="text-citi-muted uppercase text-xs">Action Trigger: </span>
-                  {sig.action}
-                </div>
+                  <span className="block mt-1 text-citi-muted">{sig.action}</span>
+                </dd>
               </div>
             ))}
-          </div>
-        </div>
+          </dl>
+        </section>
       )}
-
-      {/* Implementation Code */}
-      {indicator.codeSnippet && (
-        <div className="mt-10">
-          <div className="section-label mb-3 flex items-center gap-1.5">
-            <Code className="w-4 h-4 text-citi-accent" />
-            <span>Implementation Code Snippet</span>
-          </div>
-          <pre className="bg-navy-900 border border-white/10 p-5 font-mono text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed">
-            <code>{indicator.codeSnippet}</code>
-          </pre>
-        </div>
-      )}
-
-      {/* Bottom Back Button */}
-      <div className="mt-12 pt-6 border-t border-white/5 flex justify-between items-center">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-sm font-mono uppercase tracking-wider text-citi-muted hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Return to Custom Indicators</span>
-        </button>
-      </div>
-
     </div>
   );
 }
