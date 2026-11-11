@@ -13,6 +13,27 @@ export const profileConfig = {
   linkedin: "https://linkedin.com/in/kaloyan-tosev",
   cvPdfUrl: "/cv.pdf",
   recPdfUrl: "/letter_of_recommendation.pdf",
+  // Homepage "Experience" timeline, newest first.
+  experience: [
+    {
+      role: "Proprietary Trader",
+      org: "Amaltea · Self-employed",
+      period: "Nov 2023 – Present",
+      text: "Market microstructure through footprint charts and order-flow dynamics. Evaluating real-time volume data and modelling advanced options strategies."
+    },
+    {
+      role: "Management Global Markets | Treasury Department",
+      org: "DSK Bank · Internship · Bulgaria",
+      period: "Jun 2025 – Jul 2025",
+      text: "Exposure to money-market trading, foreign-exchange operations, discretionary portfolio management and daily market analysis, covering funding operations and investment and securities administration."
+    },
+    {
+      role: "Founder & Markets Analyst",
+      org: "Amaltea · Full-time",
+      period: "Mar 2023 – Nov 2023",
+      text: "Founded and led Amaltea, a research and analytics business specialising in institutional-style analysis of stock and cryptocurrency markets. Managed a team of six interns and secured partnerships."
+    }
+  ],
   metrics: [
     { label: "Metric 1 (e.g. Sharpe Ratio)", value: "0.00", desc: "Short description or footnote" },
     { label: "Metric 2 (e.g. Annualized Alpha)", value: "0.0%", desc: "Short description or footnote" },
@@ -286,59 +307,4 @@ The Chamberlin Group
 // 6. CERTIFICATES & AWARDS
 // -------------------------------------------------------------------------
 
-export const certificatesAndAwards = [
-  {
-    id: "cert-investment-challenge-aubg",
-    title: "First Place | Investment Challenge AUBG",
-    category: "Competition First Place Award",
-    institution: "American University in Bulgaria (AUBG)",
-    date: "Apr 2025",
-    summary: "Won first place in the institutional investment case competition by building a high-conviction valuation thesis with detailed DCF sensitivity modeling.",
-    details: [
-      "Created a Discounted Cash Flow (DCF) model, incorporating sensitivity analysis and WACC calculations to determine the intrinsic value of a target company.",
-      "Individual role for conducting fundamental and technical analysis, financial ratios, and price action to build a high-conviction investment thesis.",
-      "Presented a winning professional-grade investment case to a panel of experts, defending valuation assumptions and risk-mitigation strategies."
-    ]
-  },
-  {
-    id: "cert-goldman-sachs-business-finance",
-    title: "Fundamentals of Business Finance | Goldman Sachs",
-    category: "Corporate Finance Certification",
-    institution: "Goldman Sachs",
-    date: "Sep 2025",
-    summary: "Completed Goldman Sachs finance training covering corporate liquidity analysis, credit counterparty health, debt structure analysis, and valuation modeling.",
-    details: [
-      "Learned cash flow management and liquidity analysis, developing the ability to monitor the financial health of corporate entities and credit counterparties.",
-      "Analyzed complex financial statements to identify leverage ratios and debt structures, providing a foundation for managing bank loan activities.",
-      "Applied valuation models to understand the pricing of credit-linked instruments, essential for ensuring accuracy in trade booking."
-    ]
-  },
-  {
-    id: "cert-yale-financial-markets",
-    title: "Financial Markets | Yale University (Prof. Robert J. Shiller)",
-    category: "Academic Credential",
-    institution: "Yale University",
-    instructor: "Prof. Robert J. Shiller (Nobel Laureate)",
-    date: "Aug 2025",
-    summary: "Advanced study of multi-asset trade lifecycles, credit derivatives, futures and options mechanics, and institutional risk management frameworks.",
-    details: [
-      "Gained technical knowledge of the trade lifecycle across multiple asset classes, including the mechanics of credit derivatives, futures, and options.",
-      "Evaluated risk management frameworks used by institutional firms to minimize operational and market risks during T+1 settlements.",
-      "Connected investment banking operations with market behavior to better understand the role of intermediaries in clearing and settlement processes."
-    ]
-  },
-  {
-    id: "cert-yale-narrative-economics",
-    title: "Narrative Economics | Yale University (Prof. Robert J. Shiller)",
-    category: "Academic Credential",
-    institution: "Yale University",
-    instructor: "Prof. Robert J. Shiller (Nobel Laureate)",
-    date: "Jul 2025",
-    summary: "Applied problem-solving and forecasting models to study how market narratives drive volatility, sentiment shifts, and structural trading environments.",
-    details: [
-      "Advanced problem-solving techniques to interpret how market-wide narratives drive volatility and potential operational breaks.",
-      "Utilized financial forecasting models to anticipate shifts in market sentiment, supporting strategic decision-making in high-pressure trading environments.",
-      "Enhanced analytical skills, focusing on the intersection of economic history and modern market mechanics to improve workflow and control."
-    ]
-  }
-];
+export { certificatesAndAwards } from "./certificatesData";

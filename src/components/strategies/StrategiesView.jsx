@@ -17,7 +17,7 @@ export default function StrategiesView({ activeSubTab, setActiveSubTab, selected
     );
   }
 
-  const list = activeSubTab === 'investment-algos' ? investmentAlgos : tradingAlgos;
+  const list = activeSubTab === 'investment-algos' ? investmentAlgos : activeSubTab === 'trading-algos' ? tradingAlgos : [...tradingAlgos, ...investmentAlgos];
 
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
@@ -25,6 +25,7 @@ export default function StrategiesView({ activeSubTab, setActiveSubTab, selected
 
       <SubTabs
         tabs={[
+          { key: 'all', label: 'All', count: tradingAlgos.length + investmentAlgos.length },
           { key: 'trading-algos', label: 'Trading Algos', count: tradingAlgos.length },
           { key: 'investment-algos', label: 'Investment Algos', count: investmentAlgos.length },
         ]}

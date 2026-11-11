@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import HeroSection from './components/home/HeroSection';
@@ -12,11 +12,31 @@ import CvView from './components/cv/CvView';
 import ContactModal from './components/common/ContactModal';
 
 // Sub-tab each tab opens on when no sub-tab is named.
-const DEFAULT_SUB = { articles: 'memos', strategies: 'trading-algos', models: 'all' };
+const DEFAULT_SUB = { articles: 'all', strategies: 'all', models: 'all', certificates: 'all' };
+const TABS = ['cv', 'articles', 'strategies', 'models', 'indicators', 'recommendations', 'certificates'];
+
+// URL path <-> tab: "/" is the overview, "/certificates" the certificates tab.
+// Unknown paths fall back to the overview. vercel.json rewrites every path to index.html.
+const tabFromPath = () => {
+  const slug = window.location.pathname.split('/')[1];
+  return TABS.includes(slug) ? slug : 'overview';
+};
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [activeSubTab, setActiveSubTab] = useState(null);
+  const [activeTab, setActiveTab] = useState(tabFromPath);
+  const [activeSubTab, setActiveSubTab] = useState(() => DEFAULT_SUB[tabFromPath()] ?? null);
+
+  // Browser back/forward
+  useEffect(() => {
+    const onPop = () => {
+      const tab = tabFromPath();
+      setActiveTab(tab);
+      setActiveSubTab(DEFAULT_SUB[tab] ?? null);
+      clearDetails();
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   // Dedicated sub-page selected IDs
@@ -39,6 +59,8 @@ export default function App() {
     setActiveTab(tab);
     setActiveSubTab(sub ?? DEFAULT_SUB[tab] ?? null);
     clearDetails();
+    const path = tab === 'overview' ? '/' : `/${tab}`;
+    if (window.location.pathname !== path) window.history.pushState(null, '', path);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -97,6 +119,8 @@ export default function App() {
 
         {activeTab === 'certificates' && (
           <CertificatesView
+            activeSubTab={activeSubTab}
+            setActiveSubTab={withClear(setSelectedCertId)}
             selectedCertId={selectedCertId}
             setSelectedCertId={setSelectedCertId}
           />

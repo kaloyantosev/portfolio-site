@@ -17,7 +17,7 @@ export default function ArticlesView({ activeSubTab, setActiveSubTab, selectedAr
     );
   }
 
-  const list = activeSubTab === 'macro' ? macroAnalyses : investmentMemos;
+  const list = activeSubTab === 'macro' ? macroAnalyses : activeSubTab === 'memos' ? investmentMemos : [...investmentMemos, ...macroAnalyses];
 
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
@@ -25,6 +25,7 @@ export default function ArticlesView({ activeSubTab, setActiveSubTab, selectedAr
 
       <SubTabs
         tabs={[
+          { key: 'all', label: 'All', count: investmentMemos.length + macroAnalyses.length },
           { key: 'memos', label: 'Investment Memos', count: investmentMemos.length },
           { key: 'macro', label: 'Macro Analyses', count: macroAnalyses.length },
         ]}
