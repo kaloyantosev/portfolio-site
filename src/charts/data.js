@@ -3,10 +3,10 @@
 // Yahoo can rate-limit it, in which case the chart shows "Chart data unavailable".
 const cache = new Map();
 
-export function loadDaily(symbol, range = '3y') {
-  const key = `${symbol}|${range}`;
+export function loadDaily(symbol, range = '3y', interval = '1d') {
+  const key = `${symbol}|${range}|${interval}`;
   if (!cache.has(key)) {
-    const url = `/yf/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=1d`;
+    const url = `/yf/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}`;
     const p = fetch(url)
       .then(r => {
         if (!r.ok) throw new Error(`Price data request failed (${r.status})`);

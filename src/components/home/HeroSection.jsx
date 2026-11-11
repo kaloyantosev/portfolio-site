@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { profileConfig } from '../../portfolioData';
 import { ListRow } from '../common/ListUI';
 import CareerChart from './CareerChart';
+import ShowcaseCarousel from './ShowcaseCarousel';
 
 const SECTIONS = [
   { tab: 'articles', title: 'Articles', desc: 'Investment memos and global macro analyses.' },
@@ -89,6 +90,11 @@ export default function HeroSection({ navigate, onOpenContact }) {
             ))}
           </div>
         )}
+
+        <div className="mt-16 pt-10 border-t border-white/10">
+          <div className="section-label mb-6">Live work</div>
+          <ShowcaseCarousel navigate={navigate} />
+        </div>
 
         <div className="mt-16 border-t border-white/10">
           {SECTIONS.map((s, i) => (

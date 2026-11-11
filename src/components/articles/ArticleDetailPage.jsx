@@ -1,12 +1,16 @@
 import React from 'react';
 import { ArrowLeft, Download } from 'lucide-react';
 import ThreadPost from './ThreadPost';
+import { PriceSince, ArticleFigure } from './MarketCharts';
 
 // Renders an article body written in a small Markdown subset:
 // "## " headings, "- " bullets, "1. " numbered lists, "> " quotes, blank-line paragraphs.
 function ArticleBody({ text }) {
-  return text.trim().split(/\n\s*\n/).map((block, i) => {
+  // Normalise Windows line endings so block markers like [[chart:id]] match exactly.
+  return text.replace(/\r\n?/g, '\n').trim().split(/\n\s*\n/).map((block, i) => {
     const lines = block.split('\n');
+    const fig = block.match(/^\[\[chart:([\w-]+)\]\]$/);
+    if (fig) return <ArticleFigure key={i} id={fig[1]} />;
     if (block.startsWith('## ')) {
       return <h2 key={i} className="font-serif text-3xl text-white !mt-12 mb-2">{block.slice(3)}</h2>;
     }
@@ -37,11 +41,15 @@ export default function ArticleDetailPage({ article, onBack }) {
         Articles
       </button>
 
-      <div className="mt-10 max-w-5xl">
-        <div className="section-label mb-4">{meta}</div>
-        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-medium text-white leading-[1.05]">{article.title}</h1>
-        {article.subtitle && <p className="mt-4 text-lg text-citi-lightaccent">{article.subtitle}</p>}
-        <div className="mt-6 h-px w-14 bg-gold" />
+      {/* Headline, with the market's price since publication beside it. */}
+      <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,32rem)] lg:items-end">
+        <div>
+          <div className="section-label mb-4">{meta}</div>
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-medium text-white leading-[1.05]">{article.title}</h1>
+          {article.subtitle && <p className="mt-4 text-lg text-citi-lightaccent">{article.subtitle}</p>}
+          <div className="mt-6 h-px w-14 bg-gold" />
+        </div>
+        {article.priceSince && <PriceSince {...article.priceSince} />}
       </div>
 
       {/* Images float right; the text wraps around them and runs full width below. */}

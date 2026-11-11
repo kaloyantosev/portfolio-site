@@ -64,6 +64,8 @@ The main argument of the thread is about risk and reward. Comparing gold with Du
 
 In short, I would rather own the asset whose supply chain sits directly in the path of the crisis but whose price has not moved yet, than the one everyone is already buying at record highs. For me, that is European natural gas.
 
+[[chart:gold-since-memo]]
+
 ## 9. Conclusion and What to Watch
 
 Calling the gold top at $5,400 on January 29 was the first part of this view. The second is the expectation that markets will come to see a U.S.-Iran conflict mainly as an energy supply problem, with Europe most affected.

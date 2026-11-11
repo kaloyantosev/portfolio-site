@@ -60,8 +60,8 @@ export default function App() {
   };
 
   // One entry point for every link in the header, hero and footer.
-  const navigate = (tab, sub) => {
-    go({ tab, sub: sub ?? DEFAULT_SUB[tab] ?? null, detail: null });
+  const navigate = (tab, sub, detail = null) => {
+    go({ tab, sub: sub ?? DEFAULT_SUB[tab] ?? null, detail });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   const setSub = sub => go({ ...route, sub, detail: null });

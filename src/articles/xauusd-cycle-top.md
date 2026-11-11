@@ -25,6 +25,8 @@ I drew all three on the monthly chart, each starting from a meaningful point in 
 
 Any one of these on its own can give a false signal. What made the setup worth acting on was that the upper bands of all three landed in the same area, between $5,400 and $5,600. Three unrelated time frames agreeing that price was stretched made a reversal much more likely than any single signal would.
 
+[[chart:gold-channels]]
+
 ## 4. Putting It on Record
 
 It is easy to say you saw a top once the price has already fallen. I wanted to commit before that happened, so I posted the analysis on Threads (@ktsvv_) on January 29, 2026.
