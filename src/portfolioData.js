@@ -166,16 +166,6 @@ export const customModels = [
     description: "Advanced equity derivatives and institutional positioning platform designed to decode smart-money market activity. Connects with Nasdaq data feeds to analyze options market microstructure, Put/Call positioning metrics, and historical 13F hedge fund accumulation across individual equities and indices."
   },
   {
-    id: "model-cot-visualizer",
-    name: "COT Data Visualizer — Macro & Futures Positioning",
-    subtitle: "Disaggregated CFTC Commitments of Traders positioning and net flow aggression model",
-    category: "Global Macro & Futures",
-    group: "Macro & Positioning",
-    liveUrl: "https://cot-visualiser.vercel.app/",
-    previewImage: "/cot_visualiser_preview.png",
-    description: "Institutional macro model built to analyze and visualize disaggregated CFTC Commitments of Traders (COT) data across Commodities and Financial Futures. Isolates positioning dynamics between Commercial Hedgers (Producers/Merchants), Institutional Asset Managers, and Leveraged Speculative Funds to detect positioning extremes and liquidity inflection points."
-  },
-  {
     id: "model-cot-pro",
     name: "COT Pro — Institutional Positioning Intelligence",
     subtitle: "CFTC Legacy & Disaggregated positioning analytics across 30+ global futures markets",
