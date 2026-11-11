@@ -224,6 +224,10 @@ export const customIndicators = [
     category: "Order Flow / Momentum / Volatility",
     timeframes: ["Intraday", "Daily", "Weekly"],
     assetSuitability: "Equities, Futures, FX",
+    // TradingView chart on the detail page. intervals: "1","5","15","30","60","240","D","W","M"
+    // (first one opens by default; more than one shows timeframe buttons).
+    // studies: TradingView built-in study ids, e.g. "STD;RSI", "STD;MACD".
+    chart: { symbol: "AMEX:SPY", intervals: ["D"], studies: [] },
     description: "Detailed description of the indicator logic, what market inefficiencies it captures, and how to interpret its readings.",
     formula: "Mathematical formula for the indicator calculation",
     signals: [
