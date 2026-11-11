@@ -1,3 +1,4 @@
+import tmeoPine from "./indicators/tmeo.pine?raw";
 import imsiPine from "./indicators/imsi.pine?raw";
 import drcPine from "./indicators/dynamic-regression-channels.pine?raw";
 // =========================================================================
@@ -283,6 +284,25 @@ export const customIndicators = [
       { signal: "Extreme exhaustion", condition: "Range percentile ≤ 5% (red line)", action: "Price is pinned to the yearly low; highest stress reading" }
     ],
     codeSnippet: imsiPine
+  },
+  {
+    id: "tmeo",
+    name: "Trend Maturity & Efficiency Oscillator (TMEO)",
+    subtitle: "Fractal efficiency of price to separate fresh trends, maturing trends and chop, with quarterly levels",
+    category: "Trend / Momentum",
+    timeframes: ["Daily"],
+    assetSuitability: "OXY · Equities & Commodities",
+    chart: { symbol: "NYSE:OXY", intervals: ["D"], studies: [] },
+    description: "Measures how efficiently price is trending. Over a 20-bar cycle it compares the straight-line move from start to end with the total distance price actually travelled, giving a score from −100 (a perfectly clean decline) to +100 (a perfectly clean advance). The line is smoothed with a 5-bar WMA, and its slope separates fresh trends that are still accelerating from mature trends that are losing energy. Readings between −40 and +40 mark consolidation. On daily charts it also marks each quarter on the price chart and the oscillator, with a dotted line tracking that quarter's running average price.",
+    formula: "ER = (Cₜ − Cₜ₋₂₀) / Σ|Cᵢ − Cᵢ₋₁| × 100   ·   TMEO = WMA₅(ER)   ·   Energy = ΔTMEO   ·   Fresh: |TMEO| ≥ 40 and slope with the trend",
+    signals: [
+      { signal: "Fresh uptrend", condition: "TMEO ≥ 40 and still rising (green)", action: "Efficient advance with energy behind it" },
+      { signal: "Mature uptrend", condition: "TMEO ≥ 40 but falling (yellow)", action: "Trend is losing efficiency; tighten risk" },
+      { signal: "Fresh downtrend", condition: "TMEO ≤ −40 and still falling (red)", action: "Efficient decline with energy behind it" },
+      { signal: "Mature downtrend", condition: "TMEO ≤ −40 but rising (orange)", action: "Selling pressure is fading; watch for a base" },
+      { signal: "Consolidation", condition: "TMEO between −40 and +40 (grey)", action: "No efficient trend; range conditions" }
+    ],
+    codeSnippet: tmeoPine
   }
 ];
 

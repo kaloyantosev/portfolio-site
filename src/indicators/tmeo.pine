@@ -1,0 +1,110 @@
+// This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Kaloyan26
+
+//@version=5
+indicator("Trend Maturity & Efficiency Oscillator (TMEO) with Quarters", shorttitle="TMEO+Q", overlay=false, precision=2)
+
+// =========================================================================
+// INPUTS & STYLING
+// =========================================================================
+lookback     = input.int(20, title="Trend Cycle Lookback", minval=5)
+signal_smooth= input.int(5, title="Signal Smoothing (WMA)", minval=1)
+
+// Color definitions
+color_up_fresh  = #00ff88
+color_up_mature = #ffcc00
+color_dn_fresh  = #ff0055
+color_dn_mature = #ff6600
+color_consol    = #808080
+
+// =========================================================================
+// THE MATHEMATICAL ENGINE: FRACTAL EFFICIENCY & ENERGY EXHAUSTION
+// =========================================================================
+
+// 1. Calculate the Net Displacement (Straight-line distance from start to end)
+net_move = close - close[lookback]
+
+// 2. Calculate the Total Path Traveled (Adding up every single wiggle)
+var float total_path = 0.0
+total_path := 0.0
+for i = 0 to lookback - 1
+    total_path := total_path + math.abs(close[i] - close[i+1])
+
+// 3. Compute Efficiency Ratio (-100 to +100)
+efficiency = total_path > 0 ? (net_move / total_path) * 100 : 0.0
+
+// Smooth the raw efficiency to eliminate noise
+tmeo_line = ta.wma(efficiency, signal_smooth)
+
+// 4. Calculate Energy Exhaustion
+exhaustion_trigger = ta.change(tmeo_line)
+
+// =========================================================================
+// RENDERING & MULTI-STATE VISUALIZATION
+// =========================================================================
+
+// Convert state selection to simple, independent conditional lines to avoid parsing errors
+is_up_fresh  = tmeo_line >= 40 and exhaustion_trigger >= 0
+is_up_mature = tmeo_line >= 40 and exhaustion_trigger < 0
+is_dn_fresh  = tmeo_line <= -40 and exhaustion_trigger <= 0
+is_dn_mature = tmeo_line <= -40 and exhaustion_trigger > 0
+is_consol    = not (tmeo_line >= 40 or tmeo_line <= -40)
+
+// Assign the exact line color based on the flags above
+wave_color = is_up_fresh ? color_up_fresh : is_up_mature ? color_up_mature : is_dn_fresh ? color_dn_fresh : is_dn_mature ? color_dn_mature : color_consol
+
+// Plot the core oscillator line
+plot(tmeo_line, title="Trend Maturity Line", color=wave_color, linewidth=3)
+
+// Shaded background areas for rapid identification of market state
+bgcolor(is_up_fresh ? color.new(color_up_fresh, 92) : is_up_mature ? color.new(color_up_mature, 92) : is_dn_fresh ? color.new(color_dn_fresh, 92) : is_dn_mature ? color.new(color_dn_mature, 92) : color.new(color_consol, 95))
+
+// Institutional reference boundaries
+hline(100, "Max Bullish Boundary", color=color.new(color.white, 80))
+hline(40, "Uptrend Threshold", color=color.new(color.green, 60), linestyle=hline.style_dotted)
+hline(0, "Equilibrium Axis", color=color.new(color.white, 50), linestyle=hline.style_solid)
+hline(-40, "Downtrend Threshold", color=color.new(color.red, 60), linestyle=hline.style_dotted)
+hline(-100, "Max Bearish Boundary", color=color.new(color.white, 80))
+
+// =========================================================================
+// MAIN CHART OVERLAY & PANE: QUARTERLY LINES (DAILY TIMEFRAME ONLY)
+// =========================================================================
+
+// 3.0, not 3: keeps the division in floating point so ceil() rounds months 1-3 up to Q1.
+current_quarter = math.ceil(month(time) / 3.0)
+isNewQuarter = ta.change(current_quarter) != 0 or barstate.isfirst
+
+var float q_price_sum = 0.0
+var int   q_bars      = 0
+
+var line  q_line_main = na
+var line  q_line_pane = na
+var line  avg_p_line  = na
+
+if isNewQuarter
+    // Reset for the new quarter
+    q_price_sum := close
+    q_bars      := 1
+
+    // Only draw the lines if we are on the Daily timeframe
+    if timeframe.isdaily
+        // Vertical quarter-separator line on the main chart
+        q_line_main := line.new(bar_index, low, bar_index, high, extend=extend.both, color=color.new(color.white, 85), style=line.style_dashed, width=1, force_overlay=true)
+
+        // Vertical quarter-separator line on the TMEO indicator pane below
+        q_line_pane := line.new(bar_index, -100, bar_index, 100, extend=extend.both, color=color.new(color.white, 85), style=line.style_dashed, width=1)
+
+        // Horizontal dotted Average Price line on the main chart
+        avg_p_line := line.new(bar_index, close, bar_index, close, color=color.new(color.aqua, 60), style=line.style_dotted, width=1, force_overlay=true)
+else
+    q_price_sum += close
+    q_bars      += 1
+
+// Calculate running average price for the current quarter
+avg_price = q_price_sum / math.max(1, q_bars)
+
+// Stretch and adjust the Average Price horizontal line to match the current average
+if not na(avg_p_line) and timeframe.isdaily
+    line.set_y1(avg_p_line, avg_price)
+    line.set_y2(avg_p_line, avg_price)
+    line.set_x2(avg_p_line, bar_index)
