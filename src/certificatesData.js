@@ -179,5 +179,26 @@ export const certificatesAndAwards = [
       "Individual role for conducting fundamental and technical analysis, financial ratios, and price action to build a high-conviction investment thesis.",
       "Presented a winning professional-grade investment case to a panel of experts, defending valuation assumptions and risk-mitigation strategies."
     ]
-  }
+  },
+
+  // CME Group projects (LinkedIn "Projects"). No dates on LinkedIn, so date is omitted.
+  ...[
+    ["agricultural-commodities", "Agricultural Commodities & Agribusiness Risk Management", "End-to-end agricultural derivatives programme covering grains and agribusiness risk management."],
+    ["energy-markets", "Energy Markets, Crude Oil & Environmental Derivatives", "Energy derivatives training covering crude oil and environmental products."],
+    ["equity-index-futures", "Equity Index Futures, Sector Derivatives & Portfolio Management", "Equity index derivatives curriculum including E-mini futures, sector derivatives and portfolio management."],
+    ["fx-futures", "FX Futures, Currency Hedging & CME FX Link", "Institutional foreign exchange curriculum on FX futures, currency hedging and CME FX Link."],
+    ["financial-futures-options", "Financial Futures & Advanced Options Workshop", "Curriculum drawing on CME Institute material on financial futures and advanced options."],
+    ["fixed-income-stir", "Fixed Income, Treasury Futures & STIR Derivatives", "Fixed income and money market curriculum on Treasury futures and short-term interest rate derivatives."],
+    ["futures-operations", "Futures Market Operations, Mechanics & Spread Trading", "Operational and tactical futures curriculum on market mechanics and spread trading."],
+    ["options-on-futures", "Options on Futures, Volatility & Multi-Leg Strategies", "Options training on options on futures, volatility and multi-leg strategies."],
+    ["metals-derivatives", "Precious, Base & Ferrous Metals Derivatives", "Multi-asset metals curriculum covering precious, base and ferrous metals derivatives."],
+  ].map(([slug, title, summary]) => ({
+    id: `project-cme-${slug}`,
+    title,
+    group: "Projects",
+    category: "Project",
+    institution: "CME Group",
+    image: "/certificates/cme-group.png",
+    summary,
+  }))
 ];

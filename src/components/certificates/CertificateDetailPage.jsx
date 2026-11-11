@@ -15,7 +15,7 @@ export default function CertificateDetailPage({ item, onBack }) {
       </button>
 
       <div className="mt-10">
-        <div className="section-label mb-4">{item.institution} · {item.date}</div>
+        <div className="section-label mb-4">{[item.institution, item.date].filter(Boolean).join(" · ")}</div>
         <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-medium text-white leading-[1.05]">{item.title}</h1>
         {item.instructor && <p className="mt-4 text-citi-lightaccent text-lg">{item.instructor}</p>}
         <div className="mt-6 h-px w-14 bg-gold" />

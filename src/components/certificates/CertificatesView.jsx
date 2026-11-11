@@ -4,7 +4,7 @@ import { PageHeader, SubTabs, ListRow, EmptyNote } from '../common/ListUI';
 import CertificateDetailPage from './CertificateDetailPage';
 
 // Tab order. Each certificate names its group in portfolioData.js.
-const GROUPS = ['Markets & Trading', 'Risk & Investment', 'Data & AI', 'Academic', 'Awards'];
+const GROUPS = ['Markets & Trading', 'Risk & Investment', 'Data & AI', 'Academic', 'Awards', 'Projects'];
 
 export default function CertificatesView({ activeSubTab, setActiveSubTab, selectedCertId, setSelectedCertId }) {
   const activeItem = selectedCertId && certificatesAndAwards.find(c => c.id === selectedCertId);
@@ -36,7 +36,7 @@ export default function CertificatesView({ activeSubTab, setActiveSubTab, select
         {list.map(c => (
           <ListRow
             key={c.id}
-            meta={`${c.institution} · ${c.date}`}
+            meta={[c.institution, c.date].filter(Boolean).join(" · ")}
             image={c.image}
             wide
             title={c.title}
