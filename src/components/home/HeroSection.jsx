@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { profileConfig } from '../../portfolioData';
 import { ListRow } from '../common/ListUI';
+import CareerChart from './CareerChart';
 
 const SECTIONS = [
   { tab: 'articles', title: 'Articles', desc: 'Investment memos and global macro analyses.' },
@@ -71,18 +72,9 @@ export default function HeroSection({ navigate, onOpenContact }) {
             <div className="section-label mb-4">Experience</div>
             <h2 className="font-serif text-4xl sm:text-5xl font-medium text-white">Finance career</h2>
             <div className="mt-6 h-px w-14 bg-gold" />
-            <ol className="mt-10 border-t border-white/10">
-              {profileConfig.experience.map(e => (
-                <li key={e.role + e.period} className="grid md:grid-cols-[13rem_1fr] gap-x-10 gap-y-2 py-8 border-b border-white/10">
-                  <span className="text-[11px] uppercase tracking-[0.18em] text-citi-muted pt-2">{e.period}</span>
-                  <div>
-                    <h3 className="font-serif text-2xl sm:text-[1.7rem] leading-tight text-white">{e.role}</h3>
-                    <p className="mt-1 text-sm text-citi-lightaccent">{e.org}</p>
-                    <p className="mt-3 max-w-3xl text-sm text-citi-muted leading-relaxed">{e.text}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
+            <div className="mt-12">
+              <CareerChart items={profileConfig.experience} />
+            </div>
           </section>
         )}
 
