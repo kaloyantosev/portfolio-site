@@ -1,0 +1,78 @@
+// This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Kaloyan26
+
+//@version=5
+indicator("Idiosyncratic Market Stress Index (IMSI)", shorttitle="IMSI", overlay=false, precision=2)
+
+// =========================================================================
+// INPUTS & PARAMETERS
+// =========================================================================
+lookback_range = input.int(252, title="Range Lookback (Days)", minval=10)
+z_lookback      = input.int(200, title="Volatility Z-Score Lookback", minval=10)
+stress_limit    = input.float(10.0, title="Stress Zone Threshold (%)", minval=0.0, maxval=100.0)
+extreme_limit   = input.float(5.0, title="Extreme Exhaustion Threshold (%)", minval=0.0, maxval=100.0)
+
+// =========================================================================
+// MATHEMATICAL COMPUTATIONS
+// =========================================================================
+
+// 1. Calculate the 252-Day Range Percentile (PR_252)
+high_252 = ta.highest(high, lookback_range)
+low_252  = ta.lowest(low, lookback_range)
+
+// Prevent division by zero if an asset is completely flat
+range_width = high_252 - low_252
+pr_252 = range_width > 0 ? ((close - low_252) / range_width) * 100 : 50.0
+
+// 2. Calculate the Volatility Standardized Distance (Z-Score of 200 SMA)
+sma_200 = ta.sma(close, z_lookback)
+stdev_200 = ta.stdev(close, z_lookback)
+
+// Avoid division by zero
+z_200 = stdev_200 > 0 ? (close - sma_200) / stdev_200 : 0.0
+
+// =========================================================================
+// SIGNAL LOGIC (REVERSAL & DIVERGENCES)
+// =========================================================================
+
+// Define when the stock is mathematically "At Yearly Lows" and "Volatility Stretched"
+in_stress_zone = pr_252 <= stress_limit
+is_statistically_exhausted = z_200 <= -2.0
+
+// Bullish Divergence on the Year Low Boundary
+// Price makes a lower low over 10 bars, but PR_252 or momentum refuses to match it
+price_lower_low = ta.lowest(low, 10) < ta.lowest(low, 10)[1]
+pr_higher_low   = pr_252 > ta.lowest(pr_252, 10)[1]
+bullish_divergence = in_stress_zone and price_lower_low and pr_higher_low
+
+// =========================================================================
+// PLOTTING & VISUALIZATION
+// =========================================================================
+
+// Background shading for extreme market capitulation (PR_252 < 10% AND Volatility Z-Score < -2.0)
+capitulation_signal = in_stress_zone and is_statistically_exhausted
+bgcolor(capitulation_signal ? color.new(color.red, 90) : na)
+
+// Reference lines
+hline(100, "52-Week High (100%)", color=color.new(color.green, 50), linestyle=hline.style_dotted)
+hline(50, "Neutral Midpoint", color=color.new(color.gray, 70), linestyle=hline.style_dashed)
+hline(stress_limit, "Stress Threshold", color=color.new(color.orange, 50), linestyle=hline.style_dotted)
+hline(0, "52-Week Low (0%)", color=color.new(color.red, 50), linestyle=hline.style_solid)
+
+// Plot the main Range Percentile line
+pr_color = pr_252 <= extreme_limit ? color.red : (pr_252 <= stress_limit ? color.orange : color.white)
+plot(pr_252, title="Range Percentile", color=pr_color, linewidth=2)
+
+// Plot the Z-Score as a secondary visual element (scaled to display cleanly)
+// Map Z-score of -3 to +3 to a readable 0 to 100 scale on the oscillator panel
+scaled_z = ((z_200 + 3) / 6) * 100
+plot(scaled_z, title="Scaled Z-Score", color=color.new(color.blue, 60), linewidth=1, style=plot.style_area)
+
+// Trigger visual buy shapes when bullish divergence occurs at yearly lows
+plotshape(bullish_divergence, title="Accumulation Trigger", style=shape.triangleup, location=location.bottom, color=color.green, size=size.small)
+
+// =========================================================================
+// QUARTERLY VERTICAL LINES (DAILY TIMEFRAME ONLY)
+// =========================================================================
+
+current_quarter = math.ceil(month(time) / 3)

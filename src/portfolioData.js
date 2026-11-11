@@ -1,3 +1,4 @@
+import imsiPine from "./indicators/imsi.pine?raw";
 import drcPine from "./indicators/dynamic-regression-channels.pine?raw";
 // =========================================================================
 // PORTFOLIO CONTENT CONFIGURATION
@@ -265,6 +266,23 @@ export const customIndicators = [
       { signal: "Trend break", condition: "Daily close below the Core (315) lower band", action: "Bounce thesis invalid; the level turns into resistance" }
     ],
     codeSnippet: drcPine
+  },
+  {
+    id: "imsi",
+    name: "Idiosyncratic Market Stress Index (IMSI)",
+    subtitle: "Yearly range percentile and volatility z-score to spot capitulation and accumulation at yearly lows",
+    category: "Mean Reversion / Stress",
+    timeframes: ["Daily"],
+    assetSuitability: "QQQ · Indices & Equities",
+    chart: { symbol: "NASDAQ:QQQ", intervals: ["D"], studies: [] },
+    description: "An oscillator that measures how stressed an asset is against its own year. The 252-day range percentile places today's close between the yearly low (0%) and high (100%); a z-score shows how many standard deviations price sits from its 200-day average. When price is in the bottom 10% of its yearly range and more than two standard deviations below the 200-day mean, the panel shades red as capitulation. A bullish divergence inside the stress zone, where price prints a lower low but the range percentile holds a higher low, flags an accumulation trigger.",
+    formula: "PR₂₅₂ = (C − L₂₅₂) / (H₂₅₂ − L₂₅₂) × 100   ·   Z₂₀₀ = (C − SMA₂₀₀) / σ₂₀₀   ·   Capitulation: PR₂₅₂ ≤ 10 and Z₂₀₀ ≤ −2",
+    signals: [
+      { signal: "Capitulation", condition: "Range percentile ≤ 10% and z-score ≤ −2 (red background)", action: "Statistically exhausted selling; watch for a reversal setup" },
+      { signal: "Accumulation trigger", condition: "In the stress zone, price makes a 10-bar lower low while the range percentile makes a higher low (green triangle)", action: "Bullish divergence at the yearly low boundary" },
+      { signal: "Extreme exhaustion", condition: "Range percentile ≤ 5% (red line)", action: "Price is pinned to the yearly low; highest stress reading" }
+    ],
+    codeSnippet: imsiPine
   }
 ];
 
