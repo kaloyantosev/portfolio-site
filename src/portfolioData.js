@@ -256,6 +256,7 @@ export const customIndicators = [
     category: "Trend / Mean Reversion",
     timeframes: ["Daily"],
     assetSuitability: "NVDA · Equities",
+    summary: "Four log-regression channels whose bands cluster into confluence zones: the price levels most likely to hold.",
     // TradingView chart on the detail page. intervals: "1","5","15","30","60","240","D","W","M"
     // (first one opens by default; more than one shows timeframe buttons).
     // studies: TradingView built-in study ids, e.g. "STD;RSI", "STD;MACD".
@@ -276,6 +277,7 @@ export const customIndicators = [
     category: "Mean Reversion / Stress",
     timeframes: ["Daily"],
     assetSuitability: "QQQ · Indices & Equities",
+    summary: "Yearly range percentile plus a 200-day z-score to flag capitulation and accumulation at yearly lows.",
     chart: { symbol: "NASDAQ:QQQ", intervals: ["D"], studies: [] },
     description: "An oscillator that measures how stressed an asset is against its own year. The 252-day range percentile places today's close between the yearly low (0%) and high (100%); a z-score shows how many standard deviations price sits from its 200-day average. When price is in the bottom 10% of its yearly range and more than two standard deviations below the 200-day mean, the panel shades red as capitulation. A bullish divergence inside the stress zone, where price prints a lower low but the range percentile holds a higher low, flags an accumulation trigger.",
     formula: "PR₂₅₂ = (C − L₂₅₂) / (H₂₅₂ − L₂₅₂) × 100   ·   Z₂₀₀ = (C − SMA₂₀₀) / σ₂₀₀   ·   Capitulation: PR₂₅₂ ≤ 10 and Z₂₀₀ ≤ −2",
@@ -293,6 +295,7 @@ export const customIndicators = [
     category: "Trend / Momentum",
     timeframes: ["Daily"],
     assetSuitability: "OXY · Equities & Commodities",
+    summary: "Scores how cleanly price trends, separating fresh trends, maturing trends and chop.",
     chart: { symbol: "NYSE:OXY", intervals: ["D"], studies: [] },
     description: "Measures how efficiently price is trending. Over a 20-bar cycle it compares the straight-line move from start to end with the total distance price actually travelled, giving a score from −100 (a perfectly clean decline) to +100 (a perfectly clean advance). The line is smoothed with a 5-bar WMA, and its slope separates fresh trends that are still accelerating from mature trends that are losing energy. Readings between −40 and +40 mark consolidation. On daily charts it also marks each quarter on the price chart and the oscillator, with a dotted line tracking that quarter's running average price.",
     formula: "ER = (Cₜ − Cₜ₋₂₀) / Σ|Cᵢ − Cᵢ₋₁| × 100   ·   TMEO = WMA₅(ER)   ·   Energy = ΔTMEO   ·   Fresh: |TMEO| ≥ 40 and slope with the trend",
@@ -312,6 +315,7 @@ export const customIndicators = [
     category: "Momentum / Trend Filter",
     timeframes: ["Daily"],
     assetSuitability: "Semiconductor Index (SOXX)",
+    summary: "Stochastic breakouts that fire only when DMI, the 20/50 EMA trend and the trading window agree.",
     // SOX itself is not licensed for the free TradingView embed; SOXX (semiconductor index ETF) is.
     chart: { symbol: "NASDAQ:SOXX", intervals: ["D"], studies: [] },
     description: "A momentum trigger that only fires when the trend agrees. A 5-period slow stochastic must cross through 70 (long) or 30 (short) on a bar that closes in that direction. The signal then has to pass four filters: +DI above −DI (or the reverse), a DMI spread wider than 7 points, the most recent 20/50 EMA cross pointing the same way, and an alert window of 06:55 to 23:00 Bulgarian time. ATR is normalised to its 100-bar range so volatility shares the same 0-100 panel, and a side table summarises DMI, ADX trend strength, the EMA state and whether the alert window is open.",

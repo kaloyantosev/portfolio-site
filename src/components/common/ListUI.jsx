@@ -36,14 +36,23 @@ export function SubTabs({ tabs, active, onChange }) {
 }
 
 // wide: a 16rem left column (for thumbnails). image: shown in that column instead
-// of the meta text, which then moves above the title.
-export function ListRow({ meta, title, subtitle, text, image, wide, action = 'View', onClick }) {
+// of the meta text, which then moves above the title. media: any node (e.g. a live
+// chart) in a wider left column. A div with role="button", not <button>, because a
+// button may not contain an iframe.
+export function ListRow({ meta, title, subtitle, text, image, media, wide, action = 'View', onClick }) {
+  const cols = media ? 'md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_auto]' : wide ? 'md:grid-cols-[16rem_1fr_auto]' : 'md:grid-cols-[11rem_1fr_auto]';
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={onClick}
-      className={`group grid w-full text-left ${wide ? 'md:grid-cols-[16rem_1fr_auto]' : 'md:grid-cols-[11rem_1fr_auto]'} gap-x-10 gap-y-3 py-8 border-b border-white/10 hover:border-white/40 transition-colors`}
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
+      className={`group grid w-full text-left cursor-pointer ${cols} gap-x-10 gap-y-3 py-8 border-b border-white/10 hover:border-white/40 transition-colors`}
     >
-      {image ? (
+      {media ? (
+        // Clicks pass through the chart to the row.
+        <span className="block pointer-events-none">{media}</span>
+      ) : image ? (
         <img
           src={image}
           alt=""
@@ -54,7 +63,7 @@ export function ListRow({ meta, title, subtitle, text, image, wide, action = 'Vi
         <span className="text-xs uppercase tracking-[0.18em] text-citi-muted pt-2">{meta}</span>
       )}
       <span className="block">
-        {image && meta && <span className="block mb-2 text-xs uppercase tracking-[0.18em] text-citi-muted">{meta}</span>}
+        {(image || media) && meta && <span className="block mb-2 text-xs uppercase tracking-[0.18em] text-citi-muted">{meta}</span>}
         <span className="block font-serif text-2xl sm:text-[1.8rem] leading-tight text-white group-hover:text-white/80 transition-colors">{title}</span>
         {subtitle && <span className="block mt-2 text-base text-citi-lightaccent">{subtitle}</span>}
         {text && <span className="block mt-3 text-base text-slate-300 leading-relaxed line-clamp-2">{text}</span>}
@@ -62,7 +71,7 @@ export function ListRow({ meta, title, subtitle, text, image, wide, action = 'Vi
       <span className="flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-citi-muted group-hover:text-white transition-colors md:pt-2">
         {action} <ArrowUpRight className="w-4 h-4" />
       </span>
-    </button>
+    </div>
   );
 }
 
