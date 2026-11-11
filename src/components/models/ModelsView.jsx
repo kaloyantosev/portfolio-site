@@ -2,6 +2,8 @@ import React from 'react';
 import { customModels } from '../../portfolioData';
 import { PageHeader, SubTabs, ListRow, EmptyNote } from '../common/ListUI';
 import ModelDetailPage from './ModelDetailPage';
+import CategoryArt from './CategoryArt';
+import SitePreview from './SitePreview';
 
 // Tab order. Each model names its group in portfolioData.js.
 const GROUPS = ['Macro & Positioning', 'Commodities & Energy', 'Derivatives & Options', 'Systematic Strategies'];
@@ -43,16 +45,19 @@ export default function ModelsView({ activeSubTab, setActiveSubTab, selectedMode
         const items = customModels.filter(m => m.group === group);
         if (!items.length) return null;
         return (
-          <section key={group} className="mt-10">
-            {activeSubTab === 'all' && <div className="section-label pb-2">{group}</div>}
-            <div className={activeSubTab === 'all' ? 'border-t border-white/10' : ''}>
+          <section key={group} className="cat-section mt-12">
+            <div className="flex items-end gap-5 pb-3">
+              <CategoryArt group={group} />
+              <div className="section-label pb-1">{group}</div>
+            </div>
+            <div className="border-t border-white/10">
               {items.map(m => (
                 <ListRow
                   key={m.id}
+                  media={m.liveUrl && <SitePreview url={m.liveUrl} title={m.name} />}
                   meta={m.category}
                   title={m.name}
-                  subtitle={m.subtitle}
-                  text={m.description}
+                  text={m.subtitle}
                   action="Open"
                   onClick={() => open(m.id)}
                 />

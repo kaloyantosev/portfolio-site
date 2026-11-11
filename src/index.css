@@ -88,3 +88,33 @@
   .career-waiting .career-draw { stroke-dashoffset: 0; }
   .career-waiting .career-fade { opacity: 1; }
 }
+
+/* Models category illustrations: still by default, animate while the section is hovered. */
+@keyframes cat-spin { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(0.15); } }
+@keyframes cat-bar { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.45); } }
+@keyframes cat-bob { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(2px) rotate(-2deg); } }
+@keyframes cat-wave { to { transform: translateX(-12px); } }
+@keyframes cat-flow { to { stroke-dashoffset: -20; } }
+@keyframes cat-sway { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(6deg); } }
+@keyframes cat-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes cat-run { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes cat-gear { to { transform: rotate(360deg); } }
+.cat-art .cat-spin { animation: cat-spin 2.4s ease-in-out infinite paused; }
+.cat-art .cat-bar { animation: cat-bar 1.6s ease-in-out infinite paused; }
+.cat-art .cat-bar-1 { animation-delay: -0.4s; }
+.cat-art .cat-bar-2 { animation-delay: -0.8s; }
+.cat-art .cat-bar-3 { animation-delay: -1.2s; }
+.cat-art .cat-bob { animation: cat-bob 2s ease-in-out infinite paused; transform-box: fill-box; transform-origin: center; }
+.cat-art .cat-wave { animation: cat-wave 1s linear infinite paused; }
+.cat-art .cat-flow { animation: cat-flow 0.8s linear infinite paused; }
+.cat-art .cat-sway { animation: cat-sway 1.8s ease-in-out infinite paused; }
+.cat-art .cat-sway-1 { animation-delay: -0.6s; }
+.cat-art .cat-sway-2 { animation-delay: -1.2s; }
+.cat-art .cat-draw { stroke-dasharray: 1; animation: cat-draw 1.6s ease-in-out infinite alternate paused; }
+.cat-art .cat-run { animation: cat-run 1.6s ease-in-out infinite alternate paused; }
+.cat-art .cat-gear { animation: cat-gear 4s linear infinite paused; }
+.cat-art .cat-gear-rev { animation: cat-gear 2.9s linear infinite reverse paused; }
+.cat-section:hover .cat-art .anim { animation-play-state: running; }
+@media (prefers-reduced-motion: reduce) {
+  .cat-section:hover .cat-art .anim { animation-play-state: paused; }
+}

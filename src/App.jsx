@@ -15,61 +15,51 @@ import ContactModal from './components/common/ContactModal';
 const DEFAULT_SUB = { articles: 'all', strategies: 'all', models: 'all', certificates: 'all' };
 const TABS = ['cv', 'articles', 'strategies', 'models', 'indicators', 'recommendations', 'certificates'];
 
-// URL path <-> tab: "/" is the overview, "/certificates" the certificates tab.
-// Unknown paths fall back to the overview. vercel.json rewrites every path to index.html.
-const tabFromPath = () => {
-  const slug = window.location.pathname.split('/')[1];
-  return TABS.includes(slug) ? slug : 'overview';
-};
+// Every view has its own URL, so the browser's Back button steps through the site:
+//   /                        overview
+//   /models                  a tab
+//   /models?view=<sub-tab>   a tab filtered to a category
+//   /models/<item-id>        a detail page
+// vercel.json rewrites every path to index.html. Unknown paths fall back to the overview.
+function readUrl() {
+  const [, slug, id] = window.location.pathname.split('/');
+  const tab = TABS.includes(slug) ? slug : 'overview';
+  const view = new URLSearchParams(window.location.search).get('view');
+  return { tab, sub: view ?? DEFAULT_SUB[tab] ?? null, detail: id ? decodeURIComponent(id) : null };
+}
+
+function writeUrl({ tab, sub, detail }) {
+  let path = tab === 'overview' ? '/' : `/${tab}`;
+  if (detail) path += `/${encodeURIComponent(detail)}`;
+  else if (sub && sub !== DEFAULT_SUB[tab]) path += `?view=${encodeURIComponent(sub)}`;
+  if (window.location.pathname + window.location.search !== path) window.history.pushState(null, '', path);
+}
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState(tabFromPath);
-  const [activeSubTab, setActiveSubTab] = useState(() => DEFAULT_SUB[tabFromPath()] ?? null);
+  const [route, setRoute] = useState(readUrl);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   // Browser back/forward
   useEffect(() => {
-    const onPop = () => {
-      const tab = tabFromPath();
-      setActiveTab(tab);
-      setActiveSubTab(DEFAULT_SUB[tab] ?? null);
-      clearDetails();
-    };
+    const onPop = () => setRoute(readUrl());
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
   }, []);
-  const [isContactOpen, setIsContactOpen] = useState(false);
 
-  // Dedicated sub-page selected IDs
-  const [selectedArticleId, setSelectedArticleId] = useState(null);
-  const [selectedStrategyId, setSelectedStrategyId] = useState(null);
-  const [selectedModelId, setSelectedModelId] = useState(null);
-  const [selectedIndicatorId, setSelectedIndicatorId] = useState(null);
-  const [selectedCertId, setSelectedCertId] = useState(null);
-
-  const clearDetails = () => {
-    setSelectedArticleId(null);
-    setSelectedStrategyId(null);
-    setSelectedModelId(null);
-    setSelectedIndicatorId(null);
-    setSelectedCertId(null);
+  const go = next => {
+    setRoute(next);
+    writeUrl(next);
   };
 
   // One entry point for every link in the header, hero and footer.
   const navigate = (tab, sub) => {
-    setActiveTab(tab);
-    setActiveSubTab(sub ?? DEFAULT_SUB[tab] ?? null);
-    clearDetails();
-    const path = tab === 'overview' ? '/' : `/${tab}`;
-    if (window.location.pathname !== path) window.history.pushState(null, '', path);
+    go({ tab, sub: sub ?? DEFAULT_SUB[tab] ?? null, detail: null });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+  const setSub = sub => go({ ...route, sub, detail: null });
+  const setDetail = detail => go({ ...route, detail });
 
-  // Switching a sub-tab closes any open detail page.
-  const withClear = (setSelected) => (sub) => {
-    setActiveSubTab(sub);
-    setSelected(null);
-  };
-
+  const { tab: activeTab, sub: activeSubTab, detail } = route;
   const openContact = () => setIsContactOpen(true);
 
   return (
@@ -82,48 +72,25 @@ export default function App() {
         {activeTab === 'cv' && <CvView />}
 
         {activeTab === 'articles' && (
-          <ArticlesView
-            activeSubTab={activeSubTab}
-            setActiveSubTab={withClear(setSelectedArticleId)}
-            selectedArticleId={selectedArticleId}
-            setSelectedArticleId={setSelectedArticleId}
-          />
+          <ArticlesView activeSubTab={activeSubTab} setActiveSubTab={setSub} selectedArticleId={detail} setSelectedArticleId={setDetail} />
         )}
 
         {activeTab === 'strategies' && (
-          <StrategiesView
-            activeSubTab={activeSubTab}
-            setActiveSubTab={withClear(setSelectedStrategyId)}
-            selectedStrategyId={selectedStrategyId}
-            setSelectedStrategyId={setSelectedStrategyId}
-          />
+          <StrategiesView activeSubTab={activeSubTab} setActiveSubTab={setSub} selectedStrategyId={detail} setSelectedStrategyId={setDetail} />
         )}
 
         {activeTab === 'models' && (
-          <ModelsView
-            activeSubTab={activeSubTab}
-            setActiveSubTab={withClear(setSelectedModelId)}
-            selectedModelId={selectedModelId}
-            setSelectedModelId={setSelectedModelId}
-          />
+          <ModelsView activeSubTab={activeSubTab} setActiveSubTab={setSub} selectedModelId={detail} setSelectedModelId={setDetail} />
         )}
 
         {activeTab === 'indicators' && (
-          <IndicatorsView
-            selectedIndicatorId={selectedIndicatorId}
-            setSelectedIndicatorId={setSelectedIndicatorId}
-          />
+          <IndicatorsView selectedIndicatorId={detail} setSelectedIndicatorId={setDetail} />
         )}
 
         {activeTab === 'recommendations' && <RecommendationsView />}
 
         {activeTab === 'certificates' && (
-          <CertificatesView
-            activeSubTab={activeSubTab}
-            setActiveSubTab={withClear(setSelectedCertId)}
-            selectedCertId={selectedCertId}
-            setSelectedCertId={setSelectedCertId}
-          />
+          <CertificatesView activeSubTab={activeSubTab} setActiveSubTab={setSub} selectedCertId={detail} setSelectedCertId={setDetail} />
         )}
       </main>
 

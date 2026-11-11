@@ -40,7 +40,7 @@ export function SubTabs({ tabs, active, onChange }) {
 // chart) in a wider left column. A div with role="button", not <button>, because a
 // button may not contain an iframe.
 export function ListRow({ meta, title, subtitle, text, image, media, wide, action = 'View', onClick }) {
-  const cols = media ? 'md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_auto]' : wide ? 'md:grid-cols-[16rem_1fr_auto]' : 'md:grid-cols-[11rem_1fr_auto]';
+  const cols = media ? 'md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_auto]' : wide ? 'md:grid-cols-[16rem_1fr_auto]' : 'md:grid-cols-[11rem_1fr_auto]';
   return (
     <div
       role="button"
