@@ -11,9 +11,12 @@ import CertificatesView from './components/certificates/CertificatesView';
 import CvView from './components/cv/CvView';
 import ContactModal from './components/common/ContactModal';
 
+// Sub-tab each tab opens on when no sub-tab is named.
+const DEFAULT_SUB = { articles: 'memos', strategies: 'trading-algos', models: 'all' };
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'cv' | 'articles' | 'strategies' | 'models' | 'indicators' | 'recommendations' | 'certificates'
-  const [activeSubTab, setActiveSubTab] = useState('memos'); // for articles: 'memos' | 'macro', for strategies: 'trading-algos' | 'investment-algos'
+  const [activeTab, setActiveTab] = useState('overview');
+  const [activeSubTab, setActiveSubTab] = useState(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   // Dedicated sub-page selected IDs
@@ -21,124 +24,88 @@ export default function App() {
   const [selectedStrategyId, setSelectedStrategyId] = useState(null);
   const [selectedModelId, setSelectedModelId] = useState(null);
   const [selectedIndicatorId, setSelectedIndicatorId] = useState(null);
-  const [selectedLetterId, setSelectedLetterId] = useState(null);
   const [selectedCertId, setSelectedCertId] = useState(null);
 
-  // Clear all sub-page states when navigating between major tabs
   const clearDetails = () => {
     setSelectedArticleId(null);
     setSelectedStrategyId(null);
     setSelectedModelId(null);
     setSelectedIndicatorId(null);
-    setSelectedLetterId(null);
     setSelectedCertId(null);
   };
 
+  // One entry point for every link in the header, hero and footer.
+  const navigate = (tab, sub) => {
+    setActiveTab(tab);
+    setActiveSubTab(sub ?? DEFAULT_SUB[tab] ?? null);
+    clearDetails();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Switching a sub-tab closes any open detail page.
+  const withClear = (setSelected) => (sub) => {
+    setActiveSubTab(sub);
+    setSelected(null);
+  };
+
+  const openContact = () => setIsContactOpen(true);
+
   return (
     <div className="min-h-screen bg-surface-900 text-slate-300 font-sans flex flex-col">
+      <Navbar activeTab={activeTab} navigate={navigate} onOpenContact={openContact} />
 
-      {/* Navigation */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        activeSubTab={activeSubTab}
-        setActiveSubTab={setActiveSubTab}
-        onOpenContact={() => setIsContactOpen(true)}
-        onClearDetail={clearDetails}
-      />
-
-      {/* Main Content View */}
       <main className="flex-grow">
-        
-        {/* Overview (Home) */}
-        {activeTab === 'overview' && (
-          <HeroSection
-            setActiveTab={setActiveTab}
-            setActiveSubTab={setActiveSubTab}
-            onOpenContact={() => setIsContactOpen(true)}
-            onClearDetail={clearDetails}
-          />
-        )}
+        {activeTab === 'overview' && <HeroSection navigate={navigate} onOpenContact={openContact} />}
 
-        {/* CV Tab */}
-        {activeTab === 'cv' && (
-          <CvView />
-        )}
+        {activeTab === 'cv' && <CvView />}
 
-        {/* Articles (Investment Memos & Macro Analyses) */}
         {activeTab === 'articles' && (
-          <ArticlesView 
-            activeSubTab={activeSubTab} 
-            setActiveSubTab={(sub) => {
-              setActiveSubTab(sub);
-              setSelectedArticleId(null);
-            }} 
+          <ArticlesView
+            activeSubTab={activeSubTab}
+            setActiveSubTab={withClear(setSelectedArticleId)}
             selectedArticleId={selectedArticleId}
             setSelectedArticleId={setSelectedArticleId}
           />
         )}
 
-        {/* Custom Trading Strats (Trading Algos & Investment Algos) */}
         {activeTab === 'strategies' && (
-          <StrategiesView 
-            activeSubTab={activeSubTab} 
-            setActiveSubTab={(sub) => {
-              setActiveSubTab(sub);
-              setSelectedStrategyId(null);
-            }} 
+          <StrategiesView
+            activeSubTab={activeSubTab}
+            setActiveSubTab={withClear(setSelectedStrategyId)}
             selectedStrategyId={selectedStrategyId}
             setSelectedStrategyId={setSelectedStrategyId}
           />
         )}
 
-        {/* Custom Models */}
         {activeTab === 'models' && (
-          <ModelsView 
+          <ModelsView
+            activeSubTab={activeSubTab}
+            setActiveSubTab={withClear(setSelectedModelId)}
             selectedModelId={selectedModelId}
             setSelectedModelId={setSelectedModelId}
           />
         )}
 
-        {/* Custom Indicators */}
         {activeTab === 'indicators' && (
-          <IndicatorsView 
+          <IndicatorsView
             selectedIndicatorId={selectedIndicatorId}
             setSelectedIndicatorId={setSelectedIndicatorId}
           />
         )}
 
-        {/* Letter of Recommendation */}
-        {activeTab === 'recommendations' && (
-          <RecommendationsView 
-            selectedLetterId={selectedLetterId}
-            setSelectedLetterId={setSelectedLetterId}
-          />
-        )}
+        {activeTab === 'recommendations' && <RecommendationsView />}
 
-        {/* Certificates & Awards */}
         {activeTab === 'certificates' && (
-          <CertificatesView 
+          <CertificatesView
             selectedCertId={selectedCertId}
             setSelectedCertId={setSelectedCertId}
           />
         )}
-
       </main>
 
-      {/* Institutional Footer */}
-      <Footer
-        setActiveTab={setActiveTab}
-        setActiveSubTab={setActiveSubTab}
-        onOpenContact={() => setIsContactOpen(true)}
-        onClearDetail={clearDetails}
-      />
+      <Footer navigate={navigate} onOpenContact={openContact} />
 
-      {/* Contact Inquiry Modal */}
-      <ContactModal 
-        isOpen={isContactOpen} 
-        onClose={() => setIsContactOpen(false)} 
-      />
-
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
     </div>
   );
 }

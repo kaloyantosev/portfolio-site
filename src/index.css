@@ -36,18 +36,6 @@
     z-index: 0;
   }
 
-  /* ── Bank-style panel / card ── */
-  .bank-card {
-    background: rgba(10, 22, 40, 0.55);
-    border: 1px solid rgba(0, 100, 180, 0.14);
-    border-radius: 2px;
-    transition: border-color 0.2s ease, background 0.2s ease;
-  }
-  .bank-card:hover {
-    background: rgba(10, 22, 40, 0.8);
-    border-color: rgba(0, 100, 180, 0.4);
-  }
-
   /* ── Section label ── */
   .section-label {
     font-family: 'Inter', sans-serif;

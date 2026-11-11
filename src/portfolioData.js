@@ -160,6 +160,7 @@ export const customModels = [
     name: "Truecharts — Options Flow & 13F Analytics",
     subtitle: "Real-time institutional options positioning, Put/Call ratios & 13F sector flow model",
     category: "Derivatives & Options Flow",
+    group: "Derivatives & Options",
     liveUrl: "https://truecharts-chi.vercel.app/",
     previewImage: "/truecharts_preview.png",
     description: "Advanced equity derivatives and institutional positioning platform designed to decode smart-money market activity. Connects with Nasdaq data feeds to analyze options market microstructure, Put/Call positioning metrics, and historical 13F hedge fund accumulation across individual equities and indices."
@@ -169,6 +170,7 @@ export const customModels = [
     name: "COT Data Visualizer — Macro & Futures Positioning",
     subtitle: "Disaggregated CFTC Commitments of Traders positioning and net flow aggression model",
     category: "Global Macro & Futures",
+    group: "Macro & Positioning",
     liveUrl: "https://cot-visualiser.vercel.app/",
     previewImage: "/cot_visualiser_preview.png",
     description: "Institutional macro model built to analyze and visualize disaggregated CFTC Commitments of Traders (COT) data across Commodities and Financial Futures. Isolates positioning dynamics between Commercial Hedgers (Producers/Merchants), Institutional Asset Managers, and Leveraged Speculative Funds to detect positioning extremes and liquidity inflection points."
@@ -178,6 +180,7 @@ export const customModels = [
     name: "COT Pro — Institutional Positioning Intelligence",
     subtitle: "CFTC Legacy & Disaggregated positioning analytics across 30+ global futures markets",
     category: "Global Macro & Futures",
+    group: "Macro & Positioning",
     liveUrl: "https://cot-gamma.vercel.app/",
     description: "Institutional-grade Commitments of Traders terminal for macro PMs, systematic CTAs and discretionary derivatives traders. Translates weekly CFTC filings into statistical positioning intelligence: institutional crowding, commercial hedging pressure, zero-line crossovers and dealer delta-hedging flows across 156 weeks of data."
   },
@@ -186,6 +189,7 @@ export const customModels = [
     name: "Commodity Futures Platform — Market Intelligence",
     subtitle: "Forward curves, calendar & processing spreads, seasonality and volatility across energy, metals and ags",
     category: "Commodities & Term Structure",
+    group: "Commodities & Energy",
     liveUrl: "https://commodity-futures-eight.vercel.app/",
     description: "Commodity futures analysis platform covering energy, metals and agricultural markets. Interactive term-structure visualisation with contango/backwardation detection, calendar spreads with seasonal overlays, crack/crush/spark processing spreads, multi-year seasonality bands and realised vs. implied volatility metrics."
   },
@@ -194,6 +198,7 @@ export const customModels = [
     name: "OilWatch — Global Oil Shipping & Market Intelligence",
     subtitle: "Live tanker tracking, chokepoint risk monitoring, Brent/WTI pricing and maritime news briefs",
     category: "Energy & Shipping",
+    group: "Commodities & Energy",
     liveUrl: "https://oil-lac.vercel.app/",
     description: "Real-time oil shipping intelligence dashboard combining live tanker positions, Brent & WTI prices, UKMTO incident advisories and global shipping lanes. Monitors 7 major chokepoints (Hormuz, Bab el-Mandeb, Suez, Malacca, Bosphorus, Panama, Cape of Good Hope) with risk levels, plus AI-written briefs on relevant maritime news."
   },
@@ -202,6 +207,7 @@ export const customModels = [
     name: "Credit Cycle Monitor — Economic Cycle Model",
     subtitle: "Macro credit-cycle phase tracking and pressure indicators",
     category: "Global Macro & Credit",
+    group: "Macro & Positioning",
     liveUrl: "https://cot-xunw.vercel.app/",
     description: "Macro model that tracks where the economy sits in the credit cycle. Aggregates credit, rates and economic data into a cycle timeline and pressure indicators to identify phase transitions between expansion, late-cycle, contraction and recovery."
   },
@@ -210,6 +216,7 @@ export const customModels = [
     name: "Aegis — Portfolio Rotation Backtester",
     subtitle: "Systematic portfolio rotation strategy with interactive backtesting",
     category: "Systematic Strategies",
+    group: "Systematic Strategies",
     liveUrl: "https://aegis-snowy-zeta.vercel.app/",
     description: "Interactive backtesting application for the Aegis portfolio rotation strategy. Simulates systematic rotation between assets, displaying equity curves, drawdowns and performance statistics to evaluate the strategy against benchmarks."
   }

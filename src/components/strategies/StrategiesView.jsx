@@ -1,80 +1,54 @@
 import React from 'react';
 import { tradingAlgos, investmentAlgos } from '../../portfolioData';
-import StrategyCard from './StrategyCard';
+import { PageHeader, SubTabs, ListRow, EmptyNote } from '../common/ListUI';
 import StrategyDetailPage from './StrategyDetailPage';
 
 export default function StrategiesView({ activeSubTab, setActiveSubTab, selectedStrategyId, setSelectedStrategyId }) {
-  const all = [...tradingAlgos, ...investmentAlgos];
-
-  // If a strategy is selected, render the dedicated full sub-page
-  if (selectedStrategyId) {
-    const activeStrategy = all.find(s => s.id === selectedStrategyId);
-    if (activeStrategy) {
-      return (
-        <StrategyDetailPage
-          strategy={activeStrategy}
-          onBack={() => {
-            setSelectedStrategyId(null);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-        />
-      );
-    }
+  const activeStrategy = selectedStrategyId && [...tradingAlgos, ...investmentAlgos].find(s => s.id === selectedStrategyId);
+  if (activeStrategy) {
+    return (
+      <StrategyDetailPage
+        strategy={activeStrategy}
+        onBack={() => {
+          setSelectedStrategyId(null);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
   }
 
-  let list = activeSubTab === 'trading-algos' ? tradingAlgos : activeSubTab === 'investment-algos' ? investmentAlgos : all;
+  const list = activeSubTab === 'investment-algos' ? investmentAlgos : tradingAlgos;
 
   return (
-    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 animate-fade">
+    <div className="max-w-5xl mx-auto px-6 lg:px-8 py-16">
+      <PageHeader eyebrow="Systematic" title="Strategies" />
 
-      {/* Page Header */}
-      <div className="border-b border-citi-blue/15 pb-8">
-        <div className="section-label mb-3">Systematic Strategy Library</div>
-        <h1 className="font-serif text-3xl sm:text-4xl font-medium text-white">
-          {activeSubTab === 'trading-algos' ? 'Trading Algos' : activeSubTab === 'investment-algos' ? 'Investment Algos' : 'Custom Trading Strats'}
-        </h1>
-      </div>
+      <SubTabs
+        tabs={[
+          { key: 'trading-algos', label: 'Trading Algos', count: tradingAlgos.length },
+          { key: 'investment-algos', label: 'Investment Algos', count: investmentAlgos.length },
+        ]}
+        active={activeSubTab}
+        onChange={setActiveSubTab}
+      />
 
-      {/* Sub-tabs */}
-      <div className="mt-6 flex items-center gap-6 border-b border-white/5 pb-0">
-        {[
-          { key: 'trading-algos', label: `Trading Algos (${tradingAlgos.length})` },
-          { key: 'investment-algos', label: `Investment Algos (${investmentAlgos.length})` },
-        ].map(t => (
-          <button
-            key={t.key}
-            onClick={() => setActiveSubTab(t.key)}
-            className={`text-sm pb-3 border-b-2 transition-colors ${
-              activeSubTab === t.key
-                ? 'text-white border-citi-lightblue'
-                : 'text-citi-muted border-transparent hover:text-citi-silver'
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Grid */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
         {list.map(s => (
-          <StrategyCard 
-            key={s.id} 
-            strategy={s} 
+          <ListRow
+            key={s.id}
+            meta={[s.type, s.vintage].filter(Boolean).join(' · ')}
+            title={s.name}
+            subtitle={s.subtitle}
+            text={s.description}
             onClick={() => {
               setSelectedStrategyId(s.id);
               window.scrollTo({ top: 0, behavior: 'smooth' });
-            }} 
+            }}
           />
         ))}
       </div>
 
-      {list.length === 0 && (
-        <div className="mt-20 text-center text-citi-muted text-sm py-16 border border-white/5">
-          No strategies in this category yet.
-        </div>
-      )}
-
+      {list.length === 0 && <EmptyNote>No strategies in this category yet.</EmptyNote>}
     </div>
   );
 }

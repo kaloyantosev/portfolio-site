@@ -70,12 +70,9 @@ export default function ModelDetailPage({ model, onBack }) {
       </div>
 
       {/* Model Overview Summary Box */}
-      <div className="mt-8 p-6 bg-navy-800/90 border-l-4 border-citi-accent">
-        <div className="section-label mb-2">Model Overview</div>
-        <p className="text-slate-100 leading-relaxed text-base font-sans font-normal">
-          {model.description}
-        </p>
-      </div>
+      <p className="mt-8 max-w-3xl text-slate-300 leading-relaxed">
+        {model.description}
+      </p>
 
       {/* Live embedded application (always the latest production deployment) */}
       {model.liveUrl ? (
