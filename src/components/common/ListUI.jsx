@@ -16,19 +16,21 @@ export function PageHeader({ eyebrow, title, children }) {
 
 export function SubTabs({ tabs, active, onChange }) {
   return (
-    <div className="flex flex-wrap gap-x-8 gap-y-2 border-b border-white/10">
+    <div className="flex flex-wrap items-end gap-x-8 gap-y-2 border-b border-white/10">
       {tabs.map(t => (
         <button
           key={t.key}
           onClick={() => onChange(t.key)}
-          className={`pb-3 -mb-px text-sm border-b transition-colors ${
+          className={`cat-section flex flex-col items-start gap-2 pb-3 -mb-px text-sm border-b transition-colors ${
             active === t.key
               ? 'text-white border-white'
               : 'text-citi-muted border-transparent hover:text-slate-200'
           }`}
         >
-          {t.label}
-          {t.count != null && <span className="ml-2 text-xs text-citi-muted/60">{t.count}</span>}
+          {/* Optional illustration above the label; animates while the tab is hovered. */}
+          {t.art}
+          <span>{t.label}
+          {t.count != null && <span className="ml-2 text-xs text-citi-muted/60">{t.count}</span>}</span>
         </button>
       ))}
     </div>

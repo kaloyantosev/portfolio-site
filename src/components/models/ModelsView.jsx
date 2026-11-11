@@ -29,7 +29,7 @@ export default function ModelsView({ activeSubTab, setActiveSubTab, selectedMode
 
   const tabs = [
     { key: 'all', label: 'All', count: customModels.length },
-    ...GROUPS.map(g => ({ key: g, label: g, count: customModels.filter(m => m.group === g).length })),
+    ...GROUPS.map(g => ({ key: g, label: g, art: <CategoryArt group={g} />, count: customModels.filter(m => m.group === g).length })),
   ];
   const visible = activeSubTab === 'all' ? GROUPS : GROUPS.filter(g => g === activeSubTab);
 
@@ -45,11 +45,8 @@ export default function ModelsView({ activeSubTab, setActiveSubTab, selectedMode
         const items = customModels.filter(m => m.group === group);
         if (!items.length) return null;
         return (
-          <section key={group} className="cat-section mt-12">
-            <div className="flex items-end gap-5 pb-3">
-              <CategoryArt group={group} />
-              <div className="section-label pb-1">{group}</div>
-            </div>
+          <section key={group} className="mt-12">
+            <div className="section-label pb-3">{group}</div>
             <div className="border-t border-white/10">
               {items.map(m => (
                 <ListRow
