@@ -60,7 +60,7 @@ export default function ModelDetailPage({ model, onBack }) {
               href={model.liveUrl}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 px-5 py-2.5 bg-citi-lightblue text-white text-xs font-mono uppercase tracking-wider font-semibold hover:bg-citi-accent transition-colors shadow-lg self-start sm:self-auto"
+              className="btn-pill self-start sm:self-auto"
             >
               <span>Visit Live Web App</span>
               <ExternalLink className="w-4 h-4" />

@@ -54,7 +54,7 @@ export default function LetterDetailPage({ letter, onBack }) {
         <a
           href={letter.pdfUrl || "/letter_of_recommendation.pdf"}
           download="Letter_of_Recommendation_Joshua_Reesman.pdf"
-          className="flex items-center gap-2 px-5 py-2.5 bg-citi-lightblue text-white text-xs font-mono uppercase tracking-wider font-semibold hover:bg-citi-accent transition-colors shadow-lg self-start sm:self-auto"
+          className="btn-pill self-start sm:self-auto"
         >
           <Download className="w-4 h-4" />
           <span>Download PDF</span>

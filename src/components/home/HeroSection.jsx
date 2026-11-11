@@ -23,17 +23,17 @@ export default function HeroSection({ navigate, onOpenContact }) {
             <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-medium text-white leading-[1.02]">
               {profileConfig.name}
             </h1>
-            <p className="mt-4 font-serif italic text-gold-light text-xl sm:text-2xl">{profileConfig.tagline}</p>
+            <p className="mt-4 font-serif italic text-citi-silver text-xl sm:text-2xl">{profileConfig.tagline}</p>
             <p className="mt-6 text-citi-silver font-light leading-relaxed max-w-xl">{profileConfig.bio}</p>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
               <button
                 onClick={() => navigate('articles')}
-                className="flex items-center gap-2 px-6 py-3 bg-citi-lightblue text-white text-xs uppercase tracking-[0.18em] hover:bg-citi-accent transition-colors"
+                className="btn-pill-solid"
               >
                 View Research <ArrowRight className="w-4 h-4" />
               </button>
-              <button onClick={() => navigate('cv')} className="text-sm text-citi-silver border-b border-gold/60 pb-0.5 hover:text-gold-light transition-colors">
+              <button onClick={() => navigate('cv')} className="text-sm text-citi-silver border-b border-white/40 pb-0.5 hover:text-white transition-colors">
                 Curriculum Vitae
               </button>
               <button onClick={onOpenContact} className="text-sm text-citi-muted hover:text-white transition-colors">

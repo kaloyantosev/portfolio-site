@@ -13,7 +13,7 @@ export default function CvView() {
         <a
           href={profileConfig.cvPdfUrl || '/cv.pdf'}
           download="Kaloyan_Tosev_CV.pdf"
-          className="flex items-center gap-2 text-sm text-citi-accent hover:text-white transition-colors"
+          className="btn-pill self-start sm:self-auto"
         >
           <Download className="w-4 h-4" />
           Download PDF

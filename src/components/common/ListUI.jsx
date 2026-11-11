@@ -23,12 +23,12 @@ export function SubTabs({ tabs, active, onChange }) {
           onClick={() => onChange(t.key)}
           className={`pb-3 -mb-px text-sm border-b transition-colors ${
             active === t.key
-              ? 'text-white border-gold'
+              ? 'text-white border-white'
               : 'text-citi-muted border-transparent hover:text-slate-200'
           }`}
         >
           {t.label}
-          {t.count != null && <span className="ml-2 text-xs text-gold-dim">{t.count}</span>}
+          {t.count != null && <span className="ml-2 text-xs text-citi-muted/60">{t.count}</span>}
         </button>
       ))}
     </div>
@@ -39,15 +39,15 @@ export function ListRow({ meta, title, subtitle, text, action = 'View', onClick 
   return (
     <button
       onClick={onClick}
-      className="group grid w-full text-left md:grid-cols-[11rem_1fr_auto] gap-x-10 gap-y-2 py-8 border-b border-white/10 hover:border-gold/50 transition-colors"
+      className="group grid w-full text-left md:grid-cols-[11rem_1fr_auto] gap-x-10 gap-y-2 py-8 border-b border-white/10 hover:border-white/40 transition-colors"
     >
       <span className="text-[11px] uppercase tracking-[0.18em] text-citi-muted pt-2">{meta}</span>
       <span className="block">
-        <span className="block font-serif text-2xl sm:text-[1.7rem] leading-tight text-white group-hover:text-gold-light transition-colors">{title}</span>
+        <span className="block font-serif text-2xl sm:text-[1.7rem] leading-tight text-white group-hover:text-white/80 transition-colors">{title}</span>
         {subtitle && <span className="block mt-2 text-sm text-citi-lightaccent">{subtitle}</span>}
         {text && <span className="block mt-3 text-sm text-citi-muted leading-relaxed line-clamp-2">{text}</span>}
       </span>
-      <span className="flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-citi-muted group-hover:text-gold transition-colors md:pt-2">
+      <span className="flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-citi-muted group-hover:text-white transition-colors md:pt-2">
         {action} <ArrowUpRight className="w-4 h-4" />
       </span>
     </button>

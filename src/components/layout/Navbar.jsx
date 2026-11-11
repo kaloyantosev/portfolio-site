@@ -25,7 +25,7 @@ export default function Navbar({ activeTab, navigate, onOpenContact }) {
       <div className="max-w-6xl mx-auto px-6 lg:px-8 flex items-center justify-between h-20">
         <button
           onClick={() => go('overview')}
-          className="font-serif text-white text-2xl tracking-wide hover:text-gold-light transition-colors"
+          className="font-serif text-white text-2xl tracking-wide hover:text-white/80 transition-colors"
         >
           Kaloyan Tosev
         </button>
@@ -36,7 +36,7 @@ export default function Navbar({ activeTab, navigate, onOpenContact }) {
               key={tab}
               onClick={() => go(tab)}
               className={`text-[13px] tracking-wide pb-1 border-b transition-colors ${
-                activeTab === tab ? 'text-white border-gold' : 'text-citi-muted border-transparent hover:text-slate-200'
+                activeTab === tab ? 'text-white border-white' : 'text-citi-muted border-transparent hover:text-slate-200'
               }`}
             >
               {label}
@@ -44,7 +44,7 @@ export default function Navbar({ activeTab, navigate, onOpenContact }) {
           ))}
           <button
             onClick={onOpenContact}
-            className="text-xs uppercase tracking-[0.18em] px-4 py-2 border border-gold/60 text-gold hover:bg-gold hover:text-navy-950 transition-colors"
+            className="btn-pill"
           >
             Contact
           </button>
@@ -74,7 +74,7 @@ export default function Navbar({ activeTab, navigate, onOpenContact }) {
           ))}
           <button
             onClick={() => { setMobileOpen(false); onOpenContact(); }}
-            className="block w-full text-left py-3 text-sm text-gold"
+            className="block w-full text-left py-3 text-sm text-white"
           >
             Contact
           </button>
