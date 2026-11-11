@@ -1,3 +1,4 @@
+import stochAtrDmiPine from "./indicators/stoch-atr-dmi.pine?raw";
 import tmeoPine from "./indicators/tmeo.pine?raw";
 import imsiPine from "./indicators/imsi.pine?raw";
 import drcPine from "./indicators/dynamic-regression-channels.pine?raw";
@@ -303,6 +304,24 @@ export const customIndicators = [
       { signal: "Consolidation", condition: "TMEO between −40 and +40 (grey)", action: "No efficient trend; range conditions" }
     ],
     codeSnippet: tmeoPine
+  },
+  {
+    id: "stoch-atr-dmi",
+    name: "Stoch + ATR + DMI Matrix (Unified Alert Suite)",
+    subtitle: "Stochastic breakout triggers filtered by DMI direction, DMI spread, EMA trend and a trading-hours window",
+    category: "Momentum / Trend Filter",
+    timeframes: ["Daily"],
+    assetSuitability: "Semiconductor Index (SOXX)",
+    // SOX itself is not licensed for the free TradingView embed; SOXX (semiconductor index ETF) is.
+    chart: { symbol: "NASDAQ:SOXX", intervals: ["D"], studies: [] },
+    description: "A momentum trigger that only fires when the trend agrees. A 5-period slow stochastic must cross through 70 (long) or 30 (short) on a bar that closes in that direction. The signal then has to pass four filters: +DI above −DI (or the reverse), a DMI spread wider than 7 points, the most recent 20/50 EMA cross pointing the same way, and an alert window of 06:55 to 23:00 Bulgarian time. ATR is normalised to its 100-bar range so volatility shares the same 0-100 panel, and a side table summarises DMI, ADX trend strength, the EMA state and whether the alert window is open.",
+    formula: "%K = SMA₃(Stoch₅)   ·   Long: %K crosses above 70 ∧ +DI > −DI ∧ |+DI − −DI| > 7 ∧ last EMA20/50 cross up ∧ 06:55–23:00 BG   ·   ATRₙ = (ATR − min₁₀₀) / (max₁₀₀ − min₁₀₀) × 100",
+    signals: [
+      { signal: "Long signal", condition: "%K crosses above 70 with +DI > −DI, DMI spread > 7 and a bullish 20/50 EMA state", action: "Momentum breakout aligned with trend (green triangle and alert)" },
+      { signal: "Short signal", condition: "%K crosses below 30 with −DI > +DI, DMI spread > 7 and a bearish 20/50 EMA state", action: "Momentum breakdown aligned with trend (red triangle and alert)" },
+      { signal: "Overextended trend", condition: "ADX ≥ 40", action: "Trend is stretched; treat new signals with caution" }
+    ],
+    codeSnippet: stochAtrDmiPine
   }
 ];
 
