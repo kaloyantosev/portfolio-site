@@ -27,6 +27,7 @@ export default {
           silver: '#cbd5e1',
           muted: '#8fa2b5',
         },
+        gold: { DEFAULT: '#c9a96e', light: '#e2cc9c', dim: '#8f7748' },
         surface: {
           900: '#06090f',
           800: '#0b1120',
@@ -35,8 +36,8 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['"Inter"', 'system-ui', 'sans-serif'], // Replaced all serifs with ultra-clean modern sans
-        sans: ['"Inter"', 'system-ui', 'sans-serif'],
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans: ['"Manrope"', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'Consolas', 'monospace'],
       },
     },

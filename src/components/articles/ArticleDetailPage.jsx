@@ -27,7 +27,7 @@ export default function ArticleDetailPage({ article, onBack }) {
           <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />{article.date}</span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white tracking-tight leading-tight font-sans">
+        <h1 className="text-3xl sm:text-4xl lg:text-6xl font-serif font-medium text-white leading-[1.05]">
           {article.title}
         </h1>
         <p className="text-citi-lightaccent text-base sm:text-lg font-medium">

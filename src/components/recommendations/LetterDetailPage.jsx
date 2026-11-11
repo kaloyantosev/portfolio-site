@@ -26,7 +26,7 @@ export default function LetterDetailPage({ letter, onBack }) {
         <div className="text-xs font-mono text-citi-accent uppercase tracking-wider">
           {letter.institution} • {letter.date}
         </div>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white tracking-tight leading-tight font-sans">
+        <h1 className="text-3xl sm:text-4xl lg:text-6xl font-serif font-medium text-white leading-[1.05]">
           Letter of Recommendation
         </h1>
         <p className="text-citi-lightaccent text-base sm:text-lg font-medium font-sans">

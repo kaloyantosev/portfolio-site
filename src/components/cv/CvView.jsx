@@ -8,7 +8,7 @@ export default function CvView() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10">
         <div>
           <div className="section-label mb-3">Credentials</div>
-          <h1 className="text-3xl sm:text-5xl font-semibold text-white tracking-tight">Curriculum Vitae</h1>
+          <h1 className="text-4xl sm:text-6xl font-serif font-medium text-white">Curriculum Vitae</h1>
         </div>
         <a
           href={profileConfig.cvPdfUrl || '/cv.pdf'}

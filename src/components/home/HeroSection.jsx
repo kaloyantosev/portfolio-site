@@ -20,20 +20,20 @@ export default function HeroSection({ navigate, onOpenContact }) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           <div className="lg:col-span-7">
             <div className="section-label mb-4">Portfolio & Achievements</div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-white tracking-tight leading-tight">
+            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-medium text-white leading-[1.02]">
               {profileConfig.name}
             </h1>
-            <p className="mt-3 text-citi-lightblue text-lg sm:text-xl">{profileConfig.tagline}</p>
-            <p className="mt-5 text-citi-silver font-light leading-relaxed max-w-xl">{profileConfig.bio}</p>
+            <p className="mt-4 font-serif italic text-gold-light text-xl sm:text-2xl">{profileConfig.tagline}</p>
+            <p className="mt-6 text-citi-silver font-light leading-relaxed max-w-xl">{profileConfig.bio}</p>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
               <button
                 onClick={() => navigate('articles')}
-                className="flex items-center gap-2 px-5 py-2.5 bg-citi-lightblue text-white text-sm font-medium hover:bg-citi-accent transition-colors"
+                className="flex items-center gap-2 px-6 py-3 bg-citi-lightblue text-white text-xs uppercase tracking-[0.18em] hover:bg-citi-accent transition-colors"
               >
                 View Research <ArrowRight className="w-4 h-4" />
               </button>
-              <button onClick={() => navigate('cv')} className="text-sm text-citi-silver hover:text-white transition-colors">
+              <button onClick={() => navigate('cv')} className="text-sm text-citi-silver border-b border-gold/60 pb-0.5 hover:text-gold-light transition-colors">
                 Curriculum Vitae
               </button>
               <button onClick={onOpenContact} className="text-sm text-citi-muted hover:text-white transition-colors">

@@ -5,10 +5,11 @@ import { ArrowUpRight } from 'lucide-react';
 
 export function PageHeader({ eyebrow, title, children }) {
   return (
-    <div className="pb-10">
-      {eyebrow && <div className="section-label mb-3">{eyebrow}</div>}
-      <h1 className="text-3xl sm:text-5xl font-semibold text-white tracking-tight">{title}</h1>
-      {children && <p className="mt-4 max-w-2xl text-citi-muted leading-relaxed">{children}</p>}
+    <div className="pb-12">
+      {eyebrow && <div className="section-label mb-4">{eyebrow}</div>}
+      <h1 className="font-serif text-4xl sm:text-6xl font-medium text-white leading-[1.05]">{title}</h1>
+      <div className="mt-6 h-px w-14 bg-gold" />
+      {children && <p className="mt-6 max-w-2xl text-citi-muted leading-relaxed">{children}</p>}
     </div>
   );
 }
@@ -20,14 +21,14 @@ export function SubTabs({ tabs, active, onChange }) {
         <button
           key={t.key}
           onClick={() => onChange(t.key)}
-          className={`pb-3 -mb-px text-sm border-b-2 transition-colors ${
+          className={`pb-3 -mb-px text-sm border-b transition-colors ${
             active === t.key
-              ? 'text-white border-citi-lightblue'
+              ? 'text-white border-gold'
               : 'text-citi-muted border-transparent hover:text-slate-200'
           }`}
         >
           {t.label}
-          {t.count != null && <span className="ml-2 text-xs text-citi-muted/60">{t.count}</span>}
+          {t.count != null && <span className="ml-2 text-xs text-gold-dim">{t.count}</span>}
         </button>
       ))}
     </div>
@@ -38,15 +39,15 @@ export function ListRow({ meta, title, subtitle, text, action = 'View', onClick 
   return (
     <button
       onClick={onClick}
-      className="group grid w-full text-left md:grid-cols-[11rem_1fr_auto] gap-x-10 gap-y-2 py-7 border-b border-white/10 transition-colors"
+      className="group grid w-full text-left md:grid-cols-[11rem_1fr_auto] gap-x-10 gap-y-2 py-8 border-b border-white/10 hover:border-gold/50 transition-colors"
     >
-      <span className="text-xs font-mono text-citi-muted pt-1">{meta}</span>
+      <span className="text-[11px] uppercase tracking-[0.18em] text-citi-muted pt-2">{meta}</span>
       <span className="block">
-        <span className="block text-white text-lg font-medium group-hover:text-citi-accent transition-colors">{title}</span>
-        {subtitle && <span className="block mt-1 text-sm text-citi-lightaccent">{subtitle}</span>}
+        <span className="block font-serif text-2xl sm:text-[1.7rem] leading-tight text-white group-hover:text-gold-light transition-colors">{title}</span>
+        {subtitle && <span className="block mt-2 text-sm text-citi-lightaccent">{subtitle}</span>}
         {text && <span className="block mt-3 text-sm text-citi-muted leading-relaxed line-clamp-2">{text}</span>}
       </span>
-      <span className="flex items-center gap-1 text-sm text-citi-muted group-hover:text-white transition-colors md:pt-1">
+      <span className="flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-citi-muted group-hover:text-gold transition-colors md:pt-2">
         {action} <ArrowUpRight className="w-4 h-4" />
       </span>
     </button>

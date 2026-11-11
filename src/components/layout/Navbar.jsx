@@ -21,11 +21,11 @@ export default function Navbar({ activeTab, navigate, onOpenContact }) {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-surface-900/90 backdrop-blur-md border-b border-white/10">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
+    <header className="sticky top-0 z-40 bg-surface-900/85 backdrop-blur-md border-b border-white/10">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8 flex items-center justify-between h-20">
         <button
           onClick={() => go('overview')}
-          className="text-white text-sm font-medium tracking-widest uppercase hover:text-citi-accent transition-colors"
+          className="font-serif text-white text-2xl tracking-wide hover:text-gold-light transition-colors"
         >
           Kaloyan Tosev
         </button>
@@ -35,8 +35,8 @@ export default function Navbar({ activeTab, navigate, onOpenContact }) {
             <button
               key={tab}
               onClick={() => go(tab)}
-              className={`text-sm transition-colors ${
-                activeTab === tab ? 'text-white' : 'text-citi-muted hover:text-slate-200'
+              className={`text-[13px] tracking-wide pb-1 border-b transition-colors ${
+                activeTab === tab ? 'text-white border-gold' : 'text-citi-muted border-transparent hover:text-slate-200'
               }`}
             >
               {label}
@@ -44,7 +44,7 @@ export default function Navbar({ activeTab, navigate, onOpenContact }) {
           ))}
           <button
             onClick={onOpenContact}
-            className="text-sm text-citi-accent hover:text-white transition-colors"
+            className="text-xs uppercase tracking-[0.18em] px-4 py-2 border border-gold/60 text-gold hover:bg-gold hover:text-navy-950 transition-colors"
           >
             Contact
           </button>
@@ -74,7 +74,7 @@ export default function Navbar({ activeTab, navigate, onOpenContact }) {
           ))}
           <button
             onClick={() => { setMobileOpen(false); onOpenContact(); }}
-            className="block w-full text-left py-3 text-sm text-citi-accent"
+            className="block w-full text-left py-3 text-sm text-gold"
           >
             Contact
           </button>

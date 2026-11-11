@@ -34,7 +34,7 @@ export default function StrategyDetailPage({ strategy, onBack }) {
         <div className="text-xs font-mono text-citi-muted uppercase tracking-wider">
           {strategy.type} • {strategy.vintage}
         </div>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white tracking-tight leading-tight font-sans">
+        <h1 className="text-3xl sm:text-4xl lg:text-6xl font-serif font-medium text-white leading-[1.05]">
           {strategy.name}
         </h1>
         <p className="text-citi-lightaccent text-base sm:text-lg font-medium">
