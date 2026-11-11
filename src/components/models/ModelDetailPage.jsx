@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ArrowLeft, ExternalLink, Globe, Maximize2, Minimize2, RotateCw, Loader2 } from 'lucide-react';
 
-export default function ModelDetailPage({ model, onBack }) {
+export default function ModelDetailPage({ model, onBack, backLabel = 'Custom Models' }) {
   const frameWrapRef = useRef(null);
   const iframeRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
@@ -39,7 +39,7 @@ export default function ModelDetailPage({ model, onBack }) {
           className="flex items-center gap-2 text-sm font-mono uppercase tracking-wider text-citi-muted hover:text-white transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span>Back to Custom Models</span>
+          <span>Back to {backLabel}</span>
         </button>
       </div>
 
@@ -147,7 +147,7 @@ export default function ModelDetailPage({ model, onBack }) {
           className="flex items-center gap-2 text-sm font-mono uppercase tracking-wider text-citi-muted hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Return to Custom Models</span>
+          <span>Return to {backLabel}</span>
         </button>
       </div>
 

@@ -65,8 +65,20 @@ const ART = {
       <circle className="anim cat-run" r="3" fill={GOLD} style={{ offsetPath: "path('M10 40 H80 L140 8')" }} />
     </>
   ),
-  // Two meshing gears.
-  'Systematic Strategies': (
+  // Candles that rise and fall, with an order flow line (Strategies page).
+  'Trading Algos': (
+    <>
+      {[[14, 26, 14, BLUE], [30, 20, 18, GOLD], [46, 14, 22, BLUE], [62, 22, 14, GOLD], [78, 10, 24, BLUE]].map(([x, y, h, c], i) => (
+        <g key={x} className={`anim cat-bar cat-bar-${i % 4}`} style={{ transformOrigin: `${x + 4}px 48px` }}>
+          <line x1={x + 4} y1={y - 5} x2={x + 4} y2={y + h + 5} {...S} />
+          <rect x={x} y={y} width="8" height={h} fill="none" stroke={c} strokeWidth="1.4" />
+        </g>
+      ))}
+      <path className="anim cat-flow" d="M100 30 H150" fill="none" stroke={GOLD} strokeWidth="2" strokeDasharray="4 6" />
+    </>
+  ),
+  // Two meshing gears (Strategies page).
+  'Investment Algos': (
     <>
       <Gear cx={40} cy={30} r={14} teeth={10} className="anim cat-gear" />
       <Gear cx={72} cy={30} r={10} teeth={8} className="anim cat-gear-rev" />

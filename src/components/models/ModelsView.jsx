@@ -6,7 +6,7 @@ import CategoryArt from './CategoryArt';
 import SitePreview from './SitePreview';
 
 // Tab order. Each model names its group in portfolioData.js.
-const GROUPS = ['Macro & Positioning', 'Commodities & Energy', 'Derivatives & Options', 'Systematic Strategies'];
+const GROUPS = ['Macro & Positioning', 'Commodities & Energy', 'Derivatives & Options'];
 
 export default function ModelsView({ activeSubTab, setActiveSubTab, selectedModelId, setSelectedModelId }) {
   const open = (id) => {

@@ -172,29 +172,13 @@ export const tradingAlgos = [
 
 export const investmentAlgos = [
   {
-    id: "investment-algo-1",
-    name: "Sample Investment Algorithm Name",
-    subtitle: "Long-term quantitative allocation or multi-factor strategy",
+    id: "aegis",
+    name: "Aegis — Portfolio Rotation Backtester",
+    subtitle: "Systematic portfolio rotation strategy with interactive backtesting",
     category: "Investment Algo",
-    type: "e.g. Dynamic Risk Parity / Multi-Factor / Quantitative Value",
-    status: "Live / Backtested",
-    vintage: "Year - Present",
-    rebalanceFrequency: "e.g. Monthly / Quarterly",
-    universe: "e.g. Global Equities & Fixed Income",
-    metrics: {
-      sharpeRatio: "0.00",
-      cagr: "0.0%",
-      maxDrawdown: "-0.0%",
-      volatility: "0.0%",
-      alpha: "+0.0%"
-    },
-    description: "Explanation of the long-term compounding mechanism, factor exposures, and rebalancing rules.",
-    allocationWeights: [
-      { asset: "Asset Class 1", weight: "00%" },
-      { asset: "Asset Class 2", weight: "00%" },
-      { asset: "Asset Class 3", weight: "00%" }
-    ],
-    formula: "Insert your asset allocation formula or equation here"
+    type: "Portfolio Rotation",
+    liveUrl: "https://aegis-snowy-zeta.vercel.app/",
+    description: "Interactive backtesting application for the Aegis portfolio rotation strategy. Simulates systematic rotation between assets, displaying equity curves, drawdowns and performance statistics to evaluate the strategy against benchmarks."
   }
 ];
 
@@ -248,15 +232,6 @@ export const customModels = [
     group: "Macro & Positioning",
     liveUrl: "https://cot-xunw.vercel.app/",
     description: "Macro model that tracks where the economy sits in the credit cycle. Aggregates credit, rates and economic data into a cycle timeline and pressure indicators to identify phase transitions between expansion, late-cycle, contraction and recovery."
-  },
-  {
-    id: "model-aegis",
-    name: "Aegis — Portfolio Rotation Backtester",
-    subtitle: "Systematic portfolio rotation strategy with interactive backtesting",
-    category: "Systematic Strategies",
-    group: "Systematic Strategies",
-    liveUrl: "https://aegis-snowy-zeta.vercel.app/",
-    description: "Interactive backtesting application for the Aegis portfolio rotation strategy. Simulates systematic rotation between assets, displaying equity curves, drawdowns and performance statistics to evaluate the strategy against benchmarks."
   }
 ];
 
