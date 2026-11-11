@@ -1,3 +1,5 @@
+import xauusdArticle from "./articles/xauusd-cycle-top.md?raw";
+import ttfArticle from "./articles/ttf-natural-gas.md?raw";
 import stochAtrDmiPine from "./indicators/stoch-atr-dmi.pine?raw";
 import tmeoPine from "./indicators/tmeo.pine?raw";
 import imsiPine from "./indicators/imsi.pine?raw";
@@ -93,30 +95,29 @@ Outline your valuation methodology (e.g., DCF, multiple comparison, IRR projecti
 
 export const macroAnalyses = [
   {
-    id: "macro-1",
-    title: "Sample Macro Analysis Title",
-    subtitle: "Global macro framework, rate cycle, or liquidity study",
+    id: "xauusd-cycle-top",
+    title: "Reading the XAUUSD Cycle Top Through Converging Regression Channels",
+    subtitle: "Three regression channels, leverage data and market psychology at gold's January 2026 peak",
     category: "Macro Analysis",
-    assetClass: "Cross-Asset / Rates / FX",
-    date: "Month Year",
-    regime: "Macro Regime Name",
-    keyTrade: "Primary Tactical Idea / Trade",
-    summary: "Executive summary of the macroeconomic thesis, monetary/fiscal dynamics, and market implications.",
-    keyPoints: [
-      "Macro driver or central bank observation 1",
-      "Cross-asset transmission channel 2",
-      "Portfolio allocation takeaway 3"
-    ],
-    fullContent: `
-### 1. Macro Regime Overview
-Insert your comprehensive macro analysis here. Cover interest rate expectations, inflation dynamics, global liquidity, and sovereign balance sheet considerations.
-
-### 2. Cross-Asset Transmission
-Explain how the macro theme flows through equities, fixed income, commodities, and currencies.
-
-### 3. Tactical Asset Allocation
-Specific recommendations on duration, credit risk, equity factor tilts, and hedging strategies.
-    `
+    assetClass: "XAUUSD · Gold",
+    date: "Jan 2026",
+    summary: "Three linear regression channels spanning 28 years, 5 years and 1 year converged between $5,400 and $5,600 on the monthly gold chart. Combined with record speculative leverage and peak retail euphoria, that confluence marked the cycle top, published in real time on Threads on January 29, 2026.",
+    image: "/articles/xauusd-chart.png",
+    imageCaption: "Analysis published on Threads on January 29, 2026: three converging regression channels on the monthly XAUUSD chart.",
+    docx: "/articles/xauusd-top-analysis.docx",
+    body: xauusdArticle
+  },
+  {
+    id: "ttf-natural-gas",
+    title: "Why Europe Faces a Surge in Natural Gas (Dutch TTF)",
+    subtitle: "Geopolitical energy vulnerability and the cross-asset mispricing between gold and European gas",
+    category: "Macro Analysis",
+    assetClass: "Dutch TTF · Natural Gas",
+    summary: "A U.S.-Iran escalation is at its core an LNG supply shock. With Qatar's exports routed through the Strait of Hormuz, Europe dependent on seaborne LNG and in a bidding war with Asia, and storage refills due, Dutch TTF offers asymmetric upside while gold sits at a statistical cycle top.",
+    image: "/articles/ttf-chart.jpg",
+    imageCaption: "Macro analysis published on Threads (@ktsvv_): overextended precious metals versus the impending European natural gas crisis.",
+    docx: "/articles/ttf-natural-gas-macro-report.docx",
+    body: ttfArticle
   }
 ];
 
