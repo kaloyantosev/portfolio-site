@@ -2,7 +2,7 @@
 // © Kaloyan26
 
 //@version=5
-indicator("Idiosyncratic Market Stress Index (IMSI)", shorttitle="IMSI", overlay=false, precision=2)
+indicator("Idiosyncratic Market Stress Index (IMSI)", shorttitle="IMSI", overlay=false, precision=2, max_lines_count=500, max_labels_count=500)
 
 // =========================================================================
 // INPUTS & PARAMETERS
@@ -11,6 +11,7 @@ lookback_range = input.int(252, title="Range Lookback (Days)", minval=10)
 z_lookback      = input.int(200, title="Volatility Z-Score Lookback", minval=10)
 stress_limit    = input.float(10.0, title="Stress Zone Threshold (%)", minval=0.0, maxval=100.0)
 extreme_limit   = input.float(5.0, title="Extreme Exhaustion Threshold (%)", minval=0.0, maxval=100.0)
+show_quarters   = input.bool(true, title="Quarterly Lines (Daily Only)")
 
 // =========================================================================
 // MATHEMATICAL COMPUTATIONS
@@ -75,4 +76,10 @@ plotshape(bullish_divergence, title="Accumulation Trigger", style=shape.triangle
 // QUARTERLY VERTICAL LINES (DAILY TIMEFRAME ONLY)
 // =========================================================================
 
-current_quarter = math.ceil(month(time) / 3)
+// 3.0, not 3: keeps the division in floating point so ceil() rounds months 1-3 up to Q1.
+current_quarter = math.ceil(month(time) / 3.0)
+new_quarter = current_quarter != current_quarter[1]
+
+if show_quarters and timeframe.isdaily and new_quarter and bar_index > 0
+    line.new(bar_index, 0, bar_index, 100, extend=extend.both, color=color.new(color.gray, 75), style=line.style_dotted, width=1)
+    label.new(bar_index, 100, "Q" + str.tostring(current_quarter) + " '" + str.substring(str.tostring(year(time)), 2), style=label.style_label_down, color=color(na), textcolor=color.new(color.gray, 30), size=size.tiny)
