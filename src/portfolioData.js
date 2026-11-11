@@ -16,7 +16,7 @@ export const profileConfig = {
   location: "Sofia, Sofia-Capital",
   phone: { local: "0895 047 947", intl: "+359 895 047 947" },
   email: "kaloyan.tosev@gmail.com",
-  linkedin: "https://linkedin.com/in/kaloyan-tosev",
+  linkedin: "https://www.linkedin.com/in/kaloyant/",
   cvPdfUrl: "/cv.pdf",
   recPdfUrl: "/letter_of_recommendation.pdf",
   // Homepage "Experience" timeline, newest first.

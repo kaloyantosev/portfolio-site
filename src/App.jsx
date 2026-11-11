@@ -10,6 +10,14 @@ import RecommendationsView from './components/recommendations/RecommendationsVie
 import CertificatesView from './components/certificates/CertificatesView';
 import CvView from './components/cv/CvView';
 import ContactModal from './components/common/ContactModal';
+import { investmentMemos, macroAnalyses, tradingAlgos, investmentAlgos, customModels, customIndicators, certificatesAndAwards } from './portfolioData';
+
+const ALL_ITEMS = [...investmentMemos, ...macroAnalyses, ...tradingAlgos, ...investmentAlgos, ...customModels, ...customIndicators, ...certificatesAndAwards];
+const TAB_TITLES = {
+  cv: 'Curriculum Vitae', articles: 'Research Articles', strategies: 'Trading & Investment Strategies',
+  models: 'Market Models & Applications', indicators: 'Custom Indicators', recommendations: 'Letter of Recommendation',
+  certificates: 'Certificates & Awards',
+};
 
 // Sub-tab each tab opens on when no sub-tab is named.
 const DEFAULT_SUB = { articles: 'all', strategies: 'all', models: 'all', certificates: 'all' };
@@ -60,6 +68,13 @@ export default function App() {
   const setDetail = detail => go({ ...route, detail });
 
   const { tab: activeTab, sub: activeSubTab, detail } = route;
+
+  // Per-page browser title, so each link reads well in search results and shares.
+  useEffect(() => {
+    const item = detail && ALL_ITEMS.find(i => i.id === detail);
+    const page = item ? item.name || item.title : TAB_TITLES[activeTab];
+    document.title = page ? `${page} — Kaloyan Tosev` : 'Kaloyan Tosev — Quantitative Trader & Commodities / Energy Markets Analyst';
+  }, [activeTab, detail]);
   const openContact = () => setIsContactOpen(true);
 
   return (
