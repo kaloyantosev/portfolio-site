@@ -253,12 +253,8 @@ export function tmeo(bars, { lookback = 20, smooth = 5 } = {}) {
 }
 
 // ─── 4. Stoch + ATR + DMI Matrix ──────────────────────────────────────────
-const londonHM = t => {
-  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' }).formatToParts(new Date(t * 1000));
-  return [Number(parts.find(p => p.type === 'hour').value), Number(parts.find(p => p.type === 'minute').value)];
-};
-
-export function stochAtrDmi(bars, { k = 5, atrLen = 14, diLen = 14, adxLen = 14, minSpread = 7, fast = 20, slow = 50 } = {}) {
+// Plotted lines only; the long/short signal arrows are not drawn on the site.
+export function stochAtrDmi(bars, { k = 5, atrLen = 14, diLen = 14, adxLen = 14 } = {}) {
   const close = bars.map(b => b.close), high = bars.map(b => b.high), low = bars.map(b => b.low);
   const hh = highest(high, k), ll = lowest(low, k);
   const raw = close.map((c, i) => (hh[i] == null ? null : hh[i] - ll[i] > 0 ? (100 * (c - ll[i])) / (hh[i] - ll[i]) : 0));
@@ -267,26 +263,6 @@ export function stochAtrDmi(bars, { k = 5, atrLen = 14, diLen = 14, adxLen = 14,
   const aHi = highest(atr, 100), aLo = lowest(atr, 100);
   const nAtr = atr.map((v, i) => (aHi[i] == null ? null : ((v - aLo[i]) / Math.max(aHi[i] - aLo[i], 0.00001)) * 100));
   const { plus, minus, adx } = dmi(bars, diLen, adxLen);
-  const e1 = ema(close, fast), e2 = ema(close, slow);
-
-  let trend = 0;
-  const markers = [];
-  bars.forEach((b, i) => {
-    if (i > 0 && e1[i] != null && e2[i] != null && e1[i - 1] != null && e2[i - 1] != null) {
-      if (e1[i] > e2[i] && e1[i - 1] <= e2[i - 1]) trend = 1;
-      if (e1[i] < e2[i] && e1[i - 1] >= e2[i - 1]) trend = -1;
-    }
-    if (i === 0 || K[i] == null || K[i - 1] == null || plus[i] == null) return;
-    const [h, m] = londonHM(b.time);
-    const inWindow = ((h === 4 && m >= 55) || h >= 5) && h < 21;
-    const spreadOk = Math.abs(plus[i] - minus[i]) > minSpread;
-    if (inWindow && spreadOk && K[i] > 70 && K[i - 1] <= 70 && plus[i] > minus[i] && trend === 1) {
-      markers.push({ time: b.time, position: 'belowBar', shape: 'arrowUp', color: '#2E9E6B' });
-    }
-    if (inWindow && spreadOk && K[i] < 30 && K[i - 1] >= 30 && minus[i] > plus[i] && trend === -1) {
-      markers.push({ time: b.time, position: 'aboveBar', shape: 'arrowDown', color: '#C2453D' });
-    }
-  });
   return {
     pane: {
       range: [0, 100],
@@ -295,7 +271,7 @@ export function stochAtrDmi(bars, { k = 5, atrLen = 14, diLen = 14, adxLen = 14,
         { data: series(bars, plus), color: '#2E9E6B', alpha: 0.8, width: 1 },
         { data: series(bars, minus), color: '#C2453D', alpha: 0.8, width: 1 },
         { data: series(bars, adx), color: '#FFFFFF', alpha: 0.35, width: 1 },
-        { data: series(bars, K), color: '#4C8DD9', width: 2, markers },
+        { data: series(bars, K), color: '#4C8DD9', width: 2 },
       ],
       levels: [
         { price: 70, color: 'rgba(255,255,255,0.3)', style: 'dashed' },

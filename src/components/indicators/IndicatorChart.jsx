@@ -14,7 +14,6 @@ const quiet = { priceLineVisible: false, lastValueVisible: false, crosshairMarke
 export default function IndicatorChart({ symbol, study, height = 560, compact = false }) {
   const ref = useRef(null);
   const [error, setError] = useState(null);
-  const [channels, setChannels] = useState(null);
 
   useEffect(() => {
     let chart;
@@ -23,7 +22,6 @@ export default function IndicatorChart({ symbol, study, height = 560, compact = 
     loadDaily(symbol).then(bars => {
       if (cancelled || !ref.current) return;
       const result = STUDIES[study](bars);
-      setChannels(result.channels || null);
 
       chart = createChart(ref.current, {
         autoSize: true,
@@ -34,7 +32,9 @@ export default function IndicatorChart({ symbol, study, height = 560, compact = 
           fontSize: compact ? 10 : 11,
           panes: { separatorColor: 'rgba(255,255,255,0.08)' },
         },
-        grid: { vertLines: { color: 'rgba(255,255,255,0.03)' }, horzLines: { color: 'rgba(255,255,255,0.04)' } },
+        // Plain chart: no grid or crosshair lines, only candles and the indicator.
+        grid: { vertLines: { visible: false }, horzLines: { visible: false } },
+        crosshair: { vertLine: { visible: false, labelVisible: false }, horzLine: { visible: false, labelVisible: false } },
         rightPriceScale: { borderVisible: false },
         timeScale: { borderVisible: false },
         // Read-only: no dragging, zooming or scaling by visitors.
@@ -113,16 +113,6 @@ export default function IndicatorChart({ symbol, study, height = 560, compact = 
           </div>
         )}
       </div>
-      {!compact && channels && (
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-xs text-citi-muted">
-          {channels.map(c => (
-            <span key={c.name} className="flex items-center gap-2">
-              <span className="inline-block h-0.5 w-5" style={{ background: c.color }} />
-              {c.name} · R² {c.r2.toFixed(2)} · {c.rising ? '▲' : '▼'}
-            </span>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
