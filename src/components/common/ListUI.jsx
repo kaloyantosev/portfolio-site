@@ -9,7 +9,7 @@ export function PageHeader({ eyebrow, title, children }) {
       {eyebrow && <div className="section-label mb-4">{eyebrow}</div>}
       <h1 className="font-serif text-4xl sm:text-6xl font-medium text-white leading-[1.05]">{title}</h1>
       <div className="mt-6 h-px w-14 bg-gold" />
-      {children && <p className="mt-6 max-w-2xl text-citi-muted leading-relaxed">{children}</p>}
+      {children && <p className="mt-6 max-w-2xl text-lg text-slate-300 leading-relaxed">{children}</p>}
     </div>
   );
 }
@@ -35,17 +35,29 @@ export function SubTabs({ tabs, active, onChange }) {
   );
 }
 
-export function ListRow({ meta, title, subtitle, text, action = 'View', onClick }) {
+// wide: a 16rem left column (for thumbnails). image: shown in that column instead
+// of the meta text, which then moves above the title.
+export function ListRow({ meta, title, subtitle, text, image, wide, action = 'View', onClick }) {
   return (
     <button
       onClick={onClick}
-      className="group grid w-full text-left md:grid-cols-[11rem_1fr_auto] gap-x-10 gap-y-2 py-8 border-b border-white/10 hover:border-white/40 transition-colors"
+      className={`group grid w-full text-left ${wide ? 'md:grid-cols-[16rem_1fr_auto]' : 'md:grid-cols-[11rem_1fr_auto]'} gap-x-10 gap-y-3 py-8 border-b border-white/10 hover:border-white/40 transition-colors`}
     >
-      <span className="text-[11px] uppercase tracking-[0.18em] text-citi-muted pt-2">{meta}</span>
+      {image ? (
+        <img
+          src={image}
+          alt=""
+          loading="lazy"
+          className="w-full max-w-[16rem] h-auto rounded-md opacity-90 group-hover:opacity-100 transition-opacity"
+        />
+      ) : (
+        <span className="text-xs uppercase tracking-[0.18em] text-citi-muted pt-2">{meta}</span>
+      )}
       <span className="block">
-        <span className="block font-serif text-2xl sm:text-[1.7rem] leading-tight text-white group-hover:text-white/80 transition-colors">{title}</span>
-        {subtitle && <span className="block mt-2 text-sm text-citi-lightaccent">{subtitle}</span>}
-        {text && <span className="block mt-3 text-sm text-citi-muted leading-relaxed line-clamp-2">{text}</span>}
+        {image && meta && <span className="block mb-2 text-xs uppercase tracking-[0.18em] text-citi-muted">{meta}</span>}
+        <span className="block font-serif text-2xl sm:text-[1.8rem] leading-tight text-white group-hover:text-white/80 transition-colors">{title}</span>
+        {subtitle && <span className="block mt-2 text-base text-citi-lightaccent">{subtitle}</span>}
+        {text && <span className="block mt-3 text-base text-slate-300 leading-relaxed line-clamp-2">{text}</span>}
       </span>
       <span className="flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-citi-muted group-hover:text-white transition-colors md:pt-2">
         {action} <ArrowUpRight className="w-4 h-4" />

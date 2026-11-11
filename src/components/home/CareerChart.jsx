@@ -93,8 +93,8 @@ export default function CareerChart({ items }) {
               {e.period}
             </div>
             <h3 className="mt-3 font-serif text-2xl leading-tight text-white">{e.role}</h3>
-            <p className="mt-1 text-sm text-citi-lightaccent">{e.org}</p>
-            <p className="mt-3 text-sm text-citi-muted leading-relaxed">{e.text}</p>
+            <p className="mt-1 text-base text-citi-lightaccent">{e.org}</p>
+            <p className="mt-3 text-base text-slate-300 leading-relaxed">{e.text}</p>
           </li>
         ))}
       </ol>

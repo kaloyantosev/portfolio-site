@@ -44,7 +44,7 @@ export default function IndicatorDetailPage({ indicator, onBack }) {
       )}
 
       {/* Overview */}
-      <p className="mt-10 max-w-4xl text-slate-300 leading-relaxed">
+      <p className="mt-10 max-w-4xl text-slate-300 leading-relaxed text-lg">
         {indicator.description}
       </p>
 

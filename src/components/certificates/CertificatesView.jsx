@@ -37,6 +37,8 @@ export default function CertificatesView({ activeSubTab, setActiveSubTab, select
           <ListRow
             key={c.id}
             meta={`${c.institution} · ${c.date}`}
+            image={c.image}
+            wide
             title={c.title}
             subtitle={c.instructor || c.skills?.join(' · ')}
             text={c.summary}

@@ -25,7 +25,7 @@ export default {
           accent: '#38a5ff',
           lightaccent: '#75beff',
           silver: '#cbd5e1',
-          muted: '#8fa2b5',
+          muted: '#b1bfcd',
         },
         gold: { DEFAULT: '#c9a96e', light: '#e2cc9c', dim: '#8f7748' },
         surface: {

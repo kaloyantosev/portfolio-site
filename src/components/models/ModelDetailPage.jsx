@@ -70,7 +70,7 @@ export default function ModelDetailPage({ model, onBack }) {
       </div>
 
       {/* Model Overview Summary Box */}
-      <p className="mt-8 max-w-4xl text-slate-300 leading-relaxed">
+      <p className="mt-8 max-w-4xl text-slate-300 leading-relaxed text-lg">
         {model.description}
       </p>
 
