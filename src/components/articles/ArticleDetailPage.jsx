@@ -1,7 +1,8 @@
 import React from 'react';
 import { ArrowLeft, Download } from 'lucide-react';
 import ThreadPost from './ThreadPost';
-import { PriceSince, ArticleFigure } from './MarketCharts';
+import { ArticleFigure } from './MarketCharts';
+import PriceStory from './PriceStory';
 
 // Renders an article body written in a small Markdown subset:
 // "## " headings, "- " bullets, "1. " numbered lists, "> " quotes, blank-line paragraphs.
@@ -49,7 +50,7 @@ export default function ArticleDetailPage({ article, onBack }) {
           {article.subtitle && <p className="mt-4 text-lg text-citi-lightaccent">{article.subtitle}</p>}
           <div className="mt-6 h-px w-14 bg-gold" />
         </div>
-        {article.priceSince && <PriceSince {...article.priceSince} />}
+        {article.priceSince && <PriceStory {...article.priceSince} />}
       </div>
 
       {/* Images float right; the text wraps around them and runs full width below. */}

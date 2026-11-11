@@ -81,7 +81,7 @@ export const investmentMemos = [
       ],
     },
     docx: "/articles/ttf-natural-gas-macro-report.docx",
-    priceSince: { symbol: "TTF=F", label: "Dutch TTF since this memo", since: "2026-02-01", currency: "€" },
+    priceSince: { symbol: "TTF", label: "Dutch TTF since this memo", since: "2026-02-01", currency: "€" },
     body: ttfArticle
   }
 ];
