@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeft, Download } from 'lucide-react';
+import ThreadPost from './ThreadPost';
 
 // Renders an article body written in a small Markdown subset:
 // "## " headings, "- " bullets, "1. " numbered lists, "> " quotes, blank-line paragraphs.
@@ -7,7 +8,7 @@ function ArticleBody({ text }) {
   return text.trim().split(/\n\s*\n/).map((block, i) => {
     const lines = block.split('\n');
     if (block.startsWith('## ')) {
-      return <h2 key={i} className="font-serif text-3xl text-white mt-12 mb-2">{block.slice(3)}</h2>;
+      return <h2 key={i} className="font-serif text-3xl text-white !mt-12 mb-2">{block.slice(3)}</h2>;
     }
     if (lines.every(l => l.startsWith('- '))) {
       return <ul key={i} className="list-disc pl-6 space-y-2">{lines.map((l, j) => <li key={j}>{l.slice(2)}</li>)}</ul>;
@@ -43,36 +44,43 @@ export default function ArticleDetailPage({ article, onBack }) {
         <div className="mt-6 h-px w-14 bg-gold" />
       </div>
 
-      {/* Text on the left, chart and download on the right (stacked on phones). */}
-      <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)]">
-        <article className="order-2 lg:order-1 max-w-3xl space-y-5 text-lg text-slate-300 leading-relaxed">
-          {article.summary && <p className="text-xl text-slate-100 leading-relaxed">{article.summary}</p>}
-          {article.body
-            ? <ArticleBody text={article.body} />
-            : article.fullContent && <ArticleBody text={article.fullContent.replace(/^### /gm, '## ')} />}
-        </article>
-
-        {(article.image || article.docx) && (
-          <aside className="order-1 lg:order-2">
-            <div className="lg:sticky lg:top-28 space-y-5">
-              {article.image && (
-                <figure>
-                  <a href={article.image} target="_blank" rel="noreferrer">
-                    <img src={article.image} alt={article.imageCaption || article.title} className="w-full h-auto rounded-lg border border-white/10" />
-                  </a>
-                  {article.imageCaption && <figcaption className="mt-3 text-sm text-citi-muted leading-relaxed">{article.imageCaption}</figcaption>}
-                </figure>
-              )}
-              {article.docx && (
-                <a href={article.docx} download className="btn-pill">
-                  <Download className="w-4 h-4" />
-                  Download Word file
+      {/* Images float right; the text wraps around them and runs full width below. */}
+      <article className="mt-12 text-lg text-slate-300 leading-relaxed [&>*+*]:mt-5 after:block after:clear-both">
+        {(article.images?.length || article.thread || article.docx) && (
+          <aside className="mb-8 lg:float-right lg:w-[45%] lg:ml-12 space-y-6">
+            {article.images?.map(img => (
+              <figure key={img.src}>
+                <a href={img.src} target="_blank" rel="noreferrer">
+                  <img src={img.src} alt={img.caption || article.title} className="w-full h-auto rounded-lg border border-white/10" />
                 </a>
-              )}
-            </div>
+                {img.caption && <figcaption className="mt-3 text-sm text-citi-muted leading-relaxed">{img.caption}</figcaption>}
+              </figure>
+            ))}
+            {article.thread && (
+              <figure>
+                <div className="rounded-2xl border border-white/10 bg-[#101010] p-5">
+                  {article.thread.posts.map((post, i) => (
+                    <ThreadPost key={i} {...article.thread} {...post} last={i === article.thread.posts.length - 1} />
+                  ))}
+                </div>
+                <figcaption className="mt-3 text-sm text-citi-muted">
+                  <a href={article.thread.url} target="_blank" rel="noreferrer" className="hover:text-white">The full thread on Threads ↗</a>
+                </figcaption>
+              </figure>
+            )}
+            {article.docx && (
+              <a href={article.docx} download className="btn-pill">
+                <Download className="w-4 h-4" />
+                Download Word file
+              </a>
+            )}
           </aside>
         )}
-      </div>
+        {article.summary && <p className="text-xl text-slate-100 leading-relaxed">{article.summary}</p>}
+        {article.body
+          ? <ArticleBody text={article.body} />
+          : article.fullContent && <ArticleBody text={article.fullContent.replace(/^### /gm, '## ')} />}
+      </article>
     </div>
   );
 }

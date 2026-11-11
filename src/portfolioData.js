@@ -102,8 +102,9 @@ export const macroAnalyses = [
     assetClass: "XAUUSD · Gold",
     date: "Jan 2026",
     summary: "Three regression channels covering 28 years, 5 years and 1 year all reached their upper bands between $5,400 and $5,600 on the monthly gold chart. With record leverage and very one-sided sentiment on top, I read it as the end of the cycle and posted the call on Threads on January 29, 2026.",
-    image: "/articles/xauusd-chart.png",
-    imageCaption: "Analysis published on Threads on January 29, 2026: three converging regression channels on the monthly XAUUSD chart.",
+    images: [
+      { src: "/articles/xauusd-chart.png", caption: "Analysis published on Threads on January 29, 2026: three converging regression channels on the monthly XAUUSD chart." },
+    ],
     docx: "/articles/xauusd-top-analysis.docx",
     body: xauusdArticle
   },
@@ -115,8 +116,21 @@ export const macroAnalyses = [
     assetClass: "Dutch TTF · Natural Gas",
     date: "Feb 2026",
     summary: "A U.S.-Iran escalation is above all a risk to LNG supply. Qatar ships all of its LNG through the Strait of Hormuz, Europe now depends on seaborne LNG and competes with Asia for it, and storage has to be refilled from April. I think Dutch TTF is a better hedge for this risk than gold, which already looked stretched.",
-    image: "/articles/ttf-chart.jpg",
-    imageCaption: "Macro analysis published on Threads (@ktsvv_): overextended precious metals versus the impending European natural gas crisis.",
+    // The original Threads thread, post by post (text copied verbatim).
+    thread: {
+      url: "https://www.threads.com/@ktsvv_/post/DVUWkSiiNug",
+      author: "ktsvv_",
+      avatar: "/articles/ttf-thread-avatar.jpg",
+      topic: "Iran",
+      date: "03/01/26",
+      posts: [
+        { text: "Buying gold and silver right now is not the best option to hedge against the U.S. - Iran war. Both have been on a remarkable run and are attracting investors to buy in on Monday open. However, the analysis I have conducted says otherwise. We are in for an energy crisis that the markets did not fully price in. A thread on why I looked elsewhere for a hedge:", images: ["/articles/ttf-thread-1.jpg"] },
+        { text: "Commitment reports show Institutions have been piling up on precious metals ever since February 17th, so their accumulations is basically completed. From now on every % up will come from retail and “noise” that are trying to get in. Thus, institutions have a lower entry price (like they always do). They will hold their positions while letting small traders battle in volatility. Everyone trying to enter gold and silver now should know they have missed the train.", images: ["/articles/ttf-thread-2a.jpg", "/articles/ttf-thread-2b.jpg"] },
+        { text: "Why oil is looking different? Institutions have increased their positions further last week and are expecting a prolonged rise in energy prices. Gold and silver might be a hedge, but energy is the real winner here. What’s even more concerning is that demand has rapidly increased, even though oil is being produced at highest rate ever." },
+        { text: "I have previously said that markets are underpricing this conflict - I was right. For the first time in history, the Strait of Hormuz is beginning to close. Markets didn’t think it’s a possible threat, but the Iranian regime is the weakest ever. I expect an oil crisis. No premium on this possibility was set in the price of oil and Nat gas and I saw the opportunity. An event that has never happened before, until it happened today. Iran said numerous times it will fight back, so they are.", images: ["/articles/ttf-thread-4.jpg"] },
+        { text: "Natural gas looks even more critical, as many traders have been shorting and hedging ahead of mild weather months. They will now be forced to aggressively buy back to cover their positions, and natural gas will spike upwards on Monday. Gold is priced in, and with the news of the Supreme leader dead, we might see a de-escalation in uncertainty. What is expected to further escalate are the strikes, which by some reports are directed to oil rigs and inventory. Bidding was is upon us.", images: ["/articles/ttf-thread-5.jpg"] },
+      ],
+    },
     docx: "/articles/ttf-natural-gas-macro-report.docx",
     body: ttfArticle
   }
