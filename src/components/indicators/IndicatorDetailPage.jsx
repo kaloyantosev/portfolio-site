@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowLeft, CheckCircle2, Code, Clock } from 'lucide-react';
-import TradingViewChart from './TradingViewChart';
+import IndicatorChart from './IndicatorChart';
 
 export default function IndicatorDetailPage({ indicator, onBack }) {
   if (!indicator) return null;
@@ -38,8 +38,8 @@ export default function IndicatorDetailPage({ indicator, onBack }) {
       {/* Live chart */}
       {indicator.chart && (
         <div className="mt-10">
-          <div className="section-label mb-4">Live Chart · {indicator.chart.symbol || 'AMEX:SPY'}</div>
-          <TradingViewChart {...indicator.chart} />
+          <div className="section-label mb-4">Live Chart · {indicator.chart.symbol} · Daily</div>
+          <IndicatorChart symbol={indicator.chart.symbol} study={indicator.chart.study} height={620} />
         </div>
       )}
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { customIndicators } from '../../portfolioData';
 import { PageHeader, ListRow, EmptyNote } from '../common/ListUI';
 import IndicatorDetailPage from './IndicatorDetailPage';
-import MiniChart from './MiniChart';
+import IndicatorChart from './IndicatorChart';
 
 export default function IndicatorsView({ selectedIndicatorId, setSelectedIndicatorId }) {
   const activeIndicator = selectedIndicatorId && customIndicators.find(i => i.id === selectedIndicatorId);
@@ -26,7 +26,7 @@ export default function IndicatorsView({ selectedIndicatorId, setSelectedIndicat
         {customIndicators.map(ind => (
           <ListRow
             key={ind.id}
-            media={ind.chart && <MiniChart symbol={ind.chart.symbol} />}
+            media={ind.chart && <IndicatorChart symbol={ind.chart.symbol} study={ind.chart.study} height={300} compact />}
             meta={[ind.assetSuitability, ind.timeframes?.join(' · ')].filter(Boolean).join(' · ')}
             title={ind.name}
             text={ind.summary || ind.subtitle}

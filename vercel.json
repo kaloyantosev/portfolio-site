@@ -1,3 +1,6 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/yf/:path*", "destination": "https://query1.finance.yahoo.com/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
