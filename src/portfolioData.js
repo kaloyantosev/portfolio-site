@@ -8,7 +8,7 @@ export const profileConfig = {
   tagline: "Quantitative Strategy, Financial Engineering & Global Macro",
   bio: "Open-minded and results-driven strategist with experience across treasury operations, quantitative market analysis, and systematic valuation. Experienced in macro research, DCF financial modeling, and risk-controlled portfolio execution.",
   location: "Sofia, Sofia-Capital",
-  phone: "+359 895 047 947",
+  phone: { local: "0895 047 947", intl: "+359 895 047 947" },
   email: "kaloyan.tosev@gmail.com",
   linkedin: "https://linkedin.com/in/kaloyan-tosev",
   cvPdfUrl: "/cv.pdf",

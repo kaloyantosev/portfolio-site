@@ -15,7 +15,7 @@ const SECTIONS = [
 export default function HeroSection({ navigate, onOpenContact }) {
   return (
     <div className="spiral-bg relative overflow-hidden">
-      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 pt-20 pb-16">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-8 pt-20 pb-16">
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           <div className="lg:col-span-7">
@@ -43,10 +43,10 @@ export default function HeroSection({ navigate, onOpenContact }) {
           </div>
 
           <div className="lg:col-span-5 flex justify-center lg:justify-start lg:-ml-4">
-            <div className="relative w-64 sm:w-72 lg:w-80">
+            <div className="relative w-72 sm:w-80 lg:w-[26rem]">
               <div
                 className="absolute inset-0 -m-6 rounded-full pointer-events-none opacity-40 blur-2xl"
-                style={{ background: 'radial-gradient(circle, rgba(0, 100, 180, 0.25) 0%, rgba(10, 22, 40, 0.1) 60%, transparent 80%)' }}
+                style={{ background: 'radial-gradient(circle, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.03) 60%, transparent 80%)' }}
               />
               <img
                 src="/kaloyan.png"
@@ -54,7 +54,7 @@ export default function HeroSection({ navigate, onOpenContact }) {
                 className="relative z-10 w-full object-contain object-bottom select-none"
                 style={{
                   opacity: 0.88,
-                  filter: 'contrast(1.02) brightness(0.96) saturate(0.92)',
+                  filter: 'contrast(1.02) brightness(0.96) saturate(0.92) drop-shadow(0 0 1.5px rgba(255,255,255,0.45))',
                   WebkitMaskImage: 'linear-gradient(to bottom, black 65%, rgba(0,0,0,0.7) 85%, transparent 100%), radial-gradient(ellipse at 50% 50%, black 75%, transparent 100%)',
                   maskImage: 'linear-gradient(to bottom, black 65%, rgba(0,0,0,0.7) 85%, transparent 100%), radial-gradient(ellipse at 50% 50%, black 75%, transparent 100%)',
                   WebkitMaskComposite: 'destination-in',

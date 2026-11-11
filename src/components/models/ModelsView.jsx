@@ -32,7 +32,7 @@ export default function ModelsView({ activeSubTab, setActiveSubTab, selectedMode
   const visible = activeSubTab === 'all' ? GROUPS : GROUPS.filter(g => g === activeSubTab);
 
   return (
-    <div className="max-w-5xl mx-auto px-6 lg:px-8 py-16">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
       <PageHeader eyebrow="Live Applications" title="Models">
         Interactive web applications for positioning, valuation, volatility and systematic strategy research.
       </PageHeader>

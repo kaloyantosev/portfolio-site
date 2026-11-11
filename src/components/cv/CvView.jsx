@@ -4,7 +4,7 @@ import { profileConfig } from '../../portfolioData';
 
 export default function CvView() {
   return (
-    <div className="max-w-4xl mx-auto px-6 lg:px-8 py-16">
+    <div className="max-w-6xl mx-auto px-6 lg:px-8 py-16">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10">
         <div>
           <div className="section-label mb-3">Credentials</div>

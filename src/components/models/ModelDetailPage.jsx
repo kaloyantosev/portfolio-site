@@ -30,7 +30,7 @@ export default function ModelDetailPage({ model, onBack }) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+    <div className="max-w-[1440px] mx-auto px-6 lg:px-8 py-12">
 
       {/* Back Navigation Bar */}
       <div className="mb-8 pb-4 border-b border-citi-blue/15 flex items-center justify-between">
@@ -70,7 +70,7 @@ export default function ModelDetailPage({ model, onBack }) {
       </div>
 
       {/* Model Overview Summary Box */}
-      <p className="mt-8 max-w-3xl text-slate-300 leading-relaxed">
+      <p className="mt-8 max-w-4xl text-slate-300 leading-relaxed">
         {model.description}
       </p>
 

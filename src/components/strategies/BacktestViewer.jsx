@@ -21,7 +21,7 @@ export default function BacktestViewer({ strategy, onClose }) {
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-3xl bg-surface-800 border border-citi-blue/20 shadow-2xl shadow-black/70 my-4 max-h-[88vh] flex flex-col"
+        className="relative w-full max-w-4xl bg-surface-800 border border-citi-blue/20 shadow-2xl shadow-black/70 my-4 max-h-[88vh] flex flex-col"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}

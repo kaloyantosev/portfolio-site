@@ -4,7 +4,7 @@ import { NAV_LINKS } from './Navbar';
 export default function Footer({ navigate, onOpenContact }) {
   return (
     <footer className="mt-24 border-t border-white/10 text-xs text-citi-muted">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8 py-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-8 py-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <span><span className="font-serif text-lg text-white mr-3">Kaloyan Tosev</span>© {new Date().getFullYear()}</span>
         <nav className="flex flex-wrap gap-x-6 gap-y-2">
           {NAV_LINKS.map(({ label, tab }) => (

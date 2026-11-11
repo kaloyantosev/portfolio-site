@@ -21,7 +21,7 @@ export default function AchievementsView({ selectedAchievementId, setSelectedAch
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 animate-fade">
+    <div className="max-w-[1440px] mx-auto px-6 lg:px-8 py-12 animate-fade">
       
       <div className="border-b border-citi-blue/15 pb-8">
         <div className="section-label mb-3">Honors, Distinctions & Milestones</div>

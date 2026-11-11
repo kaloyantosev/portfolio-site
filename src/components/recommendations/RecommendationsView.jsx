@@ -7,14 +7,14 @@ export default function RecommendationsView() {
 
   if (!letter) {
     return (
-      <div className="max-w-4xl mx-auto px-6 lg:px-8 py-16">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8 py-16">
         <EmptyNote>No recommendation letter available.</EmptyNote>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-6 lg:px-8 py-16">
+    <div className="max-w-6xl mx-auto px-6 lg:px-8 py-16">
       <PageHeader eyebrow="Recommendation" title="Letter of Recommendation">
         {letter.authorName} · {letter.institutionContext || letter.authorTitle} · {letter.date}
       </PageHeader>

@@ -20,7 +20,7 @@ export default function StrategiesView({ activeSubTab, setActiveSubTab, selected
   const list = activeSubTab === 'investment-algos' ? investmentAlgos : tradingAlgos;
 
   return (
-    <div className="max-w-5xl mx-auto px-6 lg:px-8 py-16">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
       <PageHeader eyebrow="Systematic" title="Strategies" />
 
       <SubTabs

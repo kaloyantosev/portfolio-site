@@ -20,7 +20,7 @@ export default function ArticlesView({ activeSubTab, setActiveSubTab, selectedAr
   const list = activeSubTab === 'macro' ? macroAnalyses : investmentMemos;
 
   return (
-    <div className="max-w-5xl mx-auto px-6 lg:px-8 py-16">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
       <PageHeader eyebrow="Research" title="Articles" />
 
       <SubTabs
