@@ -79,9 +79,12 @@
 .career-waiting .career-fade { opacity: 0; }
 .career-seen .career-draw { animation: career-draw 2.2s cubic-bezier(.65,0,.35,1) both; }
 .career-seen .career-fade { animation: career-fade 1s ease 1.2s both; }
+.career-waiting .career-forecast { opacity: 0; }
+.career-seen .career-forecast { animation: career-fade 1.4s ease 2s both; }
 .career-seen .career-pulse { animation: career-pulse 2.4s ease-in-out 2.2s infinite; }
 @media (prefers-reduced-motion: reduce) {
-  .career-seen .career-draw, .career-seen .career-fade, .career-seen .career-pulse { animation: none; }
+  .career-seen .career-draw, .career-seen .career-fade, .career-seen .career-forecast, .career-seen .career-pulse { animation: none; }
+  .career-waiting .career-forecast { opacity: 1; }
   .career-waiting .career-draw { stroke-dashoffset: 0; }
   .career-waiting .career-fade { opacity: 1; }
 }

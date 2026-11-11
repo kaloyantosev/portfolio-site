@@ -34,6 +34,13 @@ export const profileConfig = {
       text: "Founded and led Amaltea, a research and analytics business specialising in institutional-style analysis of stock and cryptocurrency markets. Managed a team of six interns and secured partnerships."
     }
   ],
+  // Dashed "forecast" point at the end of the career chart. Edit freely, or set to null to hide.
+  nextGoal: {
+    period: "Next",
+    role: "Institutional Markets",
+    org: "Global bank or asset manager",
+    text: "Bringing order-flow, derivatives and macro research experience to a sales, trading or quantitative markets desk."
+  },
   metrics: [
     { label: "Metric 1 (e.g. Sharpe Ratio)", value: "0.00", desc: "Short description or footnote" },
     { label: "Metric 2 (e.g. Annualized Alpha)", value: "0.0%", desc: "Short description or footnote" },

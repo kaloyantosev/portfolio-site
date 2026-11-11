@@ -73,7 +73,7 @@ export default function HeroSection({ navigate, onOpenContact }) {
             <h2 className="font-serif text-4xl sm:text-5xl font-medium text-white">Finance career</h2>
             <div className="mt-6 h-px w-14 bg-gold" />
             <div className="mt-12">
-              <CareerChart items={profileConfig.experience} />
+              <CareerChart items={profileConfig.experience} next={profileConfig.nextGoal} />
             </div>
           </section>
         )}
