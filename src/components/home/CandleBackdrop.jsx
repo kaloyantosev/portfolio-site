@@ -34,9 +34,9 @@ function Candle({ x, z, o, c, hi, lo }) {
   const s = 15, d = 15; // half width, half depth
   const bot = Math.min(o, c), top = Math.max(o, c) + 0.5;
   const [x0, x1, z0, z1] = [x - s, x + s, z - d, z + d];
-  // Solid but dim colours: opaque blocks that sit quietly on the navy background.
+  // Dim, partly see-through colours so the chart stays a quiet background element.
   const base = up ? [96, 104, 118] : [52, 58, 70];
-  const shade = k => `rgb(${base.map(v => Math.round(v * k)).join(',')})`;
+  const shade = k => `rgba(${base.map(v => Math.round(v * k)).join(',')},0.55)`;
   const sideX = x < 0 ? x1 : x0; // the side facing the camera
   return (
     <g>

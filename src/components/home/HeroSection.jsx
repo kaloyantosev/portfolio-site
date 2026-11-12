@@ -48,10 +48,6 @@ export default function HeroSection({ navigate, onOpenContact }) {
 
           <div className="lg:col-span-5 flex justify-center lg:justify-start lg:-ml-4">
             <div className="relative w-72 sm:w-80 lg:w-[26rem]">
-              <div
-                className="absolute inset-0 -m-6 rounded-full pointer-events-none opacity-40 blur-2xl"
-                style={{ background: 'radial-gradient(circle, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.03) 60%, transparent 80%)' }}
-              />
               <img
                 src="/kaloyan.png"
                 alt="Kaloyan Tosev"
