@@ -31,7 +31,7 @@ function ttfSeries() {
   return out;
 }
 
-function Chart({ points, since, currency, label, note }) {
+function Chart({ points, since, currency, label, note, compact }) {
   const ref = useRef(null);
   const [seen, setSeen] = useState(false);
   useEffect(() => {
@@ -47,25 +47,30 @@ function Chart({ points, since, currency, label, note }) {
   const lo = Math.min(...vals), hi = Math.max(...vals), pad = (hi - lo) * 0.08;
   const x = t => 8 + ((t - t0) / (t1 - t0)) * (W - 16);
   const y = v => BOTTOM - ((v - (lo - pad)) / (hi + pad - (lo - pad))) * (BOTTOM - TOP);
-  const d = points.map((p, i) => `${i ? 'L' : 'M'}${x(p.time).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
+  const toPath = list => list.map((p, i) => `${i ? 'L' : 'M'}${x(p.time).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
   const pub = points.find(p => p.time >= ts(since)) || points[0];
+  const pubI = points.indexOf(pub);
+  const before = toPath(points.slice(0, pubI + 1)), after = toPath(points.slice(pubI));
   const now = points.at(-1);
   const change = (now.value / pub.value - 1) * 100;
   const pubX = x(pub.time), nowX = x(now.time);
+  // The move since publication is green if price rose, red if it fell.
+  const move = change >= 0 ? '#2E9E6B' : '#C2453D';
 
   return (
     <figure ref={ref} className={`w-full ${seen ? 'career-seen' : 'career-waiting'}`}>
-      <div className="section-label">{label}</div>
+      {!compact && <div className="section-label">{label}</div>}
       <svg viewBox={`0 0 ${W} ${H}`} className="mt-2 w-full h-auto overflow-visible" role="img" aria-label={`${label}: ${fmt(pub.value, currency)} at publication, ${fmt(now.value, currency)} now`}>
         <defs>
           <linearGradient id={`ps-fill-${label.length}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.14" />
-            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+            <stop offset="0%" stopColor={move} stopOpacity="0.22" />
+            <stop offset="100%" stopColor={move} stopOpacity="0" />
           </linearGradient>
         </defs>
         <line x1="0" x2={W} y1={BOTTOM} y2={BOTTOM} stroke="rgba(255,255,255,0.15)" />
-        <path d={`${d} L${nowX},${BOTTOM} L${x(t0)},${BOTTOM} Z`} fill={`url(#ps-fill-${label.length})`} className="career-fade" />
-        <path d={d} fill="none" stroke="#ffffff" strokeWidth="1.6" strokeLinejoin="round" pathLength="1" className="career-draw" />
+        <path d={`${after} L${nowX},${BOTTOM} L${pubX},${BOTTOM} Z`} fill={`url(#ps-fill-${label.length})`} className="career-fade" />
+        <path d={before} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.6" strokeLinejoin="round" pathLength="1" className="career-draw" />
+        <path d={after} fill="none" stroke={move} strokeWidth="2" strokeLinejoin="round" pathLength="1" className="career-draw" />
 
         {/* Publication milestone */}
         <g className="career-fade">
@@ -87,7 +92,7 @@ function Chart({ points, since, currency, label, note }) {
           <text x={nowX} y={BOTTOM + 18} textAnchor="end" fontSize="11" fill="rgba(255,255,255,0.45)">Today</text>
         </g>
       </svg>
-      {note && <figcaption className="mt-1 text-xs text-citi-muted">{note}</figcaption>}
+      {note && !compact && <figcaption className="mt-1 text-xs text-citi-muted">{note}</figcaption>}
     </figure>
   );
 }
@@ -106,8 +111,8 @@ function LiveStory({ symbol, since, ...rest }) {
   return <Chart points={points} since={since} {...rest} />;
 }
 
-export default function PriceStory({ symbol, since, currency, label }) {
+export default function PriceStory({ symbol, since, currency, label, compact }) {
   return symbol === 'TTF'
-    ? <Chart points={ttfSeries()} since={since} currency={currency} label={label} note="Approximate, traced from the Dutch TTF front-month chart." />
-    : <LiveStory symbol={symbol} since={since} currency={currency} label={label} />;
+    ? <Chart points={ttfSeries()} since={since} currency={currency} label={label} compact={compact} note="Approximate, traced from the Dutch TTF front-month chart." />
+    : <LiveStory symbol={symbol} since={since} currency={currency} label={label} compact={compact} />;
 }

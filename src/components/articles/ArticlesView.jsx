@@ -2,6 +2,7 @@ import React from 'react';
 import { investmentMemos, macroAnalyses } from '../../portfolioData';
 import { PageHeader, SubTabs, ListRow, EmptyNote } from '../common/ListUI';
 import ArticleDetailPage from './ArticleDetailPage';
+import PriceStory from './PriceStory';
 
 export default function ArticlesView({ activeSubTab, setActiveSubTab, selectedArticleId, setSelectedArticleId }) {
   const activeArticle = selectedArticleId && [...investmentMemos, ...macroAnalyses].find(a => a.id === selectedArticleId);
@@ -37,10 +38,11 @@ export default function ArticlesView({ activeSubTab, setActiveSubTab, selectedAr
         {list.map(a => (
           <ListRow
             key={a.id}
+            media={a.priceSince && <PriceStory {...a.priceSince} compact />}
             meta={[a.ticker || a.assetClass, a.date].filter(Boolean).join(' · ')}
             title={a.title}
-            subtitle={a.subtitle}
-            text={a.summary}
+            text={a.priceSince ? a.subtitle : a.summary}
+            subtitle={a.priceSince ? undefined : a.subtitle}
             action="Read"
             onClick={() => {
               setSelectedArticleId(a.id);
