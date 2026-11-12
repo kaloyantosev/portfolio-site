@@ -5,7 +5,7 @@ import React from 'react';
 // they come towards the viewer. Deterministic data, drawn once as static SVG.
 const W = 1100, H = 640;
 const CX = W * 0.42, CY = H * 0.38, F = 620;   // screen centre and focal length
-const CAM_Y = 260;                              // camera height, above the candles so tops show
+const CAM_Y = 250;                              // eye level: tops show below it, undersides above it
 const FLOOR = -120;
 const N = 34;
 
@@ -13,7 +13,8 @@ const project = (x, y, z) => [CX + (x * F) / z, CY - ((y - CAM_Y) * F) / z];
 const pts = list => list.map(p => project(...p).map(v => v.toFixed(1)).join(',')).join(' ');
 
 // Rising price path in world units.
-const closes = Array.from({ length: N }, (_, i) => -60 + i * 8.5 + Math.sin(i * 0.9) * 26 + Math.sin(i * 0.37) * 22);
+// Steep rally: a big move up with shallow pullbacks.
+const closes = Array.from({ length: N }, (_, i) => -60 + i * 13 + Math.sin(i * 0.9) * 18 + Math.sin(i * 0.37) * 14);
 const candles = closes.map((c, i) => {
   const o = i ? closes[i - 1] : c - 10;
   const t = i / (N - 1);
@@ -22,7 +23,7 @@ const candles = closes.map((c, i) => {
     hi: Math.max(o, c) + 8 + Math.abs(Math.sin(i * 1.7)) * 18,
     lo: Math.min(o, c) - 8 - Math.abs(Math.cos(i * 1.3)) * 18,
     x: -520 + t * 760,   // left to right
-    z: 1300 - t * 1000,  // far (small) to near (big); spacing keeps candles close together
+    z: 1300 - t * 880,   // far (small) to near (big); spacing keeps candles close together
   };
 });
 
@@ -32,13 +33,14 @@ function Candle({ x, z, o, c, hi, lo }) {
   const bot = Math.min(o, c), top = Math.max(o, c) + 0.5;
   const [x0, x1, z0, z1] = [x - s, x + s, z - d, z + d];
   const base = up ? [232, 230, 225] : [120, 128, 140];
-  const shade = k => `rgba(${base.map(v => Math.round(v * k)).join(',')},${up ? 0.42 : 0.45})`;
+  const shade = k => `rgba(${base.map(v => Math.round(v * k)).join(',')},${up ? 0.78 : 0.78})`;
   const sideX = x < 0 ? x1 : x0; // the side facing the camera
   return (
     <g>
       <line {...Object.fromEntries([['x1', project(x, lo, z)[0]], ['y1', project(x, lo, z)[1]], ['x2', project(x, hi, z)[0]], ['y2', project(x, hi, z)[1]]])} stroke={shade(0.9)} strokeWidth={Math.max(0.6, 900 / z)} />
       <polygon points={pts([[sideX, bot, z0], [sideX, bot, z1], [sideX, top, z1], [sideX, top, z0]])} fill={shade(0.55)} />
-      <polygon points={pts([[x0, top, z0], [x1, top, z0], [x1, top, z1], [x0, top, z1]])} fill={shade(1.05)} />
+      {top < CAM_Y && <polygon points={pts([[x0, top, z0], [x1, top, z0], [x1, top, z1], [x0, top, z1]])} fill={shade(1.05)} />}
+      {bot > CAM_Y && <polygon points={pts([[x0, bot, z0], [x1, bot, z0], [x1, bot, z1], [x0, bot, z1]])} fill={shade(0.45)} />}
       <polygon points={pts([[x0, bot, z0], [x1, bot, z0], [x1, top, z0], [x0, top, z0]])} fill={shade(0.8)} />
     </g>
   );
