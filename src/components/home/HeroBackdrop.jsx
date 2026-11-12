@@ -11,7 +11,7 @@ export default function HeroBackdrop() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute right-[2%] top-[4%] hidden w-[46%] lg:block"
+      className="pointer-events-none absolute right-[8%] -top-[4%] hidden w-[34%] lg:block"
       style={{
         WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 25%, transparent 70%)',
         maskImage: 'radial-gradient(circle at 50% 50%, black 25%, transparent 70%)',
@@ -27,8 +27,8 @@ export default function HeroBackdrop() {
               width={CELL}
               height={CELL}
               rx="4"
-              fill="#ffffff"
-              fillOpacity={(0.015 + rho(i, j) * 0.11).toFixed(3)}
+              fill="#7FA8E0"
+              fillOpacity={(0.01 + rho(i, j) * 0.07).toFixed(3)}
             />
           )),
         )}
