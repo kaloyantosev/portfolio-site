@@ -7,13 +7,13 @@ const W = 1100, H = 640;
 const CX = W * 0.42, CY = H * 0.38, F = 620;   // screen centre and focal length
 const CAM_Y = 260;                              // camera height, above the candles so tops show
 const FLOOR = -120;
-const N = 26;
+const N = 34;
 
 const project = (x, y, z) => [CX + (x * F) / z, CY - ((y - CAM_Y) * F) / z];
 const pts = list => list.map(p => project(...p).map(v => v.toFixed(1)).join(',')).join(' ');
 
 // Rising price path in world units.
-const closes = Array.from({ length: N }, (_, i) => -60 + i * 11 + Math.sin(i * 0.9) * 32 + Math.sin(i * 0.37) * 26);
+const closes = Array.from({ length: N }, (_, i) => -60 + i * 8.5 + Math.sin(i * 0.9) * 26 + Math.sin(i * 0.37) * 22);
 const candles = closes.map((c, i) => {
   const o = i ? closes[i - 1] : c - 10;
   const t = i / (N - 1);
@@ -21,8 +21,8 @@ const candles = closes.map((c, i) => {
     o, c,
     hi: Math.max(o, c) + 8 + Math.abs(Math.sin(i * 1.7)) * 18,
     lo: Math.min(o, c) - 8 - Math.abs(Math.cos(i * 1.3)) * 18,
-    x: -760 + t * 1060,  // left to right
-    z: 1700 - t * 1420,  // far (small) to near (big)
+    x: -520 + t * 760,   // left to right
+    z: 1300 - t * 1000,  // far (small) to near (big); spacing keeps candles close together
   };
 });
 

@@ -57,12 +57,9 @@ export default function HeroSection({ navigate, onOpenContact }) {
                 alt="Kaloyan Tosev"
                 className="relative z-10 w-full object-contain object-bottom select-none"
                 style={{
-                  opacity: 0.88,
                   filter: 'contrast(1.02) brightness(0.96) saturate(0.92) drop-shadow(0 0 1.5px rgba(255,255,255,0.45))',
-                  WebkitMaskImage: 'linear-gradient(to bottom, black 65%, rgba(0,0,0,0.7) 85%, transparent 100%), radial-gradient(ellipse at 50% 50%, black 75%, transparent 100%)',
-                  maskImage: 'linear-gradient(to bottom, black 65%, rgba(0,0,0,0.7) 85%, transparent 100%), radial-gradient(ellipse at 50% 50%, black 75%, transparent 100%)',
-                  WebkitMaskComposite: 'destination-in',
-                  maskComposite: 'intersect',
+                  WebkitMaskImage: 'linear-gradient(to bottom, black 88%, transparent 100%)',
+                  maskImage: 'linear-gradient(to bottom, black 88%, transparent 100%)',
                 }}
                 draggable="false"
               />
