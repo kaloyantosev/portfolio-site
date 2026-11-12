@@ -1,13 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { customModels, investmentAlgos, tradingAlgos, customIndicators } from '../../portfolioData';
 import IndicatorChart from '../indicators/IndicatorChart';
+import SitePreview from '../models/SitePreview';
 
 // Strip of the live models, strategies and indicators. Web apps show a static
 // snapshot (public/snapshots/<id>.webp) instead of a live embed, so the homepage stays
 // light. It glides on its own, pauses on hover and can be dragged with the mouse.
-const snapshot = (id, title) => (
-  <img src={`/snapshots/${id}.webp`} alt={`${title} screenshot`} loading="lazy" draggable="false" className="w-full aspect-[1280/800] object-cover object-top" />
-);
+const snapshot = (id, title) => <SitePreview id={id} title={title} />;
 const ITEMS = [
   ...customModels.filter(m => m.liveUrl).map(m => ({ tab: 'models', id: m.id, kind: 'Model', title: m.name, preview: snapshot(m.id, m.name) })),
   ...[...tradingAlgos, ...investmentAlgos].filter(s => s.liveUrl).map(s => ({ tab: 'strategies', id: s.id, kind: 'Strategy', title: s.name, preview: snapshot(s.id, s.name) })),
@@ -74,7 +73,7 @@ export default function ShowcaseCarousel({ navigate }) {
           onKeyDown={e => { if (e.key === 'Enter') navigate(item.tab, null, item.id); }}
           className="group w-[78vw] sm:w-[24rem] shrink-0"
         >
-          <div className="pointer-events-none rounded-lg overflow-hidden border border-white/10">{item.preview}</div>
+          <div className="pointer-events-none rounded-lg overflow-hidden">{item.preview}</div>
           <div className="mt-3 text-[11px] uppercase tracking-[0.18em] text-citi-muted">{item.kind}</div>
           <div className="mt-1 font-serif text-xl text-white group-hover:text-white/80 transition-colors">{item.title}</div>
         </div>

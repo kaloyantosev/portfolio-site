@@ -47,7 +47,7 @@ export default function StrategiesView({ activeSubTab, setActiveSubTab, selected
             {g.items.map(s => (
               <ListRow
                 key={s.id}
-                media={s.liveUrl && <SitePreview url={s.liveUrl} title={s.name} />}
+                media={s.liveUrl && <SitePreview id={s.id} title={s.name} />}
                 meta={[s.type, s.vintage].filter(Boolean).join(' · ')}
                 title={s.name}
                 text={s.liveUrl ? s.subtitle : s.description}

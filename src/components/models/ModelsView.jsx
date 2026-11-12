@@ -51,7 +51,7 @@ export default function ModelsView({ activeSubTab, setActiveSubTab, selectedMode
               {items.map(m => (
                 <ListRow
                   key={m.id}
-                  media={m.liveUrl && <SitePreview url={m.liveUrl} title={m.name} />}
+                  media={m.liveUrl && <SitePreview id={m.id} title={m.name} />}
                   meta={m.category}
                   title={m.name}
                   text={m.subtitle}
