@@ -14,7 +14,7 @@ const ITEMS = [
   ...customIndicators.filter(i => i.chart).map(i => ({ tab: 'indicators', id: i.id, kind: 'Indicator', title: i.name, preview: <IndicatorChart symbol={i.chart.symbol} study={i.chart.study} height={208} compact /> })),
 ];
 
-const SPEED = 0.9; // px per frame (~55 px/s)
+const SPEED = 0.65; // px per frame (~40 px/s)
 
 export default function ShowcaseCarousel({ navigate }) {
   const ref = useRef(null);
