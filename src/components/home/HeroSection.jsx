@@ -4,6 +4,7 @@ import { profileConfig } from '../../portfolioData';
 import { ListRow } from '../common/ListUI';
 import CareerChart from './CareerChart';
 import ShowcaseCarousel from './ShowcaseCarousel';
+import CandleBackdrop from './CandleBackdrop';
 
 const SECTIONS = [
   { tab: 'articles', title: 'Articles', desc: 'Investment memos and global macro analyses.' },
@@ -16,7 +17,8 @@ const SECTIONS = [
 
 export default function HeroSection({ navigate, onOpenContact }) {
   return (
-    <div className="spiral-bg relative overflow-hidden">
+    <div className="relative overflow-hidden">
+      <CandleBackdrop />
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-8 pt-20 pb-16">
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">

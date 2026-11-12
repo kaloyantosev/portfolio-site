@@ -21,22 +21,6 @@
 }
 
 @layer utilities {
-  /* ── Static spiral / arc SVG background ── */
-  .spiral-bg {
-    position: relative;
-  }
-  .spiral-bg::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900' viewBox='0 0 900 900'%3E%3Cg fill='none' stroke='%230072ce' stroke-width='0.9' opacity='0.15'%3E%3Ccircle cx='450' cy='450' r='80'/%3E%3Ccircle cx='450' cy='450' r='150'/%3E%3Ccircle cx='450' cy='450' r='230'/%3E%3Ccircle cx='450' cy='450' r='320'/%3E%3Ccircle cx='450' cy='450' r='420'/%3E%3Ccircle cx='450' cy='450' r='530'/%3E%3Ccircle cx='450' cy='450' r='650'/%3E%3Cline x1='450' y1='0' x2='450' y2='900' stroke-width='0.6'/%3E%3Cline x1='0' y1='450' x2='900' y2='450' stroke-width='0.6'/%3E%3Cline x1='0' y1='0' x2='900' y2='900' stroke-width='0.5'/%3E%3Cline x1='900' y1='0' x2='0' y2='900' stroke-width='0.5'/%3E%3Cellipse cx='450' cy='450' rx='300' ry='150' stroke-width='0.7'/%3E%3Cellipse cx='450' cy='450' rx='150' ry='300' stroke-width='0.7'/%3E%3C/g%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: top right;
-    background-size: 720px 720px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
   /* ── Section label ── */
   .section-label {
     font-family: 'Manrope', sans-serif;
