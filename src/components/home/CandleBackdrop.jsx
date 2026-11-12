@@ -4,7 +4,7 @@ import React from 'react';
 // projected with real perspective, so candles shrink into the distance and grow as
 // they come towards the viewer. Deterministic data, drawn once as static SVG.
 const W = 1100, H = 640;
-const CX = W * 0.42, CY = H * 0.38, F = 620;   // screen centre and focal length
+const CX = W * 0.42, CY = H * 0.38, F = 900;   // screen centre and focal length
 const CAM_Y = 250;                              // eye level: tops show below it, undersides above it
 const FLOOR = -120;
 const N = 34;
@@ -24,8 +24,8 @@ const candles = closes.map((c, i) => {
     o, c,
     hi: Math.max(o, c) + 4 + rnd(i + 50) * 34,
     lo: Math.min(o, c) - 4 - rnd(i + 90) * 34,
-    x: -520 + t * 760,   // left to right
-    z: 1300 - t * 880,   // far (small) to near (big); spacing keeps candles close together
+    x: -380 + t * 810,   // left to right
+    z: 900 - t * 300,    // far (small) to near (big); mild depth so it still reads as a price chart
   };
 });
 
