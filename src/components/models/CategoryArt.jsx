@@ -91,7 +91,7 @@ export default function CategoryArt({ group }) {
   const art = ART[group];
   if (!art) return null;
   return (
-    <svg viewBox="0 0 160 56" className="cat-art h-14 w-40 overflow-visible" aria-hidden="true">
+    <svg viewBox="0 0 160 56" className="cat-art hidden md:block h-14 w-40 overflow-visible" aria-hidden="true">
       {art}
     </svg>
   );

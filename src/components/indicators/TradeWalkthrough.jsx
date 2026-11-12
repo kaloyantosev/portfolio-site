@@ -157,7 +157,9 @@ export default function TradeWalkthrough({ study }) {
 
   return (
     <div ref={ref} className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]">
-      <svg viewBox={`0 0 ${W} ${height}`} className="w-full h-auto" role="img" aria-label="Animated example trade using this indicator" style={{ fontFamily: 'Manrope, sans-serif' }}>
+      {/* On phones the example keeps a readable size and scrolls sideways inside this box. */}
+      <div className="overflow-x-auto">
+      <svg viewBox={`0 0 ${W} ${height}`} className="w-full min-w-[640px] h-auto" role="img" aria-label="Animated example trade using this indicator" style={{ fontFamily: 'Manrope, sans-serif' }}>
         {/* Overlay: confluence zone and channel bands */}
         {s.zone && (
           <g>
@@ -240,6 +242,7 @@ export default function TradeWalkthrough({ study }) {
           </g>
         )}
       </svg>
+      </div>
 
       {/* Steps, highlighted as the trade unfolds */}
       <ol className="space-y-5 self-center">

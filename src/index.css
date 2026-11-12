@@ -111,3 +111,6 @@
   .showcase { overflow-x: auto; }
   .showcase-track { animation: none; }
 }
+
+/* Inner pages render 10% smaller than the homepage on desktop; full size on phones. */
+@media (min-width: 1024px) { .inner-page { zoom: 0.9; } }

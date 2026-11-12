@@ -39,7 +39,7 @@ export default function ShowcaseCarousel({ navigate }) {
             tabIndex={0}
             onClick={() => navigate(item.tab, null, item.id)}
             onKeyDown={e => { if (e.key === 'Enter') navigate(item.tab, null, item.id); }}
-            className="group w-[24rem] shrink-0 cursor-pointer"
+            className="group w-[78vw] sm:w-[24rem] shrink-0 cursor-pointer"
           >
             <div className="pointer-events-none rounded-lg overflow-hidden">{item.preview}</div>
             <div className="mt-3 text-[11px] uppercase tracking-[0.18em] text-citi-muted">{item.kind}</div>

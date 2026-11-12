@@ -82,7 +82,7 @@ export default function App() {
       <Navbar activeTab={activeTab} navigate={navigate} onOpenContact={openContact} />
 
       {/* Inner pages render 10% smaller than the homepage. */}
-      <main className="flex-grow" style={activeTab === 'overview' ? undefined : { zoom: 0.9 }}>
+      <main className={`flex-grow ${activeTab === 'overview' ? '' : 'inner-page'}`}>
         {activeTab === 'overview' && <HeroSection navigate={navigate} onOpenContact={openContact} />}
 
         {activeTab === 'cv' && <CvView />}

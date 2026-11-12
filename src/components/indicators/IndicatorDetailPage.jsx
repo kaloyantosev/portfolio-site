@@ -27,7 +27,7 @@ export default function IndicatorDetailPage({ indicator, onBack }) {
       {indicator.chart && (
         <section className="mt-12">
           <div className="section-label mb-4">Live · {indicator.chart.symbol} · Daily</div>
-          <IndicatorChart symbol={indicator.chart.symbol} study={indicator.chart.study} height={620} />
+          <IndicatorChart symbol={indicator.chart.symbol} study={indicator.chart.study} height={window.innerWidth < 768 ? 420 : 620} />
         </section>
       )}
 
