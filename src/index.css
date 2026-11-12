@@ -103,14 +103,9 @@
   .cat-section:hover .cat-art .anim { animation-play-state: paused; }
 }
 
-/* Home showcase: pans slowly back and forth, pauses on hover. */
-@keyframes showcase-pan { from { transform: translateX(0); } to { transform: translateX(var(--shift)); } }
-.showcase-track { animation: showcase-pan 60s ease-in-out infinite alternate; }
-.showcase:hover .showcase-track { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) {
-  .showcase { overflow-x: auto; }
-  .showcase-track { animation: none; }
-}
 
 /* Inner pages render 10% smaller than the homepage on desktop; full size on phones. */
 @media (min-width: 1024px) { .inner-page { zoom: 0.9; } }
+
+/* Hide the scrollbar on horizontally dragged strips (homepage carousel). */
+.no-scrollbar::-webkit-scrollbar { display: none; }

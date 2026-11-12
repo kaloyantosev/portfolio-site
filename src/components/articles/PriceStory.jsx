@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { loadDaily } from '../../charts/data';
 
-// Article-header price chart in the style of the homepage career roadmap: the line
-// draws in when scrolled into view, the publication date is a milestone and today
-// pulses in gold. Uses the career-* animation classes from index.css.
+// Article price chart in the style of the homepage career roadmap: the publication
+// date is a milestone and today is marked in gold. Static, shown immediately.
 const W = 600, H = 230, TOP = 34, BOTTOM = 196;
 const ts = d => Date.parse(`${d}T00:00:00Z`) / 1000;
 const fmt = (v, cur) => `${cur}${v.toLocaleString('en-US', { maximumFractionDigits: v < 100 ? 1 : 0 })}`;
@@ -32,15 +31,6 @@ function ttfSeries() {
 }
 
 function Chart({ points, since, currency, label, note, compact }) {
-  const ref = useRef(null);
-  const [seen, setSeen] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || !('IntersectionObserver' in window)) return setSeen(true);
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setSeen(true); io.disconnect(); } }, { threshold: 0.3 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
 
   const t0 = points[0].time, t1 = points.at(-1).time;
   const vals = points.map(p => p.value);
@@ -58,7 +48,7 @@ function Chart({ points, since, currency, label, note, compact }) {
   const move = change >= 0 ? '#2E9E6B' : '#C2453D';
 
   return (
-    <figure ref={ref} className={`w-full ${seen ? 'career-seen' : 'career-waiting'}`}>
+    <figure className="w-full">
       {!compact && <div className="section-label">{label}</div>}
       <svg viewBox={`0 0 ${W} ${H}`} className="mt-2 w-full h-auto overflow-visible" role="img" aria-label={`${label}: ${fmt(pub.value, currency)} at publication, ${fmt(now.value, currency)} now`}>
         <defs>
@@ -68,12 +58,12 @@ function Chart({ points, since, currency, label, note, compact }) {
           </linearGradient>
         </defs>
         <line x1="0" x2={W} y1={BOTTOM} y2={BOTTOM} stroke="rgba(255,255,255,0.15)" />
-        <path d={`${after} L${nowX},${BOTTOM} L${pubX},${BOTTOM} Z`} fill={`url(#ps-fill-${label.length})`} className="career-fade" />
-        <path d={before} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.6" strokeLinejoin="round" pathLength="1" className="career-draw" />
-        <path d={after} fill="none" stroke={move} strokeWidth="2" strokeLinejoin="round" pathLength="1" className="career-draw" />
+        <path d={`${after} L${nowX},${BOTTOM} L${pubX},${BOTTOM} Z`} fill={`url(#ps-fill-${label.length})`} />
+        <path d={before} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.6" strokeLinejoin="round" />
+        <path d={after} fill="none" stroke={move} strokeWidth="2" strokeLinejoin="round" />
 
         {/* Publication milestone */}
-        <g className="career-fade">
+        <g>
           <line x1={pubX} x2={pubX} y1={y(pub.value) + 8} y2={BOTTOM} stroke="rgba(255,255,255,0.3)" strokeDasharray="3 5" />
           <circle cx={pubX} cy={y(pub.value)} r="5" fill="#06090f" stroke="#ffffff" strokeWidth="1.6" />
           <text x={pubX} y={y(pub.value) - 14} textAnchor="middle" fontSize="12" fill="rgba(255,255,255,0.75)">Published · {fmt(pub.value, currency)}</text>
@@ -83,8 +73,8 @@ function Chart({ points, since, currency, label, note, compact }) {
         </g>
 
         {/* Today */}
-        <g className="career-fade">
-          <circle cx={nowX} cy={y(now.value)} r="13" fill="none" stroke="#c9a96e" strokeOpacity="0.6" className="career-pulse" />
+        <g>
+          <circle cx={nowX} cy={y(now.value)} r="13" fill="none" stroke="#c9a96e" strokeOpacity="0.6" />
           <circle cx={nowX} cy={y(now.value)} r="5" fill="#c9a96e" />
           <text x={nowX - 12} y={y(now.value) + (now.value > pub.value ? -16 : 24)} textAnchor="end" fontSize="12" fill="#c9a96e">
             Now · {fmt(now.value, currency)} · {change >= 0 ? '+' : ''}{change.toFixed(0)}%
