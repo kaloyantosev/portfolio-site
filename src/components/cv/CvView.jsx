@@ -1,6 +1,7 @@
 import React from 'react';
 import { Download } from 'lucide-react';
 import { profileConfig } from '../../portfolioData';
+import DocumentViewer from '../common/DocumentViewer';
 
 export default function CvView() {
   return (
@@ -20,9 +21,11 @@ export default function CvView() {
         </a>
       </div>
 
-      <div className="border-t border-white/10 pt-10 flex flex-col gap-6">
-        <img src="/cv_page_1.png" alt="Kaloyan Tosev CV - Page 1" className="w-full h-auto bg-white select-none" />
-        <img src="/cv_page_2.png" alt="Kaloyan Tosev CV - Page 2" className="w-full h-auto bg-white select-none" />
+      <div className="border-t border-white/10 pt-6">
+        <DocumentViewer pages={[
+          { src: '/cv_page_1.png', alt: 'Kaloyan Tosev CV - Page 1' },
+          { src: '/cv_page_2.png', alt: 'Kaloyan Tosev CV - Page 2' },
+        ]} />
       </div>
     </div>
   );

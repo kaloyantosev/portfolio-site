@@ -1,6 +1,7 @@
 import React from 'react';
 import { recommendationLetters } from '../../portfolioData';
 import { PageHeader, EmptyNote } from '../common/ListUI';
+import DocumentViewer from '../common/DocumentViewer';
 
 export default function RecommendationsView() {
   const letter = recommendationLetters[0];
@@ -23,11 +24,9 @@ export default function RecommendationsView() {
         “{letter.featuredQuote}”
       </blockquote>
 
-      <img
-        src="/letter_of_recommendation_doc.png"
-        alt={`Letter of Recommendation - ${letter.authorName}`}
-        className="mt-12 mx-auto block w-[70%] h-auto bg-white select-none"
-      />
+      <div className="mt-12">
+        <DocumentViewer pages={[{ src: '/letter_of_recommendation_doc.png', alt: `Letter of Recommendation - ${letter.authorName}` }]} />
+      </div>
     </div>
   );
 }
