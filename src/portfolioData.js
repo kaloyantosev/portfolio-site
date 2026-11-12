@@ -180,7 +180,7 @@ export const customModels = [
     subtitle: "Forward curves, calendar & processing spreads, seasonality and volatility across energy, metals and ags",
     category: "Commodities & Term Structure",
     group: "Commodities & Energy",
-    liveUrl: "https://commodity-futures-eight.vercel.app/",
+    liveUrl: "https://commodity-futures-neutral.vercel.app/",
     description: "Commodity futures analysis platform covering energy, metals and agricultural markets. Interactive term-structure visualisation with contango/backwardation detection, calendar spreads with seasonal overlays, crack/crush/spark processing spreads, multi-year seasonality bands and realised vs. implied volatility metrics."
   },
   {
