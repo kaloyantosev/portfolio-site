@@ -14,14 +14,16 @@ const pts = list => list.map(p => project(...p).map(v => v.toFixed(1)).join(',')
 
 // Rising price path in world units.
 // Steep rally: a big move up with shallow pullbacks.
-const closes = Array.from({ length: N }, (_, i) => -60 + i * 13 + Math.sin(i * 0.9) * 18 + Math.sin(i * 0.37) * 14);
+// Deterministic pseudo-random noise, so the chart is the same on every load.
+const rnd = i => { const v = Math.sin(i * 12.9898) * 43758.5453; return v - Math.floor(v); };
+const closes = Array.from({ length: N }, (_, i) => -60 + i * 13 + Math.sin(i * 0.9) * 26 + Math.sin(i * 0.37) * 20 + (rnd(i) - 0.5) * 70);
 const candles = closes.map((c, i) => {
   const o = i ? closes[i - 1] : c - 10;
   const t = i / (N - 1);
   return {
     o, c,
-    hi: Math.max(o, c) + 8 + Math.abs(Math.sin(i * 1.7)) * 18,
-    lo: Math.min(o, c) - 8 - Math.abs(Math.cos(i * 1.3)) * 18,
+    hi: Math.max(o, c) + 4 + rnd(i + 50) * 34,
+    lo: Math.min(o, c) - 4 - rnd(i + 90) * 34,
     x: -520 + t * 760,   // left to right
     z: 1300 - t * 880,   // far (small) to near (big); spacing keeps candles close together
   };
@@ -32,8 +34,9 @@ function Candle({ x, z, o, c, hi, lo }) {
   const s = 15, d = 15; // half width, half depth
   const bot = Math.min(o, c), top = Math.max(o, c) + 0.5;
   const [x0, x1, z0, z1] = [x - s, x + s, z - d, z + d];
-  const base = up ? [232, 230, 225] : [120, 128, 140];
-  const shade = k => `rgba(${base.map(v => Math.round(v * k)).join(',')},${up ? 0.78 : 0.78})`;
+  // Solid but dim colours: opaque blocks that sit quietly on the navy background.
+  const base = up ? [96, 104, 118] : [52, 58, 70];
+  const shade = k => `rgb(${base.map(v => Math.round(v * k)).join(',')})`;
   const sideX = x < 0 ? x1 : x0; // the side facing the camera
   return (
     <g>
