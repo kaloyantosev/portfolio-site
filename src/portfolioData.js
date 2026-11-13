@@ -166,24 +166,6 @@ export const customModels = [
     description: "Advanced equity derivatives and institutional positioning platform designed to decode smart-money market activity. Connects with Nasdaq data feeds to analyze options market microstructure, Put/Call positioning metrics, and historical 13F hedge fund accumulation across individual equities and indices."
   },
   {
-    id: "model-cot-pro",
-    name: "COT Pro — Institutional Positioning Intelligence",
-    subtitle: "CFTC Legacy & Disaggregated positioning analytics across 30+ global futures markets",
-    category: "Global Macro & Futures",
-    group: "Macro & Positioning",
-    liveUrl: "https://cot-gamma.vercel.app/",
-    description: "Institutional-grade Commitments of Traders terminal for macro PMs, systematic CTAs and discretionary derivatives traders. Translates weekly CFTC filings into statistical positioning intelligence: institutional crowding, commercial hedging pressure, zero-line crossovers and dealer delta-hedging flows across 156 weeks of data."
-  },
-  {
-    id: "model-commodity-futures",
-    name: "Commodity Futures Platform — Market Intelligence",
-    subtitle: "Forward curves, calendar & processing spreads, seasonality and volatility across energy, metals and ags",
-    category: "Commodities & Term Structure",
-    group: "Commodities & Energy",
-    liveUrl: "https://commodity-futures-neutral.vercel.app/",
-    description: "Commodity futures analysis platform covering energy, metals and agricultural markets. Interactive term-structure visualisation with contango/backwardation detection, calendar spreads with seasonal overlays, crack/crush/spark processing spreads, multi-year seasonality bands and realised vs. implied volatility metrics."
-  },
-  {
     id: "model-oilwatch",
     name: "OilWatch — Global Oil Shipping & Market Intelligence",
     subtitle: "Live tanker tracking, chokepoint risk monitoring, Brent/WTI pricing and maritime news briefs",
@@ -200,6 +182,24 @@ export const customModels = [
     group: "Macro & Positioning",
     liveUrl: "https://cot-xunw.vercel.app/",
     description: "Macro model that tracks where the economy sits in the credit cycle. Aggregates credit, rates and economic data into a cycle timeline and pressure indicators to identify phase transitions between expansion, late-cycle, contraction and recovery."
+  },
+  {
+    id: "model-cot-pro",
+    name: "COT Pro — Institutional Positioning Intelligence",
+    subtitle: "CFTC Legacy & Disaggregated positioning analytics across 30+ global futures markets",
+    category: "Global Macro & Futures",
+    group: "Macro & Positioning",
+    liveUrl: "https://cot-gamma.vercel.app/",
+    description: "Institutional-grade Commitments of Traders terminal for macro PMs, systematic CTAs and discretionary derivatives traders. Translates weekly CFTC filings into statistical positioning intelligence: institutional crowding, commercial hedging pressure, zero-line crossovers and dealer delta-hedging flows across 156 weeks of data."
+  },
+  {
+    id: "model-commodity-futures",
+    name: "Commodity Futures Platform — Market Intelligence",
+    subtitle: "Forward curves, calendar & processing spreads, seasonality and volatility across energy, metals and ags",
+    category: "Commodities & Term Structure",
+    group: "Commodities & Energy",
+    liveUrl: "https://commodity-futures-neutral.vercel.app/",
+    description: "Commodity futures analysis platform covering energy, metals and agricultural markets. Interactive term-structure visualisation with contango/backwardation detection, calendar spreads with seasonal overlays, crack/crush/spark processing spreads, multi-year seasonality bands and realised vs. implied volatility metrics."
   }
 ];
 
