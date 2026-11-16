@@ -184,6 +184,15 @@ export const customModels = [
     description: "Macro model that tracks where the economy sits in the credit cycle. Aggregates credit, rates and economic data into a cycle timeline and pressure indicators to identify phase transitions between expansion, late-cycle, contraction and recovery."
   },
   {
+    id: "model-natgas-shock",
+    name: "Natural Gas Shock Monitor — Hedge & Crash Early-Warning Research",
+    subtitle: "Does natural gas spike before major S&P 500 crashes, and does it hedge them? Every 15%+ decline since 2001",
+    category: "Energy & Equity Risk",
+    group: "Commodities & Energy",
+    liveUrl: "https://natgas-shock.vercel.app/",
+    description: "Research study testing two roles for Henry Hub natural gas around the S&P 500's major declines (15%+ since 2001): a leading indicator, where gas spikes 10%+ within five days in the week to two months before the peak, and a hedge, where gas rises while stocks fall. Roll-adjusted futures, results against all-day baselines, placebo-tested p-values, a real-time forward test, and one chart per crash. Refreshed every trading day."
+  },
+  {
     id: "model-cot-pro",
     name: "COT Pro — Institutional Positioning Intelligence",
     subtitle: "CFTC Legacy & Disaggregated positioning analytics across 30+ global futures markets",
