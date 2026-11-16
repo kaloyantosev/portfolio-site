@@ -1,0 +1,73 @@
+// This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Kaloyan26 (Pine Script v6 Unified Dashboard)
+
+//@version=6
+indicator("Mid-Cap Volume Intensity Ranker v6 Final", overlay=false, precision=2)
+
+// --- INPUTS ---
+len1 = 12, len2 = 60, len3 = 210, len4 = 315
+mult = input.float(4.0, "SD Width")
+cci_len = input.int(20, "Tactical CCI (Momentum)")
+ad_smooth = input.int(10, "A/D Smoothing")
+
+// --- CALCULATION FUNCTIONS ---
+calc_reg_rsi(int l, float m) =>
+    float lr = ta.linreg(close, l, 0)
+    float sd = ta.stdev(close, l)
+    (close - (lr - sd * m)) / ((lr + sd * m) - (lr - sd * m)) * 100
+
+// --- CORE METRICS ---
+float weighted_rsi = ((calc_reg_rsi(len1, mult)*len1)+(calc_reg_rsi(len2, mult)*len2)+(calc_reg_rsi(len3, mult)*len3)+(calc_reg_rsi(len4, mult)*len4))/(len1+len2+len3+len4)
+float norm_cci     = ((ta.cci(close, cci_len) + 200) / 400) * 100
+
+// --- MANUAL VOLUME INTENSITY (A/D) CALCULATION ---
+// Manual formula required for v6: ((Close - Low) - (High - Close)) / (High - Low) * Volume
+var float ad_val = 0.0
+float mf_multiplier = (high - low) == 0 ? 0 : ((close - low) - (high - close)) / (high - low)
+ad_val := nz(ad_val[1]) + (mf_multiplier * volume)
+
+float smoothed_ad = ta.ema(ad_val, ad_smooth)
+float hi_ad       = ta.highest(smoothed_ad, 100)
+float lo_ad       = ta.lowest(smoothed_ad, 100)
+float norm_ad     = hi_ad == lo_ad ? 50.0 : (smoothed_ad - lo_ad) / (hi_ad - lo_ad) * 100.0
+
+// --- VOLUME LOGIC ---
+float ad_change    = ta.change(norm_ad)
+bool is_ad_rising  = ad_change > 0.0
+
+// --- RANKING ENGINE ---
+float intensity_score = 0.0
+intensity_score += weighted_rsi > 50.0 ? 35.0 : 0.0
+intensity_score += (norm_ad > 50.0 ? 20.0 : 0.0) + (is_ad_rising ? 20.0 : 0.0)
+intensity_score += (norm_cci > 50.0 and norm_cci > weighted_rsi) ? 25.0 : 10.0
+
+float total_rank = math.round(intensity_score, 1)
+
+// --- DASHBOARD (Optimized Row Sizes) ---
+var table board = table.new(position.top_right, 2, 2, bgcolor=#1c1c1c, border_width=1, border_color=color.gray)
+
+if barstate.islast
+    color c_rank = total_rank > 70.0 ? color.lime : total_rank > 40.0 ? color.yellow : color.red
+
+    // Intensity Rank Row (Adjusted size to match Money Flow)
+    table.cell(board, 0, 0, "Intensity Rank", text_color=color.white, text_size=size.small)
+    table.cell(board, 1, 0, str.tostring(total_rank) + "%", text_color=c_rank, text_size=size.small)
+
+    // Money Flow Row
+    table.cell(board, 0, 1, "Money Flow", text_color=color.gray, text_size=size.small)
+    table.cell(board, 1, 1, is_ad_rising ? "ACCUMULATING" : "DISTRIBUTING", text_color=(is_ad_rising ? color.teal : color.maroon), text_size=size.small)
+
+// --- PLOTS ---
+color ad_color = is_ad_rising ? color.new(color.teal, 20) : color.new(color.maroon, 20)
+plot(weighted_rsi, "Reg RSI", color=color.white, linewidth=2)
+plot(norm_cci, "CCI 20", color=color.new(color.orange, 50))
+plot(norm_ad, "Volume Intensity (A/D)", color=ad_color, linewidth=2)
+
+hline(50, "Mid", color=color.yellow, linestyle=hline.style_dotted)
+
+// Background Fills
+h_top = hline(100, display=display.none)
+h_mid = hline(50, display=display.none)
+h_bot = hline(0, display=display.none)
+fill(h_top, h_mid, color.new(color.green, 95), title="Bull Zone")
+fill(h_mid, h_bot, color.new(color.red, 95), title="Bear Zone")

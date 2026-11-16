@@ -1,6 +1,6 @@
 // Self-check for the indicator maths: node src/charts/studies.check.mjs
 import assert from 'node:assert/strict';
-import { olsFit, sma, ema, rma, wma, stdev, highest, lowest } from './studies.js';
+import { olsFit, sma, ema, rma, wma, stdev, highest, lowest, cci } from './studies.js';
 
 // A perfect line y = 10 + 2t (t oldest -> newest): slope per bar-ago is -2, value now 10 + 2*9, R² 1, no scatter.
 const line = Array.from({ length: 10 }, (_, t) => 10 + 2 * t);
@@ -15,4 +15,6 @@ assert.deepEqual(rma([2, 2, 2, 5], 3), [null, null, 2, 3]);         // 2 + (5 - 
 assert.ok(Math.abs(stdev([2, 4, 4, 4, 5, 5, 7, 9], 8)[7] - 2) < 1e-12); // population σ = 2
 assert.deepEqual(highest(x, 2), [null, 2, 3, 4, 5]);
 assert.deepEqual(lowest(x, 2), [null, 1, 2, 3, 4]);
+// CCI of 1..20 at the last bar: SMA 10.5, mean deviation 5, so (20 - 10.5) / (0.015 * 5) = 126.67.
+assert.ok(Math.abs(cci(Array.from({ length: 20 }, (_, i) => i + 1), 20)[19] - 126.6667) < 1e-3);
 console.log('studies: all checks passed');

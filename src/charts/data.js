@@ -20,7 +20,7 @@ export function loadDaily(symbol, range = '3y', interval = '1d') {
         res.timestamp.forEach((t, i) => {
           const [o, h, l, c] = [q.open[i], q.high[i], q.low[i], q.close[i]];
           if ([o, h, l, c].some(v => v == null)) return; // skip holidays / gaps
-          bars.push({ time: t, open: o, high: h, low: l, close: c });
+          bars.push({ time: t, open: o, high: h, low: l, close: c, volume: q.volume?.[i] ?? 0 });
         });
         return bars;
       });

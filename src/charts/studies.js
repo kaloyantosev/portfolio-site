@@ -281,4 +281,61 @@ export function stochAtrDmi(bars, { k = 5, atrLen = 14, diLen = 14, adxLen = 14 
   };
 }
 
-export const STUDIES = { drc, imsi, tmeo, stochAtrDmi };
+// ─── 5. Mid-Cap Volume Intensity Ranker ───────────────────────────────────
+// Pine ta.cci: (src - SMA) / (0.015 × mean absolute deviation).
+export function cci(src, n) {
+  const m = sma(src, n);
+  return src.map((v, i) => {
+    if (m[i] == null) return null;
+    let dev = 0;
+    for (let k = i - n + 1; k <= i; k++) dev += Math.abs(src[k] - m[i]);
+    dev /= n;
+    return dev === 0 ? 0 : (v - m[i]) / (0.015 * dev);
+  });
+}
+
+export function volumeIntensity(bars, { lens = [12, 60, 210, 315], mult = 4, cciLen = 20, adSmooth = 10 } = {}) {
+  const close = bars.map(b => b.close);
+  // Position of close inside each regression channel (0 = lower band, 100 = upper), length-weighted.
+  const regRsi = n => close.map((c, i) => {
+    if (i < n - 1) return null;
+    const lr = olsFit(close.slice(0, i + 1), n).a;
+    let mean = 0, s = 0;
+    for (let k = i - n + 1; k <= i; k++) mean += close[k];
+    mean /= n;
+    for (let k = i - n + 1; k <= i; k++) s += (close[k] - mean) ** 2;
+    const sd = Math.sqrt(s / n);
+    return sd === 0 ? 50 : ((c - (lr - sd * mult)) / (2 * sd * mult)) * 100;
+  });
+  const parts = lens.map(n => regRsi(n));
+  const wSum = lens.reduce((a, b) => a + b, 0);
+  const wRsi = close.map((_, i) => (parts.some(p => p[i] == null) ? null : parts.reduce((s, p, j) => s + p[i] * lens[j], 0) / wSum));
+  const nCci = cci(close, cciLen).map(v => (v == null ? null : ((v + 200) / 400) * 100));
+
+  // Accumulation/distribution line, smoothed and normalised to its 100-bar range.
+  let ad = 0;
+  const adLine = bars.map(b => {
+    const range = b.high - b.low;
+    ad += (range === 0 ? 0 : ((b.close - b.low) - (b.high - b.close)) / range) * (b.volume || 0);
+    return ad;
+  });
+  const sAd = ema(adLine, adSmooth);
+  const hi = highest(sAd, 100), lo = lowest(sAd, 100);
+  const nAd = sAd.map((v, i) => (hi[i] == null ? null : hi[i] === lo[i] ? 50 : ((v - lo[i]) / (hi[i] - lo[i])) * 100));
+  const rising = i => i > 0 && nAd[i] != null && nAd[i - 1] != null && nAd[i] - nAd[i - 1] > 0;
+
+  return {
+    pane: {
+      range: [0, 100],
+      zones: [{ from: 50, to: 100, color: 'rgba(46,158,107,0.06)' }, { from: 0, to: 50, color: 'rgba(194,69,61,0.06)' }],
+      lines: [
+        { data: series(bars, nCci), color: '#D9822B', alpha: 0.5, width: 1 },
+        { data: series(bars, nAd, i => ({ color: rising(i) ? 'rgba(20,160,150,0.85)' : 'rgba(150,40,50,0.85)' })), color: '#14A096', width: 2 },
+        { data: series(bars, wRsi), color: '#FFFFFF', width: 2 },
+      ],
+      levels: [{ price: 50, color: 'rgba(232,200,60,0.6)', style: 'dotted' }],
+    },
+  };
+}
+
+export const STUDIES = { drc, imsi, tmeo, stochAtrDmi, volumeIntensity };

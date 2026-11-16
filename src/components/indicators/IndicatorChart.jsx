@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { createChart, createSeriesMarkers, CandlestickSeries, LineSeries, AreaSeries, HistogramSeries } from 'lightweight-charts';
+import { createChart, createSeriesMarkers, CandlestickSeries, LineSeries, AreaSeries, HistogramSeries, BaselineSeries } from 'lightweight-charts';
 import { loadDaily } from '../../charts/data';
 import { STUDIES, quarterOf } from '../../charts/studies';
 
@@ -84,6 +84,16 @@ export default function IndicatorChart({ symbol, study, height = 560, compact = 
       if (pn) {
         const [lo, hi] = pn.range;
         const autoscale = () => ({ priceRange: { minValue: lo, maxValue: hi } });
+        // Static background bands (e.g. bull zone 50-100, bear zone 0-50).
+        // A baseline series fills solidly between its base and its value (no histogram gaps).
+        (pn.zones || []).forEach(z => {
+          chart.addSeries(BaselineSeries, {
+            ...quiet, baseValue: { type: 'price', price: z.from }, lineWidth: 1,
+            topLineColor: 'transparent', bottomLineColor: 'transparent',
+            topFillColor1: z.color, topFillColor2: z.color, bottomFillColor1: z.color, bottomFillColor2: z.color,
+            autoscaleInfoProvider: autoscale,
+          }, 1).setData(bars.map(b => ({ time: b.time, value: z.to })));
+        });
         if (pn.shade?.length) {
           chart.addSeries(HistogramSeries, { ...quiet, base: pn.shadeBase ?? lo, autoscaleInfoProvider: autoscale }, 1).setData(pn.shade);
         }

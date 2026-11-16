@@ -78,6 +78,26 @@ const SCENARIOS = {
       'Exit when the line turns yellow: the trend is maturing.',
     ],
   },
+  volumeIntensity: {
+    price: path([[0, 62], [8, 60], [14, 58.5], [20, 59.5], [26, 61], [30, 63.5], [34, 66], [40, 69], [46, 72], [52, 73.5], [59, 75]], 0.5),
+    pane: {
+      range: [0, 100],
+      levels: [{ v: 50, color: GOLD, label: '50' }],
+      lines: [
+        { values: path([[0, 40], [10, 30], [20, 42], [28, 58], [32, 72], [40, 68], [50, 74], [59, 66]]), color: '#D9822B', width: 1 },
+        { values: path([[0, 35], [12, 28], [22, 44], [30, 62], [38, 76], [48, 82], [59, 84]]), color: '#14A096', width: 2 },
+        { values: path([[0, 38], [12, 33], [22, 41], [29, 51], [34, 58], [44, 66], [59, 70]]), color: UP, width: 2 },
+      ],
+    },
+    signalAt: 30, entryAt: 31, sl: 59, tp: 72, tpLabel: 'Target · prior swing high',
+    signalLabel: 'Intensity rank 100%',
+    steps: [
+      'Volume flow (teal) starts rising while price is still basing.',
+      'Regression RSI crosses 50, money flow is above 50 and rising, and CCI leads: the rank hits 100%.',
+      'Enter long; stop under the base.',
+      'Hold while money flow keeps accumulating; target the prior swing high.',
+    ],
+  },
   stochAtrDmi: {
     price: path([[0, 80], [10, 86], [18, 92], [24, 88], [28, 86], [30, 88.5], [34, 92], [40, 96], [46, 100], [52, 101], [59, 103]], 0.6),
     pane: {

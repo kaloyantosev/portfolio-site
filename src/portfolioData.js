@@ -273,6 +273,23 @@ export const customIndicators = [
     ]
   },
   {
+    id: "volume-intensity",
+    name: "Mid-Cap Volume Intensity Ranker",
+    subtitle: "Scores trend position, money flow and momentum into one 0–100% intensity rank",
+    category: "Volume / Momentum",
+    timeframes: ["Daily"],
+    assetSuitability: "MDY · S&P MidCap 400",
+    summary: "Ranks how strongly money is flowing into a mid-cap: regression trend position, accumulation/distribution and CCI combined into one score.",
+    chart: { symbol: "MDY", study: "volumeIntensity" },
+    description: "Built to rank mid-caps by the strength of buying behind them. A length-weighted regression RSI places price inside four regression channels (12, 60, 210 and 315 bars, ±4σ) on a 0–100 scale. A volume-weighted accumulation/distribution line, smoothed and normalised to its 100-bar range, shows whether money is flowing in or out. A 20-bar CCI, rescaled to 0–100, measures short-term momentum. The three combine into an intensity rank: up to 35 points for trend position above 50, 40 for money flow above 50 and rising, and 25 when momentum leads.",
+    formula: "Rank = 35·[RegRSI > 50] + 20·[A/D > 50] + 20·[A/D rising] + (25 if CCI > 50 and CCI > RegRSI, else 10)   ·   RegRSI = Σ(lᵢ · position in channel lᵢ) / Σlᵢ",
+    signals: [
+      { signal: "High intensity (> 70%)", condition: "Price above mid-channel, money flow above 50 and rising, momentum leading", action: "Strong accumulation; trend-following longs favoured" },
+      { signal: "Mixed (40–70%)", condition: "Some components positive, others not", action: "Wait for money flow to confirm" },
+      { signal: "Distribution (< 40%)", condition: "Money flow falling and trend position below 50", action: "Avoid longs; money is leaving" }
+    ]
+  },
+  {
     id: "stoch-atr-dmi",
     name: "Stoch + ATR + DMI Matrix (Unified Alert Suite)",
     subtitle: "Stochastic breakout triggers filtered by DMI direction, DMI spread, EMA trend and a trading-hours window",
