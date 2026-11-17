@@ -36,7 +36,12 @@ export default function ModelsView({ activeSubTab, setActiveSubTab, selectedMode
   const renderRow = (m) => (
     <ListRow
       key={m.id}
-      media={m.liveUrl && <SitePreview id={m.id} title={m.name} />}
+      media={m.liveUrl && (
+        // Clicking the snapshot opens the live site in a new tab; the rest of the row opens the detail page.
+        <a href={m.liveUrl} target="_blank" rel="noopener noreferrer" className="block pointer-events-auto" title={`Open ${m.name} in a new tab`} onClick={e => e.stopPropagation()}>
+          <SitePreview id={m.id} title={m.name} />
+        </a>
+      )}
       meta={m.category}
       title={m.name}
       text={m.subtitle}
