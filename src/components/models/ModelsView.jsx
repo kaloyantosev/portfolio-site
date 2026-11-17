@@ -36,17 +36,13 @@ export default function ModelsView({ activeSubTab, setActiveSubTab, selectedMode
   const renderRow = (m) => (
     <ListRow
       key={m.id}
-      media={m.liveUrl && (
-        // Clicking the snapshot opens the live site in a new tab; the rest of the row opens the detail page.
-        <a href={m.liveUrl} target="_blank" rel="noopener noreferrer" className="block pointer-events-auto" title={`Open ${m.name} in a new tab`} onClick={e => e.stopPropagation()}>
-          <SitePreview id={m.id} title={m.name} />
-        </a>
-      )}
+      media={m.liveUrl && <SitePreview id={m.id} title={m.name} />}
       meta={m.category}
       title={m.name}
       text={m.subtitle}
       action="Open"
-      onClick={() => open(m.id)}
+      // Truecharts goes straight to the live site in a new tab; other models open their detail page.
+      onClick={() => (m.id === 'model-truecharts' ? window.open(m.liveUrl, '_blank', 'noopener') : open(m.id))}
     />
   );
 
