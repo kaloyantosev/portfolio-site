@@ -112,30 +112,13 @@ export const macroAnalyses = [
 
 export const tradingAlgos = [
   {
-    id: "trading-algo-1",
-    name: "Sample Trading Algorithm Name",
-    subtitle: "Short description of the algorithmic strategy and execution style",
+    id: "momo",
+    name: "MOMO — FX Momentum Backtester",
+    subtitle: "Intraday EMA + Supertrend + MACD hook strategy on six OANDA FX pairs, backtested on demand (still under review)",
     category: "Trading Algo",
-    type: "e.g. Statistical Arbitrage / Microstructure / Trend",
-    status: "Live / Backtested",
-    vintage: "Year - Present",
-    timeframe: "e.g. 5-Min / Intraday",
-    universe: "e.g. S&P 500 Equities / Futures",
-    metrics: {
-      sharpeRatio: "0.00",
-      sortinoRatio: "0.00",
-      cagr: "0.0%",
-      maxDrawdown: "-0.0%",
-      winRate: "0.0%",
-      profitFactor: "0.00"
-    },
-    description: "Detailed summary of how the trading algorithm generates signals, manages risk, and executes trades.",
-    mechanics: [
-      "Signal Generation: Description of the mathematical trigger or model",
-      "Risk Management: Position sizing, stop loss, and exposure constraints",
-      "Execution Model: Slippage handling, order types, and venue routing"
-    ],
-    formula: "Insert your mathematical formula or LaTeX string here"
+    type: "Intraday FX Momentum",
+    liveUrl: "https://momo-backtester.vercel.app/",
+    description: "Interactive backtester for the MOMO intraday momentum strategy on EURUSD, GBPUSD, AUDUSD, USDJPY, USDCHF and EURJPY. A trade needs an EMA(20) body break, a Supertrend flip and a MACD histogram hook to line up on the 5-minute chart, only in ADX-filtered sessions and away from high-impact news. Runs on OANDA's own candles with 5-second data for entries, showing the equity curve, drawdown and trade statistics for any chosen period. The rules are still being reviewed and tuned."
   }
 ];
 
