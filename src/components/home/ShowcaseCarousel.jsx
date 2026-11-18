@@ -15,7 +15,7 @@ const ITEMS = Array.from({ length: Math.max(MODELS.length, INDICATORS.length, ST
   [MODELS, INDICATORS, STRATEGIES].filter(l => l.length).map(l => l[i % l.length])
 ).flat().map((item, k) => ({ ...item, key: `${item.id}-${k}` }));
 
-const SPEED = 0.4; // px per frame (~24 px/s)
+const SPEED = 20; // px per second, the same on 60 Hz and 144 Hz screens
 
 export default function ShowcaseCarousel({ navigate }) {
   const ref = useRef(null);
@@ -24,15 +24,17 @@ export default function ShowcaseCarousel({ navigate }) {
   // Auto-glide back and forth while not hovered or dragged.
   useEffect(() => {
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
-    let raf;
-    const tick = () => {
+    let raf, last = performance.now();
+    const tick = now => {
+      const dt = Math.min(0.1, (now - last) / 1000); // cap so a background tab doesn't jump
+      last = now;
       const el = ref.current, s = state.current;
       if (el && !s.hover && !s.drag) {
         const max = el.scrollWidth - el.clientWidth;
         // Track the position as a float: browsers round scrollLeft to whole pixels,
         // so adding 0.4 to it directly never moves.
         if (s.pos == null || Math.abs(s.pos - el.scrollLeft) > 2) s.pos = el.scrollLeft; // resync after drag/touch
-        s.pos = Math.min(max, Math.max(0, s.pos + s.dir * SPEED));
+        s.pos = Math.min(max, Math.max(0, s.pos + s.dir * SPEED * dt));
         el.scrollLeft = s.pos;
         if (s.pos >= max - 1) s.dir = -1;
         else if (s.pos <= 0) s.dir = 1;
