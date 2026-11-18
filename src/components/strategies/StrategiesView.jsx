@@ -8,8 +8,8 @@ import SitePreview from '../models/SitePreview';
 
 // Same layout as Models: illustrated category tabs, live previews, grouped sections.
 const GROUPS = [
-  { key: 'trading-algos', label: 'Trading Algos', items: tradingAlgos },
   { key: 'investment-algos', label: 'Investment Algos', items: investmentAlgos },
+  { key: 'trading-algos', label: 'Trading Algos', items: tradingAlgos },
 ];
 
 export default function StrategiesView({ activeSubTab, setActiveSubTab, selectedStrategyId, setSelectedStrategyId }) {
