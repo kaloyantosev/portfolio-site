@@ -29,9 +29,13 @@ export default function ShowcaseCarousel({ navigate }) {
       const el = ref.current, s = state.current;
       if (el && !s.hover && !s.drag) {
         const max = el.scrollWidth - el.clientWidth;
-        el.scrollLeft += s.dir * SPEED;
-        if (el.scrollLeft >= max - 1) s.dir = -1;
-        else if (el.scrollLeft <= 0) s.dir = 1;
+        // Track the position as a float: browsers round scrollLeft to whole pixels,
+        // so adding 0.4 to it directly never moves.
+        if (s.pos == null || Math.abs(s.pos - el.scrollLeft) > 2) s.pos = el.scrollLeft; // resync after drag/touch
+        s.pos = Math.min(max, Math.max(0, s.pos + s.dir * SPEED));
+        el.scrollLeft = s.pos;
+        if (s.pos >= max - 1) s.dir = -1;
+        else if (s.pos <= 0) s.dir = 1;
       }
       raf = requestAnimationFrame(tick);
     };
