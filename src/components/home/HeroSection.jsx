@@ -2,7 +2,8 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { profileConfig, tradingAlgos, investmentAlgos, customModels, customIndicators } from '../../portfolioData';
 
-const WORK_COUNT = tradingAlgos.length + investmentAlgos.length + customModels.length + customIndicators.length;
+// Placeholder entries ("Sample ...") are not counted.
+const WORK_COUNT = [...tradingAlgos, ...investmentAlgos, ...customModels, ...customIndicators].filter(x => !x.name.startsWith('Sample')).length;
 import { ListRow } from '../common/ListUI';
 import CareerChart from './CareerChart';
 import ShowcaseCarousel from './ShowcaseCarousel';
