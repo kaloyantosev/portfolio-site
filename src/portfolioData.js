@@ -166,6 +166,15 @@ export const customModels = [
     description: "Advanced equity derivatives and institutional positioning platform designed to decode smart-money market activity. Connects with Nasdaq data feeds to analyze options market microstructure, Put/Call positioning metrics, and historical 13F hedge fund accumulation across individual equities and indices."
   },
   {
+    id: "model-stock-injector",
+    name: "Stock Analysis Injector — Options Levels inside TradingView",
+    subtitle: "Turns the live option chain into a DOM-style open-interest ladder and draws the key levels straight onto TradingView, 24/7 on demand",
+    category: "Derivatives & Options Flow",
+    group: "Derivatives & Options",
+    previewImage: "/snapshots/model-stock-injector.webp",
+    description: "A desktop companion to Truecharts that plugs directly into TradingView. It reads the ticker on the active chart, pulls that symbol's option chain from the Truecharts engine and injects the result into the chart itself. Open interest by strike is rendered as a DOM-style ladder (puts on the left, calls on the right), and the levels that matter are plotted as labelled lines: call walls, put walls, max pain, the gamma flip, the weekly pin and the monthly OpEx anchor, each tagged with its open interest and expiry. Switch symbols and the levels redraw automatically; whole watchlists can be synced in one pass, and the levels can be cleared just as quickly. Built in Python on TradingView Desktop's debugging interface, so the analysis lives on the chart rather than in a separate tab."
+  },
+  {
     id: "model-oilwatch",
     name: "OilWatch — Global Oil Shipping & Market Intelligence",
     subtitle: "Live tanker tracking, chokepoint risk monitoring, Brent/WTI pricing and maritime news briefs",

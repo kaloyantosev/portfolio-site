@@ -36,7 +36,7 @@ export default function ModelsView({ activeSubTab, setActiveSubTab, selectedMode
   const renderRow = (m) => (
     <ListRow
       key={m.id}
-      media={m.liveUrl && <SitePreview id={m.id} title={m.name} />}
+      media={(m.liveUrl || m.previewImage) && <SitePreview id={m.id} title={m.name} />}
       meta={m.category}
       title={m.name}
       text={m.subtitle}
