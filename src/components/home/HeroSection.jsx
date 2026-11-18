@@ -80,13 +80,13 @@ export default function HeroSection({ navigate, onOpenContact }) {
         {profileConfig.metrics?.length > 0 && (
           <div className="mt-16 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-6">
             {profileConfig.metrics.map((m, i) => (
-              <div key={i}>
+              <div key={i} className="text-center">
                 <div className="section-label mb-1">{m.label}</div>
-                <div className="stat-value text-2xl sm:text-3xl">{m.count ? WORK_COUNT : m.value}</div>
+                <div className="stat-value text-3xl sm:text-4xl">{m.count ? WORK_COUNT : m.value}</div>
                 {m.link ? (
-                  <button onClick={() => navigate(m.link.tab, null, m.link.id)} className="text-citi-muted hover:text-white text-xs mt-1 leading-snug text-left underline underline-offset-2 decoration-white/30">{m.desc}</button>
+                  <button onClick={() => navigate(m.link.tab, null, m.link.id)} className="text-citi-muted hover:text-white text-sm mt-1 leading-snug underline underline-offset-2 decoration-white/30">{m.desc}</button>
                 ) : (
-                  <div className="text-citi-muted text-xs mt-1 leading-snug">{m.desc}</div>
+                  <div className="text-citi-muted text-sm mt-1 leading-snug">{m.desc}</div>
                 )}
               </div>
             ))}
