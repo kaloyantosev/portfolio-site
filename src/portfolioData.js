@@ -39,15 +39,16 @@ export const profileConfig = {
   // Dashed "forecast" point at the end of the career chart. Edit freely, or set to null to hide.
   nextGoal: {
     period: "Next",
-    role: "Institutional Markets",
-    org: "Global bank or asset manager",
-    text: "Bringing order-flow, derivatives and macro research experience to a sales, trading or quantitative markets desk."
+    role: "Next chapter",
+    org: "To be decided",
+    text: ""
   },
   metrics: [
-    { label: "Metric 1 (e.g. Sharpe Ratio)", value: "0.00", desc: "Short description or footnote" },
-    { label: "Metric 2 (e.g. Annualized Alpha)", value: "0.0%", desc: "Short description or footnote" },
-    { label: "Metric 3 (e.g. Max Drawdown)", value: "0.0%", desc: "Short description or footnote" },
-    { label: "Metric 4 (e.g. Track Record)", value: "0+ Yrs", desc: "Short description or footnote" },
+    { label: "Sharpe Ratio", value: "1.04", desc: "Aegis investment strategy, 20-year backtest", link: { tab: "strategies", id: "aegis" } },
+    { label: "Years Beating the S&P 500", value: "90%", desc: "18 of 20 years, Aegis strategy", link: { tab: "strategies", id: "aegis" } },
+    // value filled in by HeroSection: live count of strategies, models and indicators
+    { label: "Strategies, Models & Indicators", count: true, desc: "Built and published on this site" },
+    { label: "Readers", value: "30,000+", desc: "Readers of my market analyses" },
   ]
 };
 

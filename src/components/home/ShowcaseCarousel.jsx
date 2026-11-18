@@ -7,13 +7,15 @@ import SitePreview from '../models/SitePreview';
 // snapshot (public/snapshots/<id>.webp) instead of a live embed, so the homepage stays
 // light. It glides on its own, pauses on hover and can be dragged with the mouse.
 const snapshot = (id, title) => <SitePreview id={id} title={title} />;
-const ITEMS = [
-  ...customModels.filter(m => m.liveUrl).map(m => ({ tab: 'models', id: m.id, kind: 'Model', title: m.name, preview: snapshot(m.id, m.name) })),
-  ...[...tradingAlgos, ...investmentAlgos].filter(s => s.liveUrl).map(s => ({ tab: 'strategies', id: s.id, kind: 'Strategy', title: s.name, preview: snapshot(s.id, s.name) })),
-  ...customIndicators.filter(i => i.chart).map(i => ({ tab: 'indicators', id: i.id, kind: 'Indicator', title: i.name, preview: <IndicatorChart symbol={i.chart.symbol} study={i.chart.study} height={208} compact /> })),
-];
+const MODELS = customModels.filter(m => m.liveUrl).map(m => ({ tab: 'models', id: m.id, kind: 'Model', title: m.name, preview: snapshot(m.id, m.name) }));
+const INDICATORS = customIndicators.filter(i => i.chart).map(i => ({ tab: 'indicators', id: i.id, kind: 'Indicator', title: i.name, preview: <IndicatorChart symbol={i.chart.symbol} study={i.chart.study} height={208} compact /> }));
+const STRATEGIES = [...tradingAlgos, ...investmentAlgos].filter(s => s.liveUrl).map(s => ({ tab: 'strategies', id: s.id, kind: 'Strategy', title: s.name, preview: snapshot(s.id, s.name) }));
+// Interleave model, indicator, strategy; the shorter lists repeat so the mix holds to the end.
+const ITEMS = Array.from({ length: Math.max(MODELS.length, INDICATORS.length, STRATEGIES.length) }, (_, i) =>
+  [MODELS, INDICATORS, STRATEGIES].filter(l => l.length).map(l => l[i % l.length])
+).flat().map((item, k) => ({ ...item, key: `${item.id}-${k}` }));
 
-const SPEED = 0.65; // px per frame (~40 px/s)
+const SPEED = 0.4; // px per frame (~24 px/s)
 
 export default function ShowcaseCarousel({ navigate }) {
   const ref = useRef(null);
@@ -66,7 +68,7 @@ export default function ShowcaseCarousel({ navigate }) {
     >
       {ITEMS.map(item => (
         <div
-          key={`${item.tab}-${item.id}`}
+          key={item.key}
           role="button"
           tabIndex={0}
           onClick={() => open(item)}
