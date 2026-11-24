@@ -298,6 +298,25 @@ export const customIndicators = [
       { signal: "Short signal", condition: "%K crosses below 30 with −DI > +DI, DMI spread > 7 and a bearish 20/50 EMA state", action: "Momentum breakdown aligned with trend (red triangle and alert)" },
       { signal: "Overextended trend", condition: "ADX ≥ 40", action: "Trend is stretched; treat new signals with caution" }
     ]
+  },
+  {
+    id: "ema-ha-cross-td",
+    name: "EMA 200/300 Heikin Ashi Cross + TD Sequential",
+    subtitle: "Staggered 200/300 EMA cross on Heikin Ashi closes for longs and shorts, with DeMark setup and countdown",
+    category: "Trend / Exhaustion",
+    timeframes: ["Daily"],
+    assetSuitability: "SPY · Equities & Indices",
+    summary: "Long and short entries when Heikin Ashi candles break through both the 200 and 300 EMA and then clear them, with TD Sequential 9s and 13s for exhaustion.",
+    chart: { symbol: "SPY", study: "emaHaCross" },
+    description: "Builds Heikin Ashi candles from the daily bars and runs a 200 and a 300 EMA on the Heikin Ashi close. A long arms when part of a Heikin Ashi body breaks below both lines, and fires once a whole body closes above both; a short is the mirror. When the two EMAs have been tangled within 0.2% of each other for 40 days and the 200 EMA has moved less than 2% in 20 days, signals are blocked as chop. On the real candles it counts TD Sequential: a setup of nine closes each below (or above) the close four bars earlier, perfected when bar 8 or 9 reaches past bars 6 and 7, then a countdown to 13 with DeMark's recycling and range-exit rules. The chart shows the setup 9s (bright when perfected) and the countdown 13s.",
+    formula: "HAc = (O + H + L + C) / 4   ·   HAo = (HAoₜ₋₁ + HAcₜ₋₁) / 2   ·   Long: body broke below EMA₂₀₀ & EMA₃₀₀, then whole body above both   ·   Setup: 9 × Cₜ < Cₜ₋₄   ·   Countdown: 13 × Cₜ ≤ Lₜ₋₂",
+    signals: [
+      { signal: "Long", condition: "A Heikin Ashi body broke below both EMAs, then a whole body closes above both (green arrow)", action: "Trend re-established above the long-term averages; long bias" },
+      { signal: "Short", condition: "A Heikin Ashi body broke above both EMAs, then a whole body closes below both (red arrow)", action: "Trend re-established below the long-term averages; short bias" },
+      { signal: "Setup 9", condition: "Nine closes in a row below (green) or above (red) the close four bars earlier; bright when perfected", action: "Short-term exhaustion: expect a pause or a pullback against the run" },
+      { signal: "Countdown 13", condition: "Thirteenth qualifying close after a setup (yellow)", action: "Larger exhaustion: the move is late; tighten risk on positions with it" },
+      { signal: "Flat filter", condition: "EMAs tangled within 0.2% for 40+ days with a flat 200 EMA", action: "No signals: the averages carry no trend" }
+    ]
   }
 ];
 

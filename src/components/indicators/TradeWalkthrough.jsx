@@ -135,6 +135,8 @@ const STEP_PAUSE = 26; // ticks to hold the finished trade before restarting
 
 const tmeoColor = (v, prev) => (v >= 40 ? (v >= prev ? '#00ff88' : '#ffcc00') : v <= -40 ? (v <= prev ? '#ff0055' : '#ff6600') : '#808080');
 
+export const hasWalkthrough = study => Boolean(SCENARIOS[study]);
+
 export default function TradeWalkthrough({ study }) {
   const s = SCENARIOS[study];
   const ref = useRef(null);

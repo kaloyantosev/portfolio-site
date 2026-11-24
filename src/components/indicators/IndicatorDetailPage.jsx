@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import IndicatorChart from './IndicatorChart';
-import TradeWalkthrough from './TradeWalkthrough';
+import TradeWalkthrough, { hasWalkthrough } from './TradeWalkthrough';
 
 export default function IndicatorDetailPage({ indicator, onBack }) {
   if (!indicator) return null;
@@ -39,10 +39,12 @@ export default function IndicatorDetailPage({ indicator, onBack }) {
         </div>
       </section>
 
-      <section className="mt-16">
-        <h2 className="font-serif text-3xl text-white mb-8">Trading it</h2>
-        <TradeWalkthrough study={indicator.chart?.study} />
-      </section>
+      {hasWalkthrough(indicator.chart?.study) && (
+        <section className="mt-16">
+          <h2 className="font-serif text-3xl text-white mb-8">Trading it</h2>
+          <TradeWalkthrough study={indicator.chart?.study} />
+        </section>
+      )}
 
       {indicator.signals?.length > 0 && (
         <section className="mt-16 grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">

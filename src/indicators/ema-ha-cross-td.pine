@@ -1,0 +1,189 @@
+//@version=5
+// EMA 200/300 staggered cross on Heikin Ashi, longs and shorts. Same rules as ema-cross/strategy.js.
+// Add to a DAILY chart (normal candles or Heikin Ashi, both work: the script builds Heikin Ashi itself).
+// Keep the "Dividend-adjusted" input the same as the chart's ADJ button, or the lines sit off the candles.
+// Long: the HA candle broke below both EMAs (part of the HA body under both counts), then the whole HA body
+// is above both. Short: the mirror. No signal when the EMAs are flat and have been tangled for 40+ days (see inputs).
+// TD Sequential counts on the real candles: setup 1-9 next to the candles, countdown 1-13 further out
+// (countdown numbers are labels, so only the last 500 show: TradingView's label limit).
+indicator("EMA 200/300 HA cross: longs & shorts", overlay = true, max_labels_count = 500, max_lines_count = 500)
+
+flatGap = input.float(0.2, "Flat filter: EMA gap under %", step = 0.05) / 100
+flatSlope = input.float(2.0, "Flat filter: EMA 200 moved under % in 20 days", step = 0.5) / 100
+flatDays = input.int(40, "Flat filter: EMAs tangled for at least N days", minval = 1)
+
+adjDiv = input.bool(true, "Dividend-adjusted prices (set the same as the chart's ADJ button)")
+// Standard candles of this symbol with the chosen adjustment. ticker.standard() would drop the chart's
+// dividend adjustment, so the EMAs drifted away from an adjusted chart further back in time.
+src = ticker.new(syminfo.prefix, syminfo.ticker, syminfo.session, adjDiv ? adjustment.dividends : adjustment.splits)
+[o, h, l, c] = request.security(src, timeframe.period, [open, high, low, close])
+// Heikin Ashi built here from those candles, the same way as the website and the Python backtest
+hC = (o + h + l + c) / 4
+var float hO = na
+hO := na(hO[1]) ? (o + c) / 2 : (hO[1] + hC[1]) / 2
+
+e200 = ta.ema(hC, 200)
+e300 = ta.ema(hC, 300)
+loB = math.min(hO, hC)
+hiB = math.max(hO, hC)
+side = loB > e200 and loB > e300 ? 1 : hiB < e200 and hiB < e300 ? -1 : 0  // whole body above both / below both
+brokeDn = loB < e200 and loB < e300  // part of the body under both lines: arms a long
+brokeUp = hiB > e200 and hiB > e300  // part of the body over both lines: arms a short
+inGap = math.abs(e200 - e300) / math.min(e200, e300) < flatGap
+// tangled today and on every one of the previous flatDays bars, and the EMA 200 flat: chop, not a brief touch
+tangled = inGap and math.sum(inGap ? 1 : 0, flatDays)[1] >= flatDays and math.abs(e200 / e200[20] - 1) < flatSlope
+
+var bool armLong = false
+var bool armShort = false
+fire = (side == 1 and armLong) or (side == -1 and armShort)
+if fire and side == 1
+    armLong := false
+if fire and side == -1
+    armShort := false
+armLong := armLong or brokeDn
+armShort := armShort or brokeUp
+sig = bar_index > 300 and fire and not tangled
+
+plot(e200, "EMA 200 (HA close)", color.orange, 2)
+plot(e300, "EMA 300 (HA close)", color.purple, 2)
+plotshape(sig and side == 1, "Long", shape.triangleup, location.belowbar, color.green, size = size.small)
+plotshape(sig and side == -1, "Short", shape.triangledown, location.abovebar, color.red, size = size.small)
+
+// ---- TD Sequential (Tom DeMark), on the real candles
+// Setup: 9 closes in a row each below the close 4 bars earlier = buy setup (green 1-9 under the candles);
+// 9 closes in a row each above the close 4 bars earlier = sell setup (red 1-9 over the candles).
+// A close that breaks the run resets the count to 0, so count 1 always starts right after a price flip.
+var int bs = 0
+var int ss = 0
+bs := c < c[4] ? bs + 1 : 0
+ss := c > c[4] ? ss + 1 : 0
+// Countdown starts on the setup's 9th candle. Candles need not be in a row: a buy countdown candle closes at or
+// below the low 2 candles earlier (sell: at or above the high 2 candles earlier). Candle 13 must also have its
+// low at or below the close of countdown candle 8 (sell: high at or above it); if not, 13 waits for a candle
+// that qualifies. A completed opposite setup (9) cancels the countdown.
+// Recycling (DeMark): a new same-way 9 during a countdown is compared by size (true high - true low of its
+// 9 candles) with the setup the countdown runs from. Size at least the old one but under 1.618x: the countdown
+// restarts from the new 9. 1.618x or more: the move is accelerating, the countdown is cancelled. Smaller: ignored.
+// A setup that runs on to 18 candles in a row counts as a new setup (its last 9 candles) for this rule.
+// Range exit (DeMark): a buy countdown is cancelled when a candle's true low is above the true high of the buy
+// setup it runs from (price left the setup's range upward); a sell countdown when a true high is under its true low.
+tH = math.max(h, nz(c[1], h))
+tL = math.min(l, nz(c[1], l))
+hi9 = ta.highest(tH, 9)
+lo9 = ta.lowest(tL, 9)
+bNew = bs == 9 or bs == 18
+sNew = ss == 9 or ss == 18
+var bool bAct = false
+var bool sAct = false
+var int bc = 0
+var int sc = 0
+var float b8 = na
+var float s8 = na
+var float bSize = na
+var float sSize = na
+var float bHi = na
+var float sLo = na
+if ss == 9
+    bAct := false
+if bs == 9
+    sAct := false
+if bNew
+    sz = hi9 - lo9
+    if not bAct or (sz >= bSize and sz < 1.618 * bSize)
+        bAct := true
+        bc := 0
+        b8 := na
+        bSize := sz
+        bHi := hi9
+    else if sz >= 1.618 * bSize
+        bAct := false
+if sNew
+    sz = hi9 - lo9
+    if not sAct or (sz >= sSize and sz < 1.618 * sSize)
+        sAct := true
+        sc := 0
+        s8 := na
+        sSize := sz
+        sLo := lo9
+    else if sz >= 1.618 * sSize
+        sAct := false
+if bAct and tL > bHi
+    bAct := false
+if sAct and tH < sLo
+    sAct := false
+
+// Perfection: a buy 9 is perfected when the low of candle 8 or 9 is at or below the lows of candles 6 and 7
+// (sell: high of 8 or 9 at or above the highs of 6 and 7). Perfected 9 = bright; not yet = faded 9, and a small
+// "P" marks the later candle that reaches that level (until the next setup the same way or the opposite 9).
+bPerf = bs == 9 and math.min(l, l[1]) <= math.min(l[2], l[3])
+sPerf = ss == 9 and math.max(h, h[1]) >= math.max(h[2], h[3])
+var float bPLv = na
+var float sPLv = na
+bP = not na(bPLv) and bs != 9 and l <= bPLv
+sP = not na(sPLv) and ss != 9 and h >= sPLv
+if bP or ss == 9
+    bPLv := na
+if sP or bs == 9
+    sPLv := na
+if bs == 9
+    bPLv := bPerf ? na : math.min(l[2], l[3])
+if ss == 9
+    sPLv := sPerf ? na : math.max(h[2], h[3])
+plotshape(bP, "Buy 9 perfected later", shape.circle, location.belowbar, color.new(color.white, 100), text = "P", textcolor = color.new(color.lime, 30), size = size.tiny)
+plotshape(sP, "Sell 9 perfected later", shape.circle, location.abovebar, color.new(color.white, 100), text = "P", textcolor = color.new(color.red, 30), size = size.tiny)
+
+// TDST: buy setup = highest true high of its 9 candles (resistance), sell setup = lowest true low (support).
+// The line runs right until a close breaks it or a new setup the same way replaces it.
+var line bT = na
+var line sT = na
+if not na(bT)
+    line.set_x2(bT, bar_index)
+    if c > line.get_y1(bT)
+        bT := na
+if not na(sT)
+    line.set_x2(sT, bar_index)
+    if c < line.get_y1(sT)
+        sT := na
+if bs == 9
+    bT := line.new(bar_index - 8, hi9, bar_index, hi9, color = color.new(color.lime, 65), style = line.style_dashed, width = 1)
+if ss == 9
+    sT := line.new(bar_index - 8, lo9, bar_index, lo9, color = color.new(color.red, 65), style = line.style_dashed, width = 1)
+bShow = 0
+sShow = 0
+if bAct and c <= l[2] and (bc < 12 or l <= b8)
+    bc += 1
+    bShow := bc
+    b8 := bc == 8 ? c : b8
+    bAct := bc < 13
+if sAct and c >= h[2] and (sc < 12 or h >= s8)
+    sc += 1
+    sShow := sc
+    s8 := sc == 8 ? c : s8
+    sAct := sc < 13
+// countdown numbers sit further from the candle than setup numbers (the newlines push them out)
+if bShow > 0
+    label.new(bar_index, l, "\n\n" + str.tostring(bShow), yloc = yloc.belowbar, style = label.style_none, textcolor = bShow == 13 ? color.yellow : color.orange, size = bShow == 13 ? size.normal : size.tiny)
+if sShow > 0
+    label.new(bar_index, h, str.tostring(sShow) + "\n\n", yloc = yloc.abovebar, style = label.style_none, textcolor = sShow == 13 ? color.yellow : color.fuchsia, size = sShow == 13 ? size.normal : size.tiny)
+
+nc = color.new(color.white, 100)  // invisible shape, only its text shows
+plotshape(bs == 1, "Buy setup 1", shape.circle, location.belowbar, nc, text = "1", textcolor = color.lime, size = size.tiny)
+plotshape(bs == 2, "Buy setup 2", shape.circle, location.belowbar, nc, text = "2", textcolor = color.lime, size = size.tiny)
+plotshape(bs == 3, "Buy setup 3", shape.circle, location.belowbar, nc, text = "3", textcolor = color.lime, size = size.tiny)
+plotshape(bs == 4, "Buy setup 4", shape.circle, location.belowbar, nc, text = "4", textcolor = color.lime, size = size.tiny)
+plotshape(bs == 5, "Buy setup 5", shape.circle, location.belowbar, nc, text = "5", textcolor = color.lime, size = size.tiny)
+plotshape(bs == 6, "Buy setup 6", shape.circle, location.belowbar, nc, text = "6", textcolor = color.lime, size = size.tiny)
+plotshape(bs == 7, "Buy setup 7", shape.circle, location.belowbar, nc, text = "7", textcolor = color.lime, size = size.tiny)
+plotshape(bs == 8, "Buy setup 8", shape.circle, location.belowbar, nc, text = "8", textcolor = color.lime, size = size.tiny)
+plotshape(bPerf, "Buy setup 9 perfected", shape.circle, location.belowbar, nc, text = "9", textcolor = color.lime, size = size.small)
+plotshape(bs == 9 and not bPerf, "Buy setup 9 not perfected", shape.circle, location.belowbar, nc, text = "9", textcolor = color.new(color.lime, 55), size = size.small)
+plotshape(ss == 1, "Sell setup 1", shape.circle, location.abovebar, nc, text = "1", textcolor = color.red, size = size.tiny)
+plotshape(ss == 2, "Sell setup 2", shape.circle, location.abovebar, nc, text = "2", textcolor = color.red, size = size.tiny)
+plotshape(ss == 3, "Sell setup 3", shape.circle, location.abovebar, nc, text = "3", textcolor = color.red, size = size.tiny)
+plotshape(ss == 4, "Sell setup 4", shape.circle, location.abovebar, nc, text = "4", textcolor = color.red, size = size.tiny)
+plotshape(ss == 5, "Sell setup 5", shape.circle, location.abovebar, nc, text = "5", textcolor = color.red, size = size.tiny)
+plotshape(ss == 6, "Sell setup 6", shape.circle, location.abovebar, nc, text = "6", textcolor = color.red, size = size.tiny)
+plotshape(ss == 7, "Sell setup 7", shape.circle, location.abovebar, nc, text = "7", textcolor = color.red, size = size.tiny)
+plotshape(ss == 8, "Sell setup 8", shape.circle, location.abovebar, nc, text = "8", textcolor = color.red, size = size.tiny)
+plotshape(sPerf, "Sell setup 9 perfected", shape.circle, location.abovebar, nc, text = "9", textcolor = color.red, size = size.small)
+plotshape(ss == 9 and not sPerf, "Sell setup 9 not perfected", shape.circle, location.abovebar, nc, text = "9", textcolor = color.new(color.red, 55), size = size.small)

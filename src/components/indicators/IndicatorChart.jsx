@@ -71,6 +71,7 @@ export default function IndicatorChart({ symbol, study, height = 560, compact = 
       const ov = result.overlay;
       if (ov) {
         addLines(ov.lines || [], 0);
+        if (ov.markers?.length) createSeriesMarkers(candles, compact ? ov.markers.map(m => ({ ...m, text: '' })) : ov.markers);
         if (ov.quarters) addQuarters(0, 1, 0);
         (ov.zones || []).forEach(z => {
           const c = z.support ? '#2E9E6B' : '#C2453D';

@@ -338,4 +338,84 @@ export function volumeIntensity(bars, { lens = [12, 60, 210, 315], mult = 4, cci
   };
 }
 
-export const STUDIES = { drc, imsi, tmeo, stochAtrDmi, volumeIntensity };
+// ─── 6. EMA 200/300 HA cross + TD Sequential ──────────────────────────────
+// Port of src/indicators/ema-ha-cross-td.pine. Drawn on the site: both EMAs, the long/short signals, TD setup 9s
+// (bright = perfected) and countdown 13s. Not drawn: setup 1-8, countdown 1-12, TDST lines and the "P" marks.
+// Uses Yahoo's split-adjusted (not dividend-adjusted) daily candles, so EMAs can differ slightly from an ADJ chart.
+export function emaHaCross(bars, { flatGap = 0.002, flatSlope = 0.02, flatDays = 40 } = {}) {
+  const o = bars.map(b => b.open), h = bars.map(b => b.high), l = bars.map(b => b.low), c = bars.map(b => b.close);
+  const hC = bars.map(b => (b.open + b.high + b.low + b.close) / 4);
+  const hO = [];
+  hC.forEach((_, i) => hO.push(i ? (hO[i - 1] + hC[i - 1]) / 2 : (o[0] + c[0]) / 2));
+  const e200 = ema(hC, 200), e300 = ema(hC, 300);
+  const ok = i => e200[i] != null && e300[i] != null;
+  const inGap = i => ok(i) && Math.abs(e200[i] - e300[i]) / Math.min(e200[i], e300[i]) < flatGap;
+  const markers = [];
+  const mark = (i, below, color, text, shape = 'circle', size = 0.5) =>
+    markers.push({ time: bars[i].time, position: below ? 'belowBar' : 'aboveBar', color, text, shape, size });
+
+  // EMA cross: a break through both lines arms the entry the other way; the whole HA body past both fires it
+  let armLong = false, armShort = false;
+  // TD Sequential state (same names as the Pine script)
+  let bs = 0, ss = 0, bAct = false, sAct = false, bc = 0, sc = 0, b8 = null, s8 = null, bSize = null, sSize = null, bHi = null, sLo = null;
+  const tH = h.map((v, i) => Math.max(v, i ? c[i - 1] : v)), tL = l.map((v, i) => Math.min(v, i ? c[i - 1] : v));
+  const win = (a, i, f) => (i < 8 ? null : f(...a.slice(i - 8, i + 1)));
+
+  for (let i = 0; i < bars.length; i++) {
+    if (ok(i)) {
+      const loB = Math.min(hO[i], hC[i]), hiB = Math.max(hO[i], hC[i]);
+      const side = loB > e200[i] && loB > e300[i] ? 1 : hiB < e200[i] && hiB < e300[i] ? -1 : 0;
+      let tangled = inGap(i) && i > flatDays && e200[i - 20] != null && Math.abs(e200[i] / e200[i - 20] - 1) < flatSlope;
+      for (let k = i - flatDays; tangled && k < i; k++) tangled = inGap(k);
+      const fire = (side === 1 && armLong) || (side === -1 && armShort);
+      if (fire && side === 1) armLong = false;
+      if (fire && side === -1) armShort = false;
+      armLong = armLong || (loB < e200[i] && loB < e300[i]);
+      armShort = armShort || (hiB > e200[i] && hiB > e300[i]);
+      if (i > 300 && fire && !tangled) mark(i, side === 1, side === 1 ? '#2E9E6B' : '#C2453D', side === 1 ? 'Long' : 'Short', side === 1 ? 'arrowUp' : 'arrowDown', 1.4);
+    }
+
+    bs = i >= 4 && c[i] < c[i - 4] ? bs + 1 : 0;
+    ss = i >= 4 && c[i] > c[i - 4] ? ss + 1 : 0;
+    const hi9 = win(tH, i, Math.max), lo9 = win(tL, i, Math.min);
+    if (ss === 9) bAct = false;
+    if (bs === 9) sAct = false;
+    if (bs === 9 || bs === 18) {
+      const sz = hi9 - lo9;
+      if (!bAct || (sz >= bSize && sz < 1.618 * bSize)) { bAct = true; bc = 0; b8 = null; bSize = sz; bHi = hi9; }
+      else if (sz >= 1.618 * bSize) bAct = false;
+    }
+    if (ss === 9 || ss === 18) {
+      const sz = hi9 - lo9;
+      if (!sAct || (sz >= sSize && sz < 1.618 * sSize)) { sAct = true; sc = 0; s8 = null; sSize = sz; sLo = lo9; }
+      else if (sz >= 1.618 * sSize) sAct = false;
+    }
+    if (bAct && tL[i] > bHi) bAct = false;
+    if (sAct && tH[i] < sLo) sAct = false;
+    if (bs === 9) mark(i, true, Math.min(l[i], l[i - 1]) <= Math.min(l[i - 2], l[i - 3]) ? '#7CFC00' : 'rgba(124,252,0,0.45)', '9');
+    if (ss === 9) mark(i, false, Math.max(h[i], h[i - 1]) >= Math.max(h[i - 2], h[i - 3]) ? '#FF4D4D' : 'rgba(255,77,77,0.45)', '9');
+    if (bAct && i >= 2 && c[i] <= l[i - 2] && (bc < 12 || (b8 != null && l[i] <= b8))) {
+      bc += 1;
+      if (bc === 8) b8 = c[i];
+      if (bc === 13) mark(i, true, '#FACC15', '13');
+      bAct = bc < 13;
+    }
+    if (sAct && i >= 2 && c[i] >= h[i - 2] && (sc < 12 || (s8 != null && h[i] >= s8))) {
+      sc += 1;
+      if (sc === 8) s8 = c[i];
+      if (sc === 13) mark(i, false, '#FACC15', '13');
+      sAct = sc < 13;
+    }
+  }
+  return {
+    overlay: {
+      lines: [
+        { data: series(bars, e200), color: '#F59E0B', width: 2 },
+        { data: series(bars, e300), color: '#A855F7', width: 2 },
+      ],
+      markers,
+    },
+  };
+}
+
+export const STUDIES = { drc, imsi, tmeo, stochAtrDmi, volumeIntensity, emaHaCross };
